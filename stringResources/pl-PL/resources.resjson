@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Kolor niezaznaczonej komórki",
   "Visual_Granularity": "Stopień szczegółowości",
   "Visual_ScaleColor": "Kolor skali",
-  "Visual_SliderColor": "Kolor suwaka",
+  "Visual_OutlineColor": "Kolor suwaka",
   "Visual_Granularity_Year": "Rok",
   "Visual_Granularity_Quarter": "Kwartał",
   "Visual_Granularity_Month": "Miesiąc",

@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Боја неизабране ћелије",
   "Visual_Granularity": "Грануларност",
   "Visual_ScaleColor": "Боја скале",
-  "Visual_SliderColor": "Боја клизача",
+  "Visual_OutlineColor": "Боја клизача",
   "Visual_Granularity_Year": "Година",
   "Visual_Granularity_Quarter": "Квартал",
   "Visual_Granularity_Month": "Месец",

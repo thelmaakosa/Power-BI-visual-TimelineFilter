@@ -134,8 +134,12 @@ export class GranularityBase implements IGranularity {
             .text(this.granularityProps.marker)
             .attr("x", pixelConverter.toString(0 - this.textLabelXOffset))
             .attr("y", pixelConverter.toString(0 - this.textLabelYOffset))
-            .style("font-size", pixelConverter.fromPointToPixel(8.5))
-            .style("font-weight", 900)
+            .style("font-size", props.granularSettings.fontSize)
+            .style("font-family", props.granularSettings.fontFamily)
+            .style("font-weight", props.granularSettings.fontStyle)
+            .style("font-style", props.granularSettings.fontStyle)
+            .style("text-decoration", props.granularSettings.fontStyle)
+            .style("fill", props.granularSettings.fontColor)
             .attr("dx", this.textLabelDx);
 
         // render slider
@@ -318,7 +322,7 @@ export class GranularityBase implements IGranularity {
         selection
             .append("rect")
             .classed("periodSlicerRect", true)
-            .style("stroke", granularSettings.sliderColor)
+            .style("stroke", granularSettings.outlineColor)
             .attr("x", pixelConverter.toString(0 - this.sliderXOffset))
             .attr("y", pixelConverter.toString(0 - this.sliderYOffset))
             .attr("rx", pixelConverter.toString(this.sliderRx))

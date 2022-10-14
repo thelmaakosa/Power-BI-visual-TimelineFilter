@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Колір невибраної клітинки",
   "Visual_Granularity": "Деталізація",
   "Visual_ScaleColor": "Колір шкали",
-  "Visual_SliderColor": "Колір повзунка",
+  "Visual_OutlineColor": "Колір повзунка",
   "Visual_Granularity_Year": "Рік",
   "Visual_Granularity_Quarter": "Квартал",
   "Visual_Granularity_Month": "Місяць",

@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Цвят на неизбрана клетка",
   "Visual_Granularity": "Грануларност",
   "Visual_ScaleColor": "Цвят на скалата",
-  "Visual_SliderColor": "Цвят на плъзгача",
+  "Visual_OutlineColor": "Цвят на плъзгача",
   "Visual_Granularity_Year": "Година",
   "Visual_Granularity_Quarter": "Тримесечие",
   "Visual_Granularity_Month": "Месец",

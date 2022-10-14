@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Χρώμα μη επιλεγμένου κελιού",
   "Visual_Granularity": "Υποδιαίρεση",
   "Visual_ScaleColor": "Χρώμα κλίμακας",
-  "Visual_SliderColor": "Χρώμα ρυθμιστικού",
+  "Visual_OutlineColor": "Χρώμα ρυθμιστικού",
   "Visual_Granularity_Year": "Έτος",
   "Visual_Granularity_Quarter": "Τρίμηνο",
   "Visual_Granularity_Month": "Μήνας",

@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Farbe für nicht ausgewählte Zellen",
   "Visual_Granularity": "Granularität",
   "Visual_ScaleColor": "Farbe für Skala",
-  "Visual_SliderColor": "Farbe für Schieberegler",
+  "Visual_OutlineColor": "Farbe für Schieberegler",
   "Visual_Granularity_Year": "Jahr",
   "Visual_Granularity_Quarter": "Quartal",
   "Visual_Granularity_Month": "Monat",

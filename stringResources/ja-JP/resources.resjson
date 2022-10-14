@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "選択されていないセルの色",
   "Visual_Granularity": "細分性",
   "Visual_ScaleColor": "スケールの色",
-  "Visual_SliderColor": "スライダーの色",
+  "Visual_OutlineColor": "スライダーの色",
   "Visual_Granularity_Year": "年",
   "Visual_Granularity_Quarter": "四半期",
   "Visual_Granularity_Month": "月",

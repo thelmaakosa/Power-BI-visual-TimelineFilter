@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Cor da célula não selecionada",
   "Visual_Granularity": "Granularidade",
   "Visual_ScaleColor": "Cor da escala",
-  "Visual_SliderColor": "Cor do controle deslizante",
+  "Visual_OutlineColor": "Cor do controle deslizante",
   "Visual_Granularity_Year": "Ano",
   "Visual_Granularity_Quarter": "Trimestre",
   "Visual_Granularity_Month": "Mês",

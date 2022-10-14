@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Culoare celulă neselectată",
   "Visual_Granularity": "Granularitate",
   "Visual_ScaleColor": "Culoare scară",
-  "Visual_SliderColor": "Culoare cursor",
+  "Visual_OutlineColor": "Culoare cursor",
   "Visual_Granularity_Year": "An",
   "Visual_Granularity_Quarter": "Trimestru",
   "Visual_Granularity_Month": "Lună",

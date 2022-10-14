@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Warna Dinyahpilih",
   "Visual_Granularity": "Kebutiran",
   "Visual_ScaleColor": "Warna Skala",
-  "Visual_SliderColor": "Warna Gelangsar",
+  "Visual_OutlineColor": "Warna Gelangsar",
   "Visual_Granularity_Year": "Tahun",
   "Visual_Granularity_Quarter": "Suku",
   "Visual_Granularity_Month": "Bulan",

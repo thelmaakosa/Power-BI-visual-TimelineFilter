@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "لون الخلية غير المحددة",
   "Visual_Granularity": "النقاوة",
   "Visual_ScaleColor": "لون المقياس",
-  "Visual_SliderColor": "لون شريط التمرير",
+  "Visual_OutlineColor": "لون شريط التمرير",
   "Visual_Granularity_Year": "سنة",
   "Visual_Granularity_Quarter": "‏‏ربع سنة",
   "Visual_Granularity_Month": "شهر",

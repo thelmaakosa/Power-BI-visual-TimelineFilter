@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Barvo neizbrani celice",
   "Visual_Granularity": "Granularnost",
   "Visual_ScaleColor": "Barva merila",
-  "Visual_SliderColor": "Barva drsnika",
+  "Visual_OutlineColor": "Barva drsnika",
   "Visual_Granularity_Year": "Leto",
   "Visual_Granularity_Quarter": "Četrtletje",
   "Visual_Granularity_Month": "Mesec",

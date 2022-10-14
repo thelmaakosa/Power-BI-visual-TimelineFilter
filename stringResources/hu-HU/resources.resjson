@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Nem kijelölt cella színe",
   "Visual_Granularity": "Részletesség",
   "Visual_ScaleColor": "Skála színe",
-  "Visual_SliderColor": "Csúszka színe",
+  "Visual_OutlineColor": "Csúszka színe",
   "Visual_Granularity_Year": "Év",
   "Visual_Granularity_Quarter": "Negyedév",
   "Visual_Granularity_Month": "Hónap",

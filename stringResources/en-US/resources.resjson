@@ -35,7 +35,7 @@
 	"Visual_Cell_UnselectedColor": "Unselected cell color",
 	"Visual_Granularity": "Granularity",
 	"Visual_ScaleColor": "Scale color",
-	"Visual_SliderColor": "Slider color",
+	"Visual_OutlineColor": "Slider color",
 	"Visual_Granularity_Year": "Year",
 	"Visual_Granularity_Quarter": "Quarter",
 	"Visual_Granularity_Month": "Month",

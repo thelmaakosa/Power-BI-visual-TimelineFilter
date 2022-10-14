@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Valitsemattoman solun väri",
   "Visual_Granularity": "Askelväli",
   "Visual_ScaleColor": "Asteikon väri",
-  "Visual_SliderColor": "Liukusäätimen väri",
+  "Visual_OutlineColor": "Liukusäätimen väri",
   "Visual_Granularity_Year": "Vuosi",
   "Visual_Granularity_Quarter": "Vuosineljännes",
   "Visual_Granularity_Month": "Kuukausi",

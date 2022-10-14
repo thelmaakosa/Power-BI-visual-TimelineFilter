@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Gelaxka-kolorea desautatuta",
   "Visual_Granularity": "Gutxieneko balioa",
   "Visual_ScaleColor": "Eskalaren kolorea",
-  "Visual_SliderColor": "Graduatzailearen kolorea",
+  "Visual_OutlineColor": "Graduatzailearen kolorea",
   "Visual_Granularity_Year": "Urtea",
   "Visual_Granularity_Quarter": "Hiruhilekoa",
   "Visual_Granularity_Month": "Hilabetea",

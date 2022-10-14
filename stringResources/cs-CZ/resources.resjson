@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Barva nevybrané buňky",
   "Visual_Granularity": "Úroveň podrobností",
   "Visual_ScaleColor": "Barva měřítka",
-  "Visual_SliderColor": "Barva jezdce",
+  "Visual_OutlineColor": "Barva jezdce",
   "Visual_Granularity_Year": "Rok",
   "Visual_Granularity_Quarter": "Čtvrtletí",
   "Visual_Granularity_Month": "Měsíc",

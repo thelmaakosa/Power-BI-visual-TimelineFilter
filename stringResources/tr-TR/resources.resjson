@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Seçili olmayan hücre rengi",
   "Visual_Granularity": "Ayrıntı düzeyi",
   "Visual_ScaleColor": "Ölçek rengi",
-  "Visual_SliderColor": "Kaydırıcı rengi",
+  "Visual_OutlineColor": "Kaydırıcı rengi",
   "Visual_Granularity_Year": "Yıl",
   "Visual_Granularity_Quarter": "Üç aylık dönem",
   "Visual_Granularity_Month": "Ay",

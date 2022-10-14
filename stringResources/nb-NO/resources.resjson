@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Farge på umerket celle",
   "Visual_Granularity": "Kornethet",
   "Visual_ScaleColor": "Skalafarge",
-  "Visual_SliderColor": "Farge på glidebryter",
+  "Visual_OutlineColor": "Farge på glidebryter",
   "Visual_Granularity_Year": "År",
   "Visual_Granularity_Quarter": "Kvartal",
   "Visual_Granularity_Month": "Måned",

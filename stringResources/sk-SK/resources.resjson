@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Farba nevybratej bunky",
   "Visual_Granularity": "Granularita",
   "Visual_ScaleColor": "Farba mierky",
-  "Visual_SliderColor": "Farba jazdca",
+  "Visual_OutlineColor": "Farba jazdca",
   "Visual_Granularity_Year": "Rok",
   "Visual_Granularity_Quarter": "Štvrťrok",
   "Visual_Granularity_Month": "Mesiac",

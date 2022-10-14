@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Kleur van niet-geselecteerde cel",
   "Visual_Granularity": "Granulariteit",
   "Visual_ScaleColor": "Schaalkleur",
-  "Visual_SliderColor": "Kleur van de schuifregelaar",
+  "Visual_OutlineColor": "Kleur van de schuifregelaar",
   "Visual_Granularity_Year": "Jaar",
   "Visual_Granularity_Quarter": "Kwartaal",
   "Visual_Granularity_Month": "Maand",

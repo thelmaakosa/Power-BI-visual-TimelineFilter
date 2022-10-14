@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Таңдалмаған ұяшық түсі",
   "Visual_Granularity": "Нақтылау дәрежесі",
   "Visual_ScaleColor": "Масштаб түсі",
-  "Visual_SliderColor": "Жүгірткі түсі",
+  "Visual_OutlineColor": "Жүгірткі түсі",
   "Visual_Granularity_Year": "Жыл",
   "Visual_Granularity_Quarter": "Тоқсан",
   "Visual_Granularity_Month": "Ай",

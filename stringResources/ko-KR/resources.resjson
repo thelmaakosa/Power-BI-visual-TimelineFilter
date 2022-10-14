@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "선택 취소한 셀 색",
   "Visual_Granularity": "세분성",
   "Visual_ScaleColor": "눈금 색",
-  "Visual_SliderColor": "슬라이더 색",
+  "Visual_OutlineColor": "슬라이더 색",
   "Visual_Granularity_Year": "년",
   "Visual_Granularity_Quarter": "분기",
   "Visual_Granularity_Month": "월",

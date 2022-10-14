@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Nepasirinkto langelio spalva",
   "Visual_Granularity": "Detalumas",
   "Visual_ScaleColor": "Mastelio spalva",
-  "Visual_SliderColor": "Slankiklio spalva",
+  "Visual_OutlineColor": "Slankiklio spalva",
   "Visual_Granularity_Year": "Metai",
   "Visual_Granularity_Quarter": "Ketvirtis",
   "Visual_Granularity_Month": "Mėnuo",

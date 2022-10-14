@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "צבע תא שלא נבחר",
   "Visual_Granularity": "צפיפות רשת",
   "Visual_ScaleColor": "צבע סרגל",
-  "Visual_SliderColor": "צבע מחוון",
+  "Visual_OutlineColor": "צבע מחוון",
   "Visual_Granularity_Year": "שנה",
   "Visual_Granularity_Quarter": "רבעון",
   "Visual_Granularity_Month": "חודש",

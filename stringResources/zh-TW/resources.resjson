@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "已取消選取的儲存格色彩",
   "Visual_Granularity": "資料粒度",
   "Visual_ScaleColor": "刻度色彩",
-  "Visual_SliderColor": "滑桿色彩",
+  "Visual_OutlineColor": "滑桿色彩",
   "Visual_Granularity_Year": "年",
   "Visual_Granularity_Quarter": "季",
   "Visual_Granularity_Month": "月",

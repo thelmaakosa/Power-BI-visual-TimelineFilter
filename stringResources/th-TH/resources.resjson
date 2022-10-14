@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "สีของเซลล์ที่ไม่ได้เลือก",
   "Visual_Granularity": "การแตกเป็นส่วนย่อย",
   "Visual_ScaleColor": "สีมาตราส่วน",
-  "Visual_SliderColor": "สีแถบเลื่อน",
+  "Visual_OutlineColor": "สีแถบเลื่อน",
   "Visual_Granularity_Year": "ปี",
   "Visual_Granularity_Quarter": "ไตรมาส",
   "Visual_Granularity_Month": "เดือน",

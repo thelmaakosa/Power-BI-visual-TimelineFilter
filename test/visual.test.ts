@@ -667,7 +667,7 @@ describe("Timeline", () => {
 
                 dataView.metadata.objects = {
                     granularity: {
-                        sliderColor: getSolidColorStructuralObject(color),
+                        outlineColor: getSolidColorStructuralObject(color),
                     },
                 };
 

@@ -507,7 +507,9 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             settings.cells.selectedStrokeColor = background.value;
 
             settings.granularity.scaleColor = foreground.value;
-            settings.granularity.sliderColor = foreground.value;
+            settings.granularity.fontColor = foreground.value;
+
+            settings.granularity.outlineColor = foreground.value;
 
             settings.labels.fontColor = foreground.value;
 
@@ -1203,6 +1205,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             this.selectorSelection
                 .append("text")
                 .attr("fill", this.settings.granularity.scaleColor)
+                .style("color", this.settings.granularity.fontColor)
                 .classed(Timeline.TimelineSelectors.PeriodSlicerSelection.className, true)
                 .text(this.localizationManager.getDisplayName(Utils.GET_GRANULARITY_NAME_KEY(granularity)))
                 .attr("x", pixelConverter.toString(startXpoint + Timeline.SelectedTextSelectionFactor * elementWidth))

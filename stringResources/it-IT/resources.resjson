@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Colore della cella non selezionata",
   "Visual_Granularity": "Granularità",
   "Visual_ScaleColor": "Colore della scala",
-  "Visual_SliderColor": "Colore del dispositivo di scorrimento",
+  "Visual_OutlineColor": "Colore del dispositivo di scorrimento",
   "Visual_Granularity_Year": "Anno",
   "Visual_Granularity_Quarter": "Trimestre",
   "Visual_Granularity_Month": "Mese",

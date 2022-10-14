@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "未选定的单元格颜色",
   "Visual_Granularity": "时间粒度",
   "Visual_ScaleColor": "刻度颜色",
-  "Visual_SliderColor": "滑块颜色",
+  "Visual_OutlineColor": "滑块颜色",
   "Visual_Granularity_Year": "年",
   "Visual_Granularity_Quarter": "季度",
   "Visual_Granularity_Month": "月",

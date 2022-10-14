@@ -272,6 +272,17 @@
                         }
                     }
                 },
+                "selectedStrokeColor": {
+                    "displayName": "Selected border color",
+                    "displayNameKey": "Visual_Cell_SelectedStrokeColor",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
                 "fillUnselected": {
                     "displayName": "Unselected cell color",
                     "displayNameKey": "Visual_Cell_UnselectedColor",
@@ -281,6 +292,17 @@
                                 "color": {
                                     "nullable": true
                                 }
+                            }
+                        }
+                    }
+                },
+                "strokeColor": {
+                    "displayName": "Unselected border color",
+                    "displayNameKey": "Visual_Cell_StrokeColor",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
                             }
                         }
                     }
@@ -298,6 +320,15 @@
                         "bool": true
                     }
                 },
+                "position": {
+                    "displayName": "Position",
+                    "displayNameKey": "Visual_Position",
+                    "type": {
+                        "formatting": {
+                            "alignment": true
+                        }
+                    }
+                },
                 "scaleColor": {
                     "displayName": "Scale color",
                     "displayNameKey": "Visual_ScaleColor",
@@ -309,9 +340,57 @@
                         }
                     }
                 },
-                "sliderColor": {
-                    "displayName": "Slider color",
-                    "displayNameKey": "Visual_SliderColor",
+                "fontFamily": {
+                    "displayName": "Scale Font",
+                    "description": "Font of the Scale text.",
+                    "type": {
+                        "formatting": {
+                            "fontFamily": true
+                        }
+                    }
+                },
+                "fontBold": {
+                    "displayName": "Bold",
+                    "displayNameKey": "Visual_FontBold",
+                    "type": {
+                        "bool": false
+                    }
+                },
+                "fontItalic": {
+                    "displayName": "Italic",
+                    "displayNameKey": "Visual_FontItalic",
+                    "type": {
+                        "bool": false
+                    }
+                },
+                "fontUnderline": {
+                    "displayName": "Underline",
+                    "displayNameKey": "Visual_FontUnderline",
+                    "type": {
+                        "bool": false
+                    }
+                },
+                "fontColor": {
+                    "displayName": "Font color",
+                    "displayNameKey": "Visual_FontColor",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "fontSize": {
+                    "displayName": "Font Size",
+                    "displayNameKey": "Visual_TextSize",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "outlineColor": {
+                    "displayName": "Outline color",
+                    "displayNameKey": "Visual_OutlineColor",
                     "type": {
                         "fill": {
                             "solid": {

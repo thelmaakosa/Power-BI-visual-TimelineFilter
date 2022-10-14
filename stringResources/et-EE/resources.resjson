@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Valimata lahtri värv",
   "Visual_Granularity": "Granulaarsus",
   "Visual_ScaleColor": "Skaala värv",
-  "Visual_SliderColor": "Liuguri värv",
+  "Visual_OutlineColor": "Liuguri värv",
   "Visual_Granularity_Year": "Aasta",
   "Visual_Granularity_Quarter": "Kvartal",
   "Visual_Granularity_Month": "Kuu",

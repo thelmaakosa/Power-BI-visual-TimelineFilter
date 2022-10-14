@@ -34,7 +34,7 @@
   "Visual_Cell_UnselectedColor": "Warna sel yang batal dipilih",
   "Visual_Granularity": "Granularitas",
   "Visual_ScaleColor": "Warna skala",
-  "Visual_SliderColor": "Warna penggeser",
+  "Visual_OutlineColor": "Warna penggeser",
   "Visual_Granularity_Year": "Tahun",
   "Visual_Granularity_Quarter": "Kuartal",
   "Visual_Granularity_Month": "Bulan",
