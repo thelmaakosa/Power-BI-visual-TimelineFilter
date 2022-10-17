@@ -115,15 +115,37 @@ export class GranularityData {
 
         this.granularities.forEach((granularity: IGranularity) => {
             const granularitySelection = granularity.render(props, renderIndex === 0);
-
-            if (granularitySelection !== null) {
-                granularitySelection.attr(
-                    "transform",
-                    svgManipulation.translate(viewport.width - (this.groupWidth*(count)) + renderIndex * this.groupWidth, 0),
-                );
-
-                renderIndex++;
+            if (props.granularSettings.position == 'right'){
+                if (granularitySelection !== null) {
+                    granularitySelection.attr(
+                        "transform",
+                        svgManipulation.translate(viewport.width - (this.groupWidth*(count)) + renderIndex * this.groupWidth, 0),
+                    );
+    
+                    renderIndex++;
+                }
             }
+            else if (props.granularSettings.position == 'left'){
+                if (granularitySelection !== null) {
+                    granularitySelection.attr(
+                        "transform",
+                        svgManipulation.translate(renderIndex * this.groupWidth, 0),
+                    );
+    
+                    renderIndex++;
+                }
+            }
+            else{
+                if (granularitySelection !== null) {
+                    granularitySelection.attr(
+                        "transform",
+                        svgManipulation.translate(viewport.width / 2 - (this.groupWidth*(count)) / 2 + renderIndex * this.groupWidth, 0),
+                    );
+    
+                    renderIndex++;
+                }
+            }
+            
         });
     }
 

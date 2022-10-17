@@ -237,6 +237,15 @@
                         "bool": true
                     }
                 },
+                "position": {
+                    "displayName": "Position",
+                    "displayNameKey": "Visual_Position",
+                    "type": {
+                        "formatting": {
+                            "alignment": true
+                        }
+                    }
+                },
                 "fontColor": {
                     "displayName": "Font color",
                     "displayNameKey": "Visual_FontColor",
@@ -349,23 +358,29 @@
                         }
                     }
                 },
+                "fontSize": {
+                    "displayName": "Font Size",
+                    "displayNameKey": "Visual_TextSize",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "fontBold": {
                     "displayName": "Bold",
-                    "displayNameKey": "Visual_FontBold",
                     "type": {
                         "bool": false
                     }
                 },
                 "fontItalic": {
                     "displayName": "Italic",
-                    "displayNameKey": "Visual_FontItalic",
+                    "description": "Font Italic",
                     "type": {
                         "bool": false
                     }
                 },
                 "fontUnderline": {
                     "displayName": "Underline",
-                    "displayNameKey": "Visual_FontUnderline",
+                    "description": "Font Underline",
                     "type": {
                         "bool": false
                     }
@@ -379,13 +394,6 @@
                                 "color": true
                             }
                         }
-                    }
-                },
-                "fontSize": {
-                    "displayName": "Font Size",
-                    "displayNameKey": "Visual_TextSize",
-                    "type": {
-                        "numeric": true
                     }
                 },
                 "outlineColor": {
@@ -486,6 +494,25 @@
                     "displayNameKey": "Visual_DisplayAll",
                     "type": {
                         "bool": true
+                    }
+                },
+                "position": {
+                    "displayName": "Position",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "above",
+                                "displayName": "Above"
+                            },
+                            {
+                                "value": "inside",
+                                "displayName": "Inside"
+                            },
+                            {
+                                "value": "below",
+                                "displayName": "Below"
+                            }
+                        ]
                     }
                 },
                 "fontColor": {

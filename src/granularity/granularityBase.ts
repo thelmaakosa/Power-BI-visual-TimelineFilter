@@ -136,9 +136,9 @@ export class GranularityBase implements IGranularity {
             .attr("y", pixelConverter.toString(0 - this.textLabelYOffset))
             .style("font-size", props.granularSettings.fontSize)
             .style("font-family", props.granularSettings.fontFamily)
-            .style("font-weight", props.granularSettings.fontStyle)
-            .style("font-style", props.granularSettings.fontStyle)
-            .style("text-decoration", props.granularSettings.fontStyle)
+            .style("font-weight", props.granularSettings.fontBold ? '900' : 'normal')
+            .style("font-style", props.granularSettings.fontItalic ? 'italic' : 'initial')
+            .style("text-decoration", props.granularSettings.fontUnderline ? 'underline' : 'initial')
             .style("fill", props.granularSettings.fontColor)
             .attr("dx", this.textLabelDx);
 

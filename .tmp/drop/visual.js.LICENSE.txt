@@ -1,0 +1,13 @@
+/*!
+ * Globalize
+ *
+ * http://github.com/jquery/globalize
+ *
+ * Copyright Software Freedom Conservancy, Inc.
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ */
+
+/*! powerbi-models v1.3.4 | (c) 2016 Microsoft Corporation MIT */
+
+/*! powerbi-models v1.4.0 | (c) 2016 Microsoft Corporation MIT */

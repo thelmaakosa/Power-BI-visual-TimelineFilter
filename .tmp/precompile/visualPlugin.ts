@@ -5,8 +5,8 @@ import VisualConstructorOptions = powerbiVisualsApi.extensibility.visual.VisualC
 
 var powerbiKey: any = "powerbi";
 var powerbi: any = window[powerbiKey];
-var Timeline1447991079100_DEBUG: IVisualPlugin = {
-    name: 'Timeline1447991079100_DEBUG',
+var Timeline1447991079100: IVisualPlugin = {
+    name: 'Timeline1447991079100',
     displayName: 'Timeline 2.4.0',
     class: 'Timeline',
     apiVersion: '3.5.0',
@@ -22,6 +22,6 @@ var Timeline1447991079100_DEBUG: IVisualPlugin = {
 if (typeof powerbi !== "undefined") {
     powerbi.visuals = powerbi.visuals || {};
     powerbi.visuals.plugins = powerbi.visuals.plugins || {};
-    powerbi.visuals.plugins["Timeline1447991079100_DEBUG"] = Timeline1447991079100_DEBUG;
+    powerbi.visuals.plugins["Timeline1447991079100"] = Timeline1447991079100;
 }
-export default Timeline1447991079100_DEBUG;
+export default Timeline1447991079100;

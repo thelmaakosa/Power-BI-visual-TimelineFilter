@@ -25,6 +25,7 @@
  */
 
 export class LabelsSettings {
+    public position: string = "above";
     public show: boolean = true;
     public displayAll: boolean = true;
     public fontColor: string = "#777777";

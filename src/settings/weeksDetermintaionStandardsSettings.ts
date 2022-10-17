@@ -27,5 +27,5 @@
 import { WeekStandards } from "../calendars/weekStandards";
 
 export class WeeksDetermintaionStandardsSettings {
-    public weekStandard: number = WeekStandards.NotSet;
+    public weekStandard: number = 1;
 }
