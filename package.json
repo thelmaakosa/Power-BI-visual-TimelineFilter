@@ -1,6 +1,6 @@
 {
   "name": "powerbi-visuals-timeline",
-  "version": "2.4.0",
+  "version": "2.0",
   "description": "Timeline slicer is a graphical date range selector used as a filtering component in the report canvas",
   "repository": {
     "type": "git",
@@ -53,7 +53,6 @@
     "less": "^3.12.2",
     "less-loader": "^7.0.1",
     "lodash": "^4.17.20",
-    "powerbi-visuals-api": "~3.5.0",
     "powerbi-visuals-tools": "^3.1.15",
     "powerbi-visuals-utils-testutils": "^2.3.2",
     "puppeteer": "^5.2.1",
@@ -73,6 +72,7 @@
     "eslint": "^7.8.1",
     "eslint-plugin-powerbi-visuals": "^0.8.1",
     "powerbi-models": "^1.4.0",
+    "powerbi-visuals-api": "^3.5.1",
     "powerbi-visuals-utils-chartutils": "^2.5.0",
     "powerbi-visuals-utils-dataviewutils": "^2.3.0",
     "powerbi-visuals-utils-formattingutils": "^4.7.0",
