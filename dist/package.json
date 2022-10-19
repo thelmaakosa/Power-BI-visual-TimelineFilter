@@ -1,6 +1,6 @@
 {
     "version": "2.0",
-    "author": {"name":"Microsoft","email":"pbicvsupport@microsoft.com"},
+    "author": {"name":"Andie McPartland","email":"andie.mcpartland@triskele.health"},
     "resources": [
         {
             "resourceId": "rId0",
