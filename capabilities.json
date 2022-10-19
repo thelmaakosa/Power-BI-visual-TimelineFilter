@@ -358,7 +358,7 @@
                         }
                     }
                 },
-                "fontSize": {
+                "textSize": {
                     "displayName": "Font Size",
                     "displayNameKey": "Visual_TextSize",
                     "type": {

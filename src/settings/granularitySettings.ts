@@ -33,7 +33,7 @@ export class GranularitySettings {
     public fontColor: string = "#00458F";
     public outlineColor: string = "#3F464B";
     public fontFamily: string = 'Segoe UI';
-    public fontSize: number = 9;
+    public textSize: number = 9;
     public fontBold: boolean = false;
     public fontItalic: boolean = false;
     public fontUnderline: boolean = false;

@@ -189,6 +189,15 @@
 .timeline-component .timeline .lowerTextCell {
   text-anchor: middle;
 }
+.timeline-component .timeline .mainArea .above {
+  transform: translate(0, 0);
+}
+.timeline-component .timeline .mainArea .inside {
+  transform: translate(0, 25%);
+}
+.timeline-component .timeline .mainArea .below {
+  transform: translate(0, 50%);
+}
 .timeline-component .timeline .cellRect {
   stroke: #333444;
 }
@@ -226,8 +235,19 @@
 .timeline-component .timelineSlicer .periodSlicerRect {
   pointer-events: none;
 }
+.timeline-component .rangeTextArea.left {
+  transform: translate(0, 0);
+}
+.timeline-component .rangeTextArea.right {
+  transform: translate(88%, 0);
+}
+.timeline-component .rangeTextArea.center {
+  transform: translate(44%, 0);
+}
 .timeline-component .timelineWrapper {
   overflow: auto;
   width: 100%;
 }
 
+
+/*# sourceMappingURL=https://localhost:8080/assets/visual.css.map*/

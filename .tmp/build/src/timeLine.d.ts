@@ -49,6 +49,7 @@ export declare class Timeline implements powerbiVisualsApi.extensibility.visual.
     private static DefaultRangeTextSelectionY;
     private static DefaultRangeTextSelectionX;
     private static ViewportWidthAdjustment;
+    static labelsSettings: LabelsSettings;
     private static filterObjectProperty;
     private static TimelineSelectors;
     private static updateCursors;
@@ -134,7 +135,7 @@ export declare class Timeline implements powerbiVisualsApi.extensibility.visual.
     private renderGranularityFrame;
     private handleContextMenu;
     private handleClick;
-    private addElements;
+    addElements(): void;
     private createDatePeriod;
     private createTimelineData;
     private updateCalendar;

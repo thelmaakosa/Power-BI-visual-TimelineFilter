@@ -51,6 +51,18 @@
             text-anchor: middle;
         }
 
+        .mainArea .above{
+            transform: translate(0, 0);
+        } 
+
+        .mainArea .inside{
+            transform: translate(0, 25%);
+        }
+
+        .mainArea .below{
+            transform: translate(0, 50%);
+        }
+
         .cellRect {
             stroke: #333444;
         }
@@ -102,6 +114,18 @@
         .periodSlicerRect {
             pointer-events: none;
         }
+    }
+
+    .rangeTextArea.left{
+        transform: translate(0, 0);
+    }
+
+    .rangeTextArea.right{
+        transform: translate(88%, 0);
+    }
+
+    .rangeTextArea.center{
+        transform: translate(44%, 0);
     }
 
     .timelineWrapper {

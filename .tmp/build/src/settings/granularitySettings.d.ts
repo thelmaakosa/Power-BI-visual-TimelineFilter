@@ -6,7 +6,7 @@ export declare class GranularitySettings {
     fontColor: string;
     outlineColor: string;
     fontFamily: string;
-    fontSize: number;
+    textSize: number;
     fontBold: boolean;
     fontItalic: boolean;
     fontUnderline: boolean;

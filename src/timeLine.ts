@@ -372,6 +372,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     private static DefaultRangeTextSelectionX: number = 10;
 
     private static ViewportWidthAdjustment: number = 2;
+    public static labelsSettings: LabelsSettings;
 
     private static filterObjectProperty: { objectName: string, propertyName: string } = {
         objectName: "general",
@@ -883,7 +884,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
     public renderTimeRangeText(timelineData: ITimelineData, rangeHeaderSettings: LabelsSettings): void {
         
-        
         const leftMargin: number = (GranularityNames.length + Timeline.GranularityNamesLength)
             * this.timelineProperties.elementWidth;
 
@@ -898,6 +898,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             this.rangeTextSelection = this.headerSelection
                 .append("g")
                 .classed(Timeline.TimelineSelectors.RangeTextArea.className, true)
+                .classed(rangeHeaderSettings.position, true)
                 .append("text");
 
             const timeRangeText: string = Utils.TIME_RANGE_TEXT(timelineData);
@@ -1240,20 +1241,20 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         this.onCellClickHandler(dataPoint, index, event.altKey || event.shiftKey);
     }
 
-    private addElements(): void {
+    public addElements(): void {
         this.mainGroupSelection = this.mainSvgSelection
             .append("g")
             .classed(Timeline.TimelineSelectors.MainArea.className, true);
+        
+        this.cellsSelection = this.mainGroupSelection
+            .append("g")
+            .classed(Timeline.TimelineSelectors.CellsArea.className, true);
 
         this.yearLabelsSelection = this.mainGroupSelection.append("g");
         this.quarterLabelsSelection = this.mainGroupSelection.append("g");
         this.monthLabelsSelection = this.mainGroupSelection.append("g");
         this.weekLabelsSelection = this.mainGroupSelection.append("g");
         this.dayLabelsSelection = this.mainGroupSelection.append("g");
-
-        this.cellsSelection = this.mainGroupSelection
-            .append("g")
-            .classed(Timeline.TimelineSelectors.CellsArea.className, true);
 
         this.cursorGroupSelection = this.mainSvgSelection
             .append("g")
@@ -1343,7 +1344,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             .style("height", pixelConverter.toString(options.viewport.height))
             .style("width", pixelConverter.toString(options.viewport.width));
 
-        const mainAreaHeight: number = timelineProperties.cellsYPosition
+        const mainAreaHeight: number = timelineProperties.cellsYPosition *2
             + timelineProperties.cellHeight
             + Timeline.TimelineMargins.FramePadding
             - Timeline.TimelineMargins.LegendHeight;
@@ -1421,6 +1422,8 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
         if (timelineSettings.labels.show) {
             if (timelineSettings.labels.displayAll || granularityType === GranularityType.year) {
+                this.yearLabelsSelection.attr("class", null).classed(timelineSettings.labels.position, true);
+
                 this.renderLabels(
                     extendedLabels.yearLabels,
                     this.yearLabelsSelection,
@@ -1432,6 +1435,8 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             }
 
             if (timelineSettings.labels.displayAll || granularityType === GranularityType.quarter) {
+                this.quarterLabelsSelection.attr("class", null).classed(timelineSettings.labels.position, true);
+
                 this.renderLabels(
                     extendedLabels.quarterLabels,
                     this.quarterLabelsSelection,
@@ -1443,6 +1448,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             }
 
             if (timelineSettings.labels.displayAll || granularityType === GranularityType.month) {
+                this.monthLabelsSelection.attr("class", null).classed(timelineSettings.labels.position, true);
                 this.renderLabels(
                     extendedLabels.monthLabels,
                     this.monthLabelsSelection,
@@ -1454,6 +1460,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             }
 
             if (timelineSettings.labels.displayAll || granularityType === GranularityType.week) {
+                this.weekLabelsSelection.attr("class", null).classed(timelineSettings.labels.position, true);
                 this.renderLabels(
                     extendedLabels.weekLabels,
                     this.weekLabelsSelection,
@@ -1465,6 +1472,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             }
 
             if (timelineSettings.labels.displayAll || granularityType === GranularityType.day) {
+                this.dayLabelsSelection.attr("class", null).classed(timelineSettings.labels.position, true);
                 this.renderLabels(
                     extendedLabels.dayLabels,
                     this.dayLabelsSelection,
