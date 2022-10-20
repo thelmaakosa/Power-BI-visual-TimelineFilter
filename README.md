@@ -44,8 +44,6 @@ https://github.com/thelmaakosa/Power-BI-visual-TimelineFilter/blob/main/Timeline
 
 ## Package
 
-pbiviz start
-
 ### Publish PowerBI Visual 
 - Follow documentation for finalizing visual: (https://docs.microsoft.com/en-us/power-bi/developer/visuals/package-visual)
 - Launch terminal 
