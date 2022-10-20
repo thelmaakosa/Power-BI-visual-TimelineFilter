@@ -7,6 +7,7 @@
 
 ## Introduction 
 Custom PowerBI Visual to filter the date using a timeline. 
+https://github.com/thelmaakosa/Power-BI-visual-TimelineFilter/blob/main/TimelineFilter.pdf
 
 ## Contributer(s)
 - **Developer:** [Thelma Akosa ](mailto:thelmaakosa107@gmail.com)
