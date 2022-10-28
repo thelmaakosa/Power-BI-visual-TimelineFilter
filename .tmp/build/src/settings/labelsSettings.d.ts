@@ -1,7 +1,7 @@
 export declare class LabelsSettings {
-    position: string;
     show: boolean;
-    displayAll: boolean;
-    fontColor: string;
+    position: string;
+    fontFamily: string;
     textSize: number;
+    fontColor: string;
 }

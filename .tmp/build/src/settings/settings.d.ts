@@ -9,6 +9,7 @@ import { LabelsSettings } from "./labelsSettings";
 import { ScrollAutoAdjustment } from "./scrollAutoAdjustment";
 import { WeekDaySettings } from "./weekDaySettings";
 import { WeeksDetermintaionStandardsSettings } from "./weeksDetermintaionStandardsSettings";
+import { dateFormatSettings } from "./dateFormatSettings";
 export declare class Settings extends dataViewObjectsParser.DataViewObjectsParser {
     general: GeneralSettings;
     calendar: CalendarSettings;
@@ -21,4 +22,5 @@ export declare class Settings extends dataViewObjectsParser.DataViewObjectsParse
     scrollAutoAdjustment: ScrollAutoAdjustment;
     cursor: CursorSettings;
     weeksDetermintaionStandards: WeeksDetermintaionStandardsSettings;
+    dateFormat: dateFormatSettings;
 }

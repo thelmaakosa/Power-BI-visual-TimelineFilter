@@ -62,7 +62,6 @@ export class GranularityBase implements IGranularity {
     private clickableRectWidth: number = 50;
 
     private hLineYOffset: number = 2;
-    private hLineHeight: number = 1;
     private hLineWidth: number = 45;
     private hLineXOffset: number = 45;
 
@@ -72,7 +71,6 @@ export class GranularityBase implements IGranularity {
     private sliderWidth: number = 45;
     private sliderHeight: number = 15;
 
-    private vLineWidth: number = 2;
     private vLineHeight: number = 5;
 
     private textLabelXOffset: number = 7;
@@ -115,8 +113,9 @@ export class GranularityBase implements IGranularity {
             .classed("timelineVertLine", true)
             .attr("x", 0)
             .attr("y", 0)
-            .attr("width", pixelConverter.toString(this.vLineWidth))
-            .attr("height", pixelConverter.toString(this.vLineHeight));
+            .attr("width", props.granularSettings.scaleThickness)
+            .attr("height", pixelConverter.toString(this.vLineHeight))
+            .attr("fill", props.granularSettings.scale? props.granularSettings.scaleColor : "rgba(255, 255, 255, 0)");
 
         // render horizontal line
         if (!isFirst) {
@@ -124,8 +123,9 @@ export class GranularityBase implements IGranularity {
                 .classed("timelineHorzLine", true)
                 .attr("x", pixelConverter.toString(0 - this.hLineXOffset))
                 .attr("y", pixelConverter.toString(this.hLineYOffset))
-                .attr("height", pixelConverter.toString(this.hLineHeight))
-                .attr("width", pixelConverter.toString(this.hLineWidth));
+                .attr("height", props.granularSettings.scaleThickness)
+                .attr("width", pixelConverter.toString(this.hLineWidth))
+                .attr("fill", props.granularSettings.scale? props.granularSettings.scaleColor : "rgba(255, 255, 255, 0)");
         }
 
         // render marker
@@ -136,9 +136,9 @@ export class GranularityBase implements IGranularity {
             .attr("y", pixelConverter.toString(0 - this.textLabelYOffset))
             .style("font-size", pixelConverter.fromPointToPixel(props.granularSettings.textSize))
             .style("font-family", props.granularSettings.fontFamily)
-            .style("font-weight", props.granularSettings.fontBold ? '900' : 'normal')
-            .style("font-style", props.granularSettings.fontItalic ? 'italic' : 'initial')
-            .style("text-decoration", props.granularSettings.fontUnderline ? 'underline' : 'initial')
+            .style("font-weight", props.granularSettings.Bold ? '900' : 'normal')
+            .style("font-style", props.granularSettings.Italic ? 'italic' : 'initial')
+            .style("text-decoration", props.granularSettings.Underline ? 'underline' : 'initial')
             .style("fill", props.granularSettings.fontColor)
             .attr("dx", this.textLabelDx);
 
@@ -322,12 +322,17 @@ export class GranularityBase implements IGranularity {
         selection
             .append("rect")
             .classed("periodSlicerRect", true)
-            .style("stroke", granularSettings.outlineColor)
             .attr("x", pixelConverter.toString(0 - this.sliderXOffset))
             .attr("y", pixelConverter.toString(0 - this.sliderYOffset))
-            .attr("rx", pixelConverter.toString(this.sliderRx))
+            .attr("rx", pixelConverter.toString(granularSettings.selectedOutlineRadius))
+            .attr("ry", pixelConverter.toString(granularSettings.selectedOutlineRadius))
             .attr("width", pixelConverter.toString(this.sliderWidth))
             .attr("height", pixelConverter.toString(this.sliderHeight))
-            .data([granularSettings.granularity]);
+            .style("fill", granularSettings.selectedfillColor)
+            .style("fill-opacity", granularSettings.transparency/100)
+            .style("stroke", granularSettings.outlineColor)
+            .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+            .style("stroke-opacity", granularSettings.innerPadding/100)
+            .data([granularSettings.granularity])
     }
 }

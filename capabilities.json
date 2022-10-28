@@ -246,6 +246,21 @@
                         }
                     }
                 },
+                "fontFamily": {
+                    "displayName": "Font family",
+                    "type": {
+                        "formatting": {
+                            "fontFamily": true
+                        }
+                    }
+                },
+                "textSize": {
+                    "displayName": "Text Size",
+                    "displayNameKey": "Visual_TextSize",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "fontColor": {
                     "displayName": "Font color",
                     "displayNameKey": "Visual_FontColor",
@@ -257,11 +272,22 @@
                         }
                     }
                 },
-                "textSize": {
-                    "displayName": "Text Size",
-                    "displayNameKey": "Visual_TextSize",
+                "Bold": {
+                    "displayName": "Bold",
                     "type": {
-                        "numeric": true
+                        "bool": true
+                    }
+                },
+                "Italic": {
+                    "displayName": "Italic",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "Underline": {
+                    "displayName": "Underline",
+                    "type": {
+                        "bool": true
                     }
                 }
             }
@@ -270,7 +296,7 @@
             "displayName": "Cells",
             "displayNameKey": "Visual_Cells",
             "properties": {
-                "fillSelected": {
+                "selectedfillColor": {
                     "displayName": "Selected cell color",
                     "displayNameKey": "Visual_Cell_SelectedColor",
                     "type": {
@@ -281,8 +307,14 @@
                         }
                     }
                 },
+                "transparency": {
+                    "displayName": "Selected cell opacity",
+                    "type": {
+                        "integer": true
+                    }
+                },
                 "selectedStrokeColor": {
-                    "displayName": "Selected border color",
+                    "displayName": "Selected outline color",
                     "displayNameKey": "Visual_Cell_SelectedStrokeColor",
                     "type": {
                         "fill": {
@@ -290,6 +322,12 @@
                                 "color": true
                             }
                         }
+                    }
+                },
+                "selectedoutlineThickness": {
+                    "displayName": "Selected outline thickness",
+                    "type": {
+                        "numeric": true
                     }
                 },
                 "fillUnselected": {
@@ -305,8 +343,14 @@
                         }
                     }
                 },
+                "innerPadding": {
+                    "displayName": "Unselected cell opacity",
+                    "type": {
+                        "integer": true
+                    }
+                },
                 "strokeColor": {
-                    "displayName": "Unselected border color",
+                    "displayName": "Unselected outline color",
                     "displayNameKey": "Visual_Cell_StrokeColor",
                     "type": {
                         "fill": {
@@ -314,6 +358,56 @@
                                 "color": true
                             }
                         }
+                    }
+                },
+                "unselectedoutlineThickness": {
+                    "displayName": "Unselected outline thickness",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "capSize": {
+                    "displayName": "Cap size",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "capfillColor": {
+                    "displayName": "Cap fill color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "capfillOpacity": {
+                    "displayName": "Cap fill opacity",
+                    "type": {
+                        "integer": true
+                    }
+                },
+                "capoutlineColor": {
+                    "displayName": "Cap outline color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "capoutlineThickness": {
+                    "displayName": "Cap outline thickness",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "capoutlineRadius": {
+                    "displayName": "Cap outline radius",
+                    "type": {
+                        "numeric": true
                     }
                 }
             }
@@ -336,6 +430,19 @@
                         "formatting": {
                             "alignment": true
                         }
+                    }
+                },
+                "scale": {
+                    "displayName": "Scale",
+                    "displayNameKey": "Visual_Show",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "scaleThickness": {
+                    "displayName": "Scale Thickness",
+                    "type": {
+                        "numeric": true
                     }
                 },
                 "scaleColor": {
@@ -365,20 +472,20 @@
                         "numeric": true
                     }
                 },
-                "fontBold": {
+                "Bold": {
                     "displayName": "Bold",
                     "type": {
                         "bool": false
                     }
                 },
-                "fontItalic": {
+                "Italic": {
                     "displayName": "Italic",
                     "description": "Font Italic",
                     "type": {
                         "bool": false
                     }
                 },
-                "fontUnderline": {
+                "Underline": {
                     "displayName": "Underline",
                     "description": "Font Underline",
                     "type": {
@@ -396,8 +503,64 @@
                         }
                     }
                 },
+                "selectedfillColor": {
+                    "displayName": "Selectd Fill Color",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "transparency": {
+                    "displayName": "Selected Fill Opacity",
+                    "type": {
+                        "integer": true
+                    }
+                },
+                "selectedOutlineLeft": {
+                    "displayName": "Selected Outline Left",
+                    "displayNameKey": "Visual_Show",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "selectedOutlineRight": {
+                    "displayName": "Selected Outline Right",
+                    "displayNameKey": "Visual_Show",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "selectedOutlineTop": {
+                    "displayName": "Selected Outline Top",
+                    "displayNameKey": "Visual_Show",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "selectedOutlineBottom": {
+                    "displayName": "Selected Outline Bottom",
+                    "displayNameKey": "Visual_Show",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "selectedOutlineThickness": {
+                    "displayName": "Selected Outline Thickness",
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "selectedOutlineRadius": {
+                    "displayName": "Selected Outline Radius",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "outlineColor": {
-                    "displayName": "Outline color",
+                    "displayName": "Selected Outline color",
                     "displayNameKey": "Visual_OutlineColor",
                     "type": {
                         "fill": {
@@ -405,6 +568,12 @@
                                 "color": true
                             }
                         }
+                    }
+                },
+                "innerPadding": {
+                    "displayName": "Selected Outline Opacity",
+                    "type": {
+                        "integer": true
                     }
                 },
                 "granularity": {
@@ -489,13 +658,6 @@
                         "bool": true
                     }
                 },
-                "displayAll": {
-                    "displayName": "Display all",
-                    "displayNameKey": "Visual_DisplayAll",
-                    "type": {
-                        "bool": true
-                    }
-                },
                 "position": {
                     "displayName": "Position",
                     "type": {
@@ -515,6 +677,22 @@
                         ]
                     }
                 },
+                "fontFamily": {
+                    "displayName": "Label Font",
+                    "description": "Font of the Label text.",
+                    "type": {
+                        "formatting": {
+                            "fontFamily": true
+                        }
+                    }
+                },
+                "textSize": {
+                    "displayName": "Font Size",
+                    "displayNameKey": "Visual_TextSize",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "fontColor": {
                     "displayName": "Font color",
                     "displayNameKey": "Visual_FontColor",
@@ -524,13 +702,6 @@
                                 "color": true
                             }
                         }
-                    }
-                },
-                "textSize": {
-                    "displayName": "Text Size",
-                    "displayNameKey": "Visual_TextSize",
-                    "type": {
-                        "numeric": true
                     }
                 }
             }
@@ -542,6 +713,111 @@
                 "show": {
                     "displayName": "Show",
                     "displayNameKey": "Visual_Show",
+                    "type": {
+                        "bool": true
+                    }
+                }
+            }
+        },
+        "dateFormat": {
+            "displayName": "Date Format",
+            "properties": {
+                "yearFormat": {
+                    "displayName": "Year Format",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "YYYY",
+                                "displayName": "YYYY"
+                            },
+                            {
+                                "value": "YY",
+                                "displayName": "YY"
+                            }
+                        ]
+                    },
+                    "filterState": true
+                },
+                "quarterFormat": {
+                    "displayName": "Quarter Format",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "Quanter X",
+                                "displayName": "Quanter X"
+                            },
+                            {
+                                "value": "QX",
+                                "displayName": "QX"
+                            }
+                        ]
+                    },
+                    "filterState": true
+                },
+                "monthFormat": {
+                    "displayName": "Month Format",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "mmm",
+                                "displayName": "mmm"
+                            },
+                            {
+                                "value": "mmmm",
+                                "displayName": "mmmm"
+                            },
+                            {
+                                "value": "MM",
+                                "displayName": "MM"
+                            },
+                            {
+                                "value": "M",
+                                "displayName": "M"
+                            }
+                        ]
+                    },
+                    "filterState": true
+                },
+                "dayFormat": {
+                    "displayName": "Day Format",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "DD",
+                                "displayName": "DD"
+                            },
+                            {
+                                "value": "D",
+                                "displayName": "D"
+                            }
+                        ]
+                    },
+                    "filterState": true
+                },
+                "dayofweek": {
+                    "displayName": "Day of week",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "dayofweekFormat": {
+                    "displayName": "Day of week format",
+                    "type": {
+                        "enumeration": [
+                            {
+                                "value": "ddd",
+                                "displayName": "ddd"
+                            },
+                            {
+                                "value": "dddd",
+                                "displayName": "dddd"
+                            }
+                        ]
+                    },
+                    "filterState": true
+                },
+                "datecategorization": {
+                    "displayName": "Date categorization",
                     "type": {
                         "bool": true
                     }

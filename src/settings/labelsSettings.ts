@@ -25,9 +25,9 @@
  */
 
 export class LabelsSettings {
-    public position: string = "above";
     public show: boolean = true;
-    public displayAll: boolean = true;
-    public fontColor: string = "#777777";
+    public position: string = "above";
+    public fontFamily: string = 'Segoe UI';
     public textSize: number = 9;
+    public fontColor: string = "#000000";
 }

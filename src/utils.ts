@@ -228,7 +228,7 @@ export class Utils {
             && dataPoint.datePeriod.endDate <= Utils.GET_END_SELECTION_DATE(timelineData);
 
         return inSelectedPeriods
-            ? cellSettings.fillSelected
+            ? cellSettings.selectedfillColor
             : (cellSettings.fillUnselected || Utils.DefaultCellColor);
     }
 

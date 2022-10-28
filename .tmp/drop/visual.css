@@ -219,11 +219,6 @@
   fill: #000000;
   cursor: pointer;
 }
-.timeline-component .timelineSlicer .periodSlicerRect {
-  stroke: #aaa;
-  stroke-width: 2px;
-  fill: transparent;
-}
 .timeline-component .timelineSlicer .periodSlicerGranularities,
 .timeline-component .timelineSlicer .periodSlicerSelection {
   font-size: 10px;

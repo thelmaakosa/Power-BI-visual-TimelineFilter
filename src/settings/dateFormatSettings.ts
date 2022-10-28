@@ -24,20 +24,12 @@
  *  THE SOFTWARE.
  */
 
-export class CellsSettings {
-    public selectedfillColor: string = "#ADD5FF";
-    public transparency: number = 100;
-    public selectedStrokeColor: string = "#00458F";
-    public selectedoutlineThickness: number = 1;
-    public fillUnselected: string = "#D9DADB";
-    public innerPadding: number = 100;
-    public strokeColor: string = "#8C9093";
-    public unselectedoutlineThickness: number = 1;
-    public capSize: number = 5;
-    public capfillColor: string = "#8C9093";
-    public capfillOpacity: number = 100;
-    public capoutlineColor: string = "#8C9093";
-    public capoutlineThickness: number = 2;
-    public capoutlineRadius: number = 5;
-
+export class dateFormatSettings {
+    public yearFormat: string = "YYYY";
+    public quarterFormat: string = "QX";
+    public monthFormat: string = "mmm";
+    public dayFormat: string = "DD";
+    public dayofweek: boolean = false;
+    public dayofweekFormat: string = "ddd";
+    public datecategorization: boolean = false;
 }

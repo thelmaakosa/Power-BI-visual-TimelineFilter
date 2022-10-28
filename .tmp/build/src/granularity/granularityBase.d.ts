@@ -13,7 +13,6 @@ export declare class GranularityBase implements IGranularity {
     private clickableRectFactor;
     private clickableRectWidth;
     private hLineYOffset;
-    private hLineHeight;
     private hLineWidth;
     private hLineXOffset;
     private sliderXOffset;
@@ -21,7 +20,6 @@ export declare class GranularityBase implements IGranularity {
     private sliderRx;
     private sliderWidth;
     private sliderHeight;
-    private vLineWidth;
     private vLineHeight;
     private textLabelXOffset;
     private textLabelYOffset;

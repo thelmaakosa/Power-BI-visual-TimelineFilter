@@ -28,15 +28,26 @@ import { GranularityType } from "../granularity/granularityType";
 
 export class GranularitySettings {
     public show: boolean = true;
-    public position: string = "right"
+    public position: string = "right";
+    public scale: boolean = true;
+    public scaleThickness: number = 2;
     public scaleColor: string = "#8C9093";
     public fontColor: string = "#00458F";
+    public selectedfillColor: string = "transparent";
+    public transparency: number = 50;
+    public selectedOutlineLeft: boolean = false;
+    public selectedOutlineRight: boolean = false;
+    public selectedOutlineTop: boolean = false;
+    public selectedOutlineBottom: boolean = true;
+    public selectedOutlineThickness: number = 2;
+    public selectedOutlineRadius: number = 0;
     public outlineColor: string = "#3F464B";
+    public innerPadding: number = 50;
     public fontFamily: string = 'Segoe UI';
     public textSize: number = 9;
-    public fontBold: boolean = false;
-    public fontItalic: boolean = false;
-    public fontUnderline: boolean = false;
+    public Bold: boolean = false;
+    public Italic: boolean = false;
+    public Underline: boolean = false;
     public granularity: GranularityType = GranularityType.month;
     public granularityYearVisibility: boolean = true;
     public granularityQuarterVisibility: boolean = true;
