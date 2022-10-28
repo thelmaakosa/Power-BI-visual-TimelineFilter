@@ -8,9 +8,11 @@
 ## Introduction 
 Custom PowerBI Visual to filter the date using a timeline. 
 
+https://github.com/thelmaakosa/Power-BI-visual-TimelineFilter/blob/main/TimelineFilter.pdf
+
 ## Contributer(s)
-- **Developer:** [Andie McPartland](mailto:andie.mcpartland@triskele.health)
-- **Tester:** [Ryan Fleming](mailto:ryan.fleming@triskele.health)
+- **Developer:** [Thelma Akosa ](mailto:thelmaakosa107@gmail.com)
+- **Tester:** [Thelma Akosa]
 
 ## Documentation and Resources
 - PowerBI Documentation: https://docs.microsoft.com/en-us/power-bi/developer/visuals/
@@ -33,6 +35,7 @@ Custom PowerBI Visual to filter the date using a timeline.
 - Launch terminal 
 - Navigate to repository folder location using `cd folder path` command 
 - `pbiviz start` command into terminal
+- Login to https://app.powerbi.com.
 
 ## Build
 
@@ -46,4 +49,4 @@ Custom PowerBI Visual to filter the date using a timeline.
 - Launch terminal 
 - Navigate to repository folder location using `cd folder path` command 
 - `pbiviz package` command into the terminal 
-
+- import .pbiviz file into PowerBI
