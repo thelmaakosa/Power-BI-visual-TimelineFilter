@@ -26,6 +26,6 @@
 
 import { WeekStandards } from "../calendars/weekStandards";
 
-export class WeeksDetermintaionStandardsSettings {
+export class calendaTypeSettings {
     public weekStandard: number = 1;
 }

@@ -196,7 +196,7 @@
   transform: translate(0, 25%);
 }
 .timeline-component .timeline .mainArea .below {
-  transform: translate(0, 50%);
+  transform: translate(0, 55%);
 }
 .timeline-component .timeline .cellRect {
   stroke: #333444;
@@ -244,3 +244,5 @@
   width: 100%;
 }
 
+
+/*# sourceMappingURL=https://localhost:8080/assets/visual.css.map*/

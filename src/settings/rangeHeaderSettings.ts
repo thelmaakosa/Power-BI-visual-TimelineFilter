@@ -24,7 +24,14 @@
  *  THE SOFTWARE.
  */
 
-export class WeekDaySettings {
-    public daySelection: boolean = true;
-    public day: number = 0;
+export class rangeHeaderSettings {
+    public show: boolean = true;
+    public position: string = "right";
+    public fontFamily: string = 'Segoe UI';
+    public textSize: number = 9;
+    public fontColor: string = "#000000";
+    public fontBold: boolean = false;
+    public fontItalic: boolean = false;
+    public fontUnderline: boolean = false;
+
 }

@@ -9,7 +9,7 @@ export declare class CellsSettings {
     unselectedoutlineThickness: number;
     capSize: number;
     capfillColor: string;
-    capfillOpacity: number;
+    outlineWeight: number;
     capoutlineColor: string;
     capoutlineThickness: number;
     capoutlineRadius: number;

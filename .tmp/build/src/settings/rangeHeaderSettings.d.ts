@@ -1,4 +1,4 @@
-export declare class LabelsSettings {
+export declare class rangeHeaderSettings {
     show: boolean;
     position: string;
     fontFamily: string;

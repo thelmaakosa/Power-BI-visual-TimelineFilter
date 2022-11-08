@@ -35,7 +35,7 @@ export class CellsSettings {
     public unselectedoutlineThickness: number = 1;
     public capSize: number = 5;
     public capfillColor: string = "#8C9093";
-    public capfillOpacity: number = 100;
+    public outlineWeight: number = 100;
     public capoutlineColor: string = "#8C9093";
     public capoutlineThickness: number = 2;
     public capoutlineRadius: number = 5;

@@ -7,6 +7,7 @@ import { ICursorDataPoint, ITimelineCursorOverElement, ITimelineData, ITimelineP
 import { CalendarSettings } from "./settings/calendarSettings";
 import { CellsSettings } from "./settings/cellsSettings";
 import { LabelsSettings } from "./settings/labelsSettings";
+import { rangeHeaderSettings } from "./settings/rangeHeaderSettings";
 import { Settings } from "./settings/settings";
 import { GranularityData } from "./granularity/granularityData";
 import { GranularityType } from "./granularity/granularityType";
@@ -104,7 +105,7 @@ export declare class Timeline implements powerbiVisualsApi.extensibility.visual.
     fillCells(visSettings: Settings): void;
     renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number): void;
     renderCursors(timelineData: ITimelineData, cellHeight: number, cellsYPosition: number, cellSettings: CellsSettings): D3Selection<any, any, any, any>;
-    renderTimeRangeText(timelineData: ITimelineData, rangeHeaderSettings: LabelsSettings): void;
+    renderTimeRangeText(timelineData: ITimelineData, rangeHeaderSettings: rangeHeaderSettings): void;
     setSelection(timelineData: ITimelineData): void;
     applyDatePeriod(startDate: Date, endDate: Date, target: IFilterColumnTarget): void;
     getFilterAction(startDate: Date, endDate: Date): powerbiVisualsApi.FilterAction;

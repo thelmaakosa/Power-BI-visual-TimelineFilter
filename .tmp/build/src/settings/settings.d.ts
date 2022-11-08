@@ -7,20 +7,19 @@ import { GeneralSettings } from "./generalSettings";
 import { GranularitySettings } from "./granularitySettings";
 import { LabelsSettings } from "./labelsSettings";
 import { ScrollAutoAdjustment } from "./scrollAutoAdjustment";
-import { WeekDaySettings } from "./weekDaySettings";
-import { WeeksDetermintaionStandardsSettings } from "./weeksDetermintaionStandardsSettings";
+import { calendaTypeSettings } from "./calendaTypeSettings";
 import { dateFormatSettings } from "./dateFormatSettings";
+import { rangeHeaderSettings } from "./rangeHeaderSettings";
 export declare class Settings extends dataViewObjectsParser.DataViewObjectsParser {
     general: GeneralSettings;
+    calendaType: calendaTypeSettings;
     calendar: CalendarSettings;
     forceSelection: ForceSelectionSettings;
-    weekDay: WeekDaySettings;
-    rangeHeader: LabelsSettings;
+    rangeHeader: rangeHeaderSettings;
     cells: CellsSettings;
     granularity: GranularitySettings;
     labels: LabelsSettings;
     scrollAutoAdjustment: ScrollAutoAdjustment;
     cursor: CursorSettings;
-    weeksDetermintaionStandards: WeeksDetermintaionStandardsSettings;
     dateFormat: dateFormatSettings;
 }

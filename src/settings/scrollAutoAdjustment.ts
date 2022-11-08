@@ -26,5 +26,5 @@
  */
 
 export class ScrollAutoAdjustment {
-    public show: boolean = false;
+    public show: boolean = true;
 }
