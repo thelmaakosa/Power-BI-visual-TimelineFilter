@@ -985,6 +985,9 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 .attr("fill", rangeHeaderSettings.fontColor)
                 .style("font-family", rangeHeaderSettings.fontFamily)
                 .style("font-size", pixelConverter.fromPointToPixel(rangeHeaderSettings.textSize))
+                .style("font-weight", rangeHeaderSettings.fontBold ? '700' : 'normal')
+                .style("font-style", rangeHeaderSettings.fontItalic ? 'italic' : 'initial')
+                .style("text-decoration", rangeHeaderSettings.fontUnderline ? 'underline' : 'initial')
                 .text(actualText)
                 .append("title")
                 .text(timeRangeText);
@@ -1106,6 +1109,15 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             delete instances[0].properties.scaleColor;
             delete instances[0].properties.scaleThickness;
 
+        }
+
+        if (options.objectName === "granularity"
+            && !settings.granularity.selectedOutlineLeft
+            || !settings.granularity.selectedOutlineRight
+            || !settings.granularity.selectedOutlineTop
+            || !settings.granularity.selectedOutlineBottom
+        ){
+            delete instances[0].properties.selectedOutlineRadius;
         }
 
         if (options.objectName === "cells") {
@@ -1743,6 +1755,9 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             .classed(Timeline.TimelineSelectors.TextLabel.className, true)
             .classed(labels[0].text,true)
             .merge(labelsGroupSelection)
+            .style("font-weight", this.settings.labels.fontBold ? '700' : 'normal')
+            .style("font-style", this.settings.labels.fontItalic ? 'italic' : 'initial')
+            .style("text-decoration", this.settings.labels.fontUnderline ? 'underline' : 'initial')
             .text((label: ITimelineLabel, id: number) => {
                 if (!isLast && id === 0 && labels.length > 1) {
                     let textProperties: formattingInterfaces.TextProperties = {
