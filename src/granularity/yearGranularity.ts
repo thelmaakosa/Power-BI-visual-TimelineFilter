@@ -34,6 +34,7 @@ import { Utils } from "../utils";
 import { GranularityBase } from "./granularityBase";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
+import { dateFormatSettings } from "../settings/dateFormatSettings";
 
 export class YearGranularity extends GranularityBase {
     private localizationKey: string = "Visual_Granularity_Year";
@@ -42,8 +43,9 @@ export class YearGranularity extends GranularityBase {
         calendar: Calendar,
         locale: string,
         protected localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager,
+        dateFormatSettings: dateFormatSettings
     ) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Year"));
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Year"), dateFormatSettings);
     }
 
     public getType(): GranularityType {

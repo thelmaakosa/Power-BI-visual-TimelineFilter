@@ -35,6 +35,7 @@ import { Utils } from "../utils";
 import { GranularityBase } from "./granularityBase";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
+import { dateFormatSettings } from "../settings/dateFormatSettings";
 
 export class WeekGranularity extends GranularityBase {
     private localizationKey: string = "Visual_Granularity_Year";
@@ -43,8 +44,9 @@ export class WeekGranularity extends GranularityBase {
         calendar: Calendar,
         locale: string,
         protected localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager,
+        dateFormatSettings: dateFormatSettings
     ) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Week"));
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Week"), dateFormatSettings);
     }
 
     public render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any> {
@@ -72,9 +74,11 @@ export class WeekGranularity extends GranularityBase {
         
         currentdate.setDate(currentdate.getDate() - currentdateday);
 
-        var month = this.shortMonthName(currentdate)
-        var day = currentdate.getDate()
-        var year = currentdate.getFullYear()
+        var month = this.getMonthName(currentdate)
+        var day = this.getDayName(currentdate)
+        var year = this.getYearName(currentdate)
+        // var day = currentdate.getDate()
+        // var year = currentdate.getFullYear()
 
         currentdate.setDate(currentdate.getDate()+currentdateday)
 
@@ -95,15 +99,15 @@ export class WeekGranularity extends GranularityBase {
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
 
-        const quarter: string = this.quarterText(datePeriod.startDate);
-        
         var currentdate: Date = datePeriod.startDate;
         var currentdateday = currentdate.getDay();
 
         currentdate.setDate(currentdate.getDate() - currentdateday);
-        var day: Number = currentdate.getDate();
-        var monthName: string = this.shortMonthName(currentdate);
-        var year: Number = currentdate.getFullYear();
+        // var day: Number = currentdate.getDate();
+        var dayName: string = this.getDayName(currentdate);
+        var monthName: string = this.getMonthName(currentdate);
+        var yearName: string = this.getYearName(currentdate);
+        // var year: Number = currentdate.getFullYear();
 
         currentdate.setDate(currentdate.getDate()+currentdateday);
 
@@ -111,8 +115,10 @@ export class WeekGranularity extends GranularityBase {
 
         return {
             id: datePeriod.index,
-            text: `${monthName} ${day} ${year}`,
-            title: `${monthName} ${day} ${year}`,
+            text: `${monthName} ${dayName} ${yearName}`,
+            title: `${monthName} ${dayName} ${yearName}`
+            // text: `${monthName} ${day} ${year}`,
+            // title: `${monthName} ${day} ${year}`,
         };
     }
 }

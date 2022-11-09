@@ -4,6 +4,7 @@ import { ITimelineDatePeriod } from "../datePeriod/datePeriod";
 import { IGranularity } from "./granularity";
 import { IGranularityName } from "./granularityName";
 import { IGranularityRenderProps } from "./granularityRenderProps";
+import { dateFormatSettings } from "../settings/dateFormatSettings";
 import { IExtendedLabel, ITimelineLabel } from "../dataInterfaces";
 export declare class GranularityBase implements IGranularity {
     private locale;
@@ -26,20 +27,26 @@ export declare class GranularityBase implements IGranularity {
     private textLabelDx;
     private datePeriods;
     private extendedLabel;
+    private shortDayFormatter;
     private shortMonthFormatter;
+    private shortQuarterFormatter;
+    private shortYearFormatter;
     private granularityProps;
+    dateFormatSettings: dateFormatSettings;
     private DefaultQuarter;
-    constructor(calendar: Calendar, locale: string, granularityProps: IGranularityName);
+    constructor(calendar: Calendar, locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings);
     measures(): void;
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
-    splitDate(date: Date): (string | number)[];
-    splitDateForTitle(date: Date): (string | number)[];
-    shortMonthName(date: Date): string;
+    splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
+    splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
+    getDayName(date: Date): string;
+    getMonthName(date: Date): string;
+    getYearName(date: Date): string;
     resetDatePeriods(): void;
     getDatePeriods(): ITimelineDatePeriod[];
     getExtendedLabel(): IExtendedLabel;
     setExtendedLabel(extendedLabel: IExtendedLabel): void;
-    createLabels(granularity: IGranularity): ITimelineLabel[];
+    createLabels(granularity: IGranularity, dateFormatSettings: dateFormatSettings): ITimelineLabel[];
     /**
      * Adds the new date into the given datePeriods array
      * If the date corresponds to the last date period, given the current granularity,
@@ -47,7 +54,7 @@ export declare class GranularityBase implements IGranularity {
      * i.e. using Month granularity, Feb 2 2015 corresponds to Feb 3 2015.
      * It is assumed that the given date does not correspond to previous date periods, other than the last date period
      */
-    addDate(date: Date): void;
+    addDate(date: Date, dateFormatSettings: dateFormatSettings): void;
     setNewEndDate(date: Date): void;
     /**
      * Splits a given period into two periods.
@@ -61,6 +68,6 @@ export declare class GranularityBase implements IGranularity {
      * Returns the date's quarter name (e.g. Q1, Q2, Q3, Q4)
      * @param date A date
      */
-    protected quarterText(date: Date): string;
+    protected quarterText(date: Date, dateFormatSettings: dateFormatSettings): string;
     private renderSlider;
 }

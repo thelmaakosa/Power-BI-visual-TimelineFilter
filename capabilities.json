@@ -602,11 +602,11 @@
                     "type": {
                         "enumeration": [
                             {
-                                "value": "YYYY",
+                                "value": "yyyy",
                                 "displayName": "YYYY"
                             },
                             {
-                                "value": "YY",
+                                "value": "yy",
                                 "displayName": "'YY"
                             }
                         ]
@@ -618,8 +618,8 @@
                     "type": {
                         "enumeration": [
                             {
-                                "value": "Quanter X",
-                                "displayName": "Quanter X"
+                                "value": "Quarter X",
+                                "displayName": "Quarter X"
                             },
                             {
                                 "value": "QX",
@@ -634,20 +634,16 @@
                     "type": {
                         "enumeration": [
                             {
-                                "value": "mmm",
-                                "displayName": "mmm"
+                                "value": "MMM",
+                                "displayName": "MMM"
                             },
                             {
-                                "value": "mmmm",
-                                "displayName": "mmmm"
+                                "value": "MMMM",
+                                "displayName": "MMMM"
                             },
                             {
                                 "value": "MM",
                                 "displayName": "MM"
-                            },
-                            {
-                                "value": "M",
-                                "displayName": "M"
                             }
                         ]
                     },
@@ -658,12 +654,8 @@
                     "type": {
                         "enumeration": [
                             {
-                                "value": "DD",
+                                "value": "dd",
                                 "displayName": "DD"
-                            },
-                            {
-                                "value": "D",
-                                "displayName": "D"
                             }
                         ]
                     },

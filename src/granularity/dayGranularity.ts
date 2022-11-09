@@ -34,10 +34,11 @@ import { GranularityBase } from "./granularityBase";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
 import powerbiVisualsApi from "powerbi-visuals-api";
+import { dateFormatSettings } from "../settings/dateFormatSettings";
 
 export class DayGranularity extends GranularityBase {
-    constructor(calendar: Calendar, locale: string) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Day"));
+    constructor(calendar: Calendar, locale: string, dateFormatSettings: dateFormatSettings) {
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Day"), dateFormatSettings);
     }
 
     public render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any> {
@@ -54,9 +55,11 @@ export class DayGranularity extends GranularityBase {
 
     public splitDate(date: Date): (string | number)[] {
         return [
-            this.shortMonthName(date),
-            date.getDate(),
-            this.calendar.determineYear(date),
+            this.getMonthName(date),
+            this.getDayName(date),
+            // date.getDate(),
+            // this.calendar.determineYear(date),
+            this.getYearName(date),
         ];
     }
 
@@ -65,14 +68,16 @@ export class DayGranularity extends GranularityBase {
     }
 
     public generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel {
-        const quarter: string = this.quarterText(datePeriod.startDate);
-        const monthName: string = this.shortMonthName(datePeriod.startDate);
-        const title: string = `${monthName} ${datePeriod.startDate.getDate()} ${datePeriod.year}`;
-
+        const dayName: string = this.getDayName(datePeriod.startDate);
+        const monthName: string = this.getMonthName(datePeriod.startDate);
+        const yearName: string = this.getYearName(datePeriod.startDate);
+        // const title: string = `${monthName} ${datePeriod.startDate.getDate()} ${datePeriod.year}`;
+        const title: string = `${monthName} ${dayName} ${yearName}`
         return {
             id: datePeriod.index,
-            text: `${monthName} ${datePeriod.startDate.getDate()} ${datePeriod.year}`,
-            title,
+            // text: `${monthName} ${datePeriod.startDate.getDate()} ${datePeriod.year}`,
+            text: `${monthName} ${dayName} ${yearName}`,
+            title: `${monthName} ${dayName} ${yearName}`,
         };
     }
 }

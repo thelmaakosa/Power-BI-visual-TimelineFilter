@@ -820,7 +820,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             })
     }
 
-    public renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number): void {
+    public renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number, dateFormatSettings:dateFormatSettings): void {
         const dataPoints: ITimelineDataPoint[] = timelineData.timelineDataPoints;
         let totalX: number = 0;
 
@@ -856,7 +856,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 return pixelConverter.toString(dataPoint.datePeriod.fraction * timelineProperties.cellWidth);
             })
             .append("title")
-            .text((dataPoint: ITimelineDataPoint) => timelineData.currentGranularity.generateLabel(dataPoint.datePeriod).title);
+            .text((dataPoint: ITimelineDataPoint) => timelineData.currentGranularity.generateLabel(dataPoint.datePeriod, dateFormatSettings).title);
 
         this.fillCells(this.settings);
     }
@@ -947,7 +947,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             // .call(this.cursorDragBehavior);
     }
 
-    public renderTimeRangeText(timelineData: ITimelineData, rangeHeaderSettings: rangeHeaderSettings): void {
+    public renderTimeRangeText(timelineData: ITimelineData, settings: Settings): void {
         
         const leftMargin: number = (GranularityNames.length + Timeline.GranularityNamesLength)
             * this.timelineProperties.elementWidth;
@@ -955,21 +955,21 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         const maxWidth: number = this.svgWidth
             - leftMargin
             - this.timelineProperties.leftMargin
-            - rangeHeaderSettings.textSize;
+            - settings.rangeHeader.textSize;
 
         d3SelectAll("g." + Timeline.TimelineSelectors.RangeTextArea.className).remove();
 
-        if (rangeHeaderSettings.show && maxWidth > 0) {
+        if (settings.rangeHeader.show && maxWidth > 0) {
             this.rangeTextSelection = this.headerSelection
                 .append("g")
                 .classed(Timeline.TimelineSelectors.RangeTextArea.className, true)
-                .classed(rangeHeaderSettings.position, true)
+                .classed(settings.rangeHeader.position, true)
                 .append("text");
 
-            const timeRangeText: string = Utils.TIME_RANGE_TEXT(timelineData);
+            const timeRangeText: string = Utils.TIME_RANGE_TEXT(timelineData, settings.dateFormat);
 
             const labelFormattedTextOptions: dataLabelInterfaces.LabelFormattedTextOptions = {
-                fontSize: rangeHeaderSettings.textSize,
+                fontSize: settings.rangeHeader.textSize,
                 label: timeRangeText,
                 maxWidth,
             };
@@ -982,12 +982,12 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
                 .attr("x", Timeline.DefaultRangeTextSelectionX)
                 .attr("y", Timeline.DefaultRangeTextSelectionY - positionOffset)
-                .attr("fill", rangeHeaderSettings.fontColor)
-                .style("font-family", rangeHeaderSettings.fontFamily)
-                .style("font-size", pixelConverter.fromPointToPixel(rangeHeaderSettings.textSize))
-                .style("font-weight", rangeHeaderSettings.fontBold ? '700' : 'normal')
-                .style("font-style", rangeHeaderSettings.fontItalic ? 'italic' : 'initial')
-                .style("text-decoration", rangeHeaderSettings.fontUnderline ? 'underline' : 'initial')
+                .attr("fill", settings.rangeHeader.fontColor)
+                .style("font-family", settings.rangeHeader.fontFamily)
+                .style("font-size", pixelConverter.fromPointToPixel(settings.rangeHeader.textSize))
+                .style("font-weight", settings.rangeHeader.fontBold ? '700' : 'normal')
+                .style("font-style", settings.rangeHeader.fontItalic ? 'italic' : 'initial')
+                .style("text-decoration", settings.rangeHeader.fontUnderline ? 'underline' : 'initial')
                 .text(actualText)
                 .append("title")
                 .text(timeRangeText);
@@ -1253,7 +1253,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             this.timelineProperties.cellsYPosition,
             this.settings.cells);
 
-        this.renderTimeRangeText(this.timelineData, this.settings.rangeHeader);
+        this.renderTimeRangeText(this.timelineData, this.settings);
     }
 
     /**
@@ -1442,8 +1442,8 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     ) {
         const calendar: Calendar = this.calendarFactory.create(timelineSettings.calendaType, timelineSettings.calendar);
 
-        timelineGranularityData.createGranularities(calendar, locale, localizationManager);
-        timelineGranularityData.createLabels();
+        timelineGranularityData.createGranularities(calendar, locale, localizationManager, timelineSettings.dateFormat);
+        timelineGranularityData.createLabels(timelineSettings.dateFormat);
 
         if (this.initialized) {
             const actualEndDate: Date = GranularityData.NEXT_DAY(endDate);
@@ -1502,7 +1502,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             + this.timelineProperties.cellHeight
             + timelineProperties.cellWidth * timelineDatapointsCount;
 
-        this.renderTimeRangeText(timelineData, timelineSettings.rangeHeader);
+        this.renderTimeRangeText(timelineData, timelineSettings);
 
         this.rootSelection
             .attr("drag-resize-disabled", true)
@@ -1570,6 +1570,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             timelineData,
             timelineProperties,
             this.calculateYOffset(yPos),
+            timelineSettings.dateFormat
         );
 
         this.renderCursors(
@@ -1869,7 +1870,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             this.settings.cells,
         );
 
-        this.renderTimeRangeText(timelineData, this.settings.rangeHeader);
+        this.renderTimeRangeText(timelineData, this.settings);
 
         this.setSelection(timelineData);
         this.toggleForceSelectionOptions();
