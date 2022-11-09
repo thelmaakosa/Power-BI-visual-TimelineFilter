@@ -907,7 +907,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             )
             // .attr("d", "M-3.673940397442059e-15,-20A20,20,0,1,1,6.123233995736766e-15,20L0,0Z")
             .style("fill", cellSettings.capfillColor)
-            .style("opcaity", cellSettings.outlineWeight)
+            .style("opacity", cellSettings.opacity/100)
             .style("stroke", cellSettings.capoutlineColor)
             .style("stroke-width", cellSettings.capoutlineThickness)
             .call(this.cursorDragBehavior);
@@ -1126,7 +1126,8 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 capSize: { numberRange: { min: 0 } },
                 unselectedoutlineThickness: { numberRange: { min: 0 } },
                 capoutlineThickness: { numberRange: { min: 0 } },
-                capoutlineRadius: { numberRange: { min: 0} }
+                capoutlineRadius: { numberRange: { min: 0} },
+                opacity: {numberRange: {min:0, max:100}}
          
             };
         }
