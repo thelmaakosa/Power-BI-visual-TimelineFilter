@@ -68,6 +68,7 @@ export class DayGranularity extends GranularityBase {
     }
 
     public generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel {
+        const dayofweekName: string = this.getDayofWeekName(datePeriod.startDate);
         const dayName: string = this.getDayName(datePeriod.startDate);
         const monthName: string = this.getMonthName(datePeriod.startDate);
         const yearName: string = this.getYearName(datePeriod.startDate);
@@ -76,8 +77,8 @@ export class DayGranularity extends GranularityBase {
         return {
             id: datePeriod.index,
             // text: `${monthName} ${datePeriod.startDate.getDate()} ${datePeriod.year}`,
-            text: `${monthName} ${dayName} ${yearName}`,
-            title: `${monthName} ${dayName} ${yearName}`,
+            text: `${dayofweekName} ${monthName} ${dayName} ${yearName}`,
+            title: `${dayofweekName} ${monthName} ${dayName} ${yearName}`,
         };
     }
 }

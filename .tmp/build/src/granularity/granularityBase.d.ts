@@ -27,6 +27,7 @@ export declare class GranularityBase implements IGranularity {
     private textLabelDx;
     private datePeriods;
     private extendedLabel;
+    private dayofweekFormatter;
     private shortDayFormatter;
     private shortMonthFormatter;
     private shortQuarterFormatter;
@@ -39,6 +40,7 @@ export declare class GranularityBase implements IGranularity {
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
     splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
     splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
+    getDayofWeekName(date: Date): string;
     getDayName(date: Date): string;
     getMonthName(date: Date): string;
     getYearName(date: Date): string;

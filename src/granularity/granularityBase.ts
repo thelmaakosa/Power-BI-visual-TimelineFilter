@@ -79,6 +79,7 @@ export class GranularityBase implements IGranularity {
 
     private datePeriods: ITimelineDatePeriod[] = [];
     private extendedLabel: IExtendedLabel;
+    private dayofweekFormatter: valueFormatter.IValueFormatter;
     private shortDayFormatter: valueFormatter.IValueFormatter;
     private shortMonthFormatter: valueFormatter.IValueFormatter;
     private shortQuarterFormatter: valueFormatter.IValueFormatter;
@@ -91,6 +92,7 @@ export class GranularityBase implements IGranularity {
 
     constructor(calendar: Calendar, private locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings) {
         this.calendar = calendar;
+        this.dayofweekFormatter = valueFormatter.create({ format: dateFormatSettings.dayofweekFormat, cultureSelector: this.locale });
         this.shortDayFormatter = valueFormatter.create({ format: dateFormatSettings.dayFormat, cultureSelector: this.locale });
         this.shortMonthFormatter = valueFormatter.create({ format: dateFormatSettings.monthFormat, cultureSelector: this.locale });
         this.shortQuarterFormatter = valueFormatter.create({ format: dateFormatSettings.quarterFormat, cultureSelector: this.locale });
@@ -196,6 +198,9 @@ export class GranularityBase implements IGranularity {
 
     public splitDateForTitle(date: Date, dateFormatSettings:dateFormatSettings): (string | number)[] {
         return this.splitDate(date, dateFormatSettings);
+    }
+    public getDayofWeekName(date: Date): string {
+        return this.dayofweekFormatter.format(date);
     }
     public getDayName(date: Date): string {
         return this.shortDayFormatter.format(date);

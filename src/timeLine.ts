@@ -103,6 +103,7 @@ import { WeekStandards } from "./calendars/weekStandards";
 import { CalendarFactory } from "./calendars/calendarFactory";
 import { truncate } from "fs";
 import { dateFormatSettings } from "./settings/dateFormatSettings";
+import { translate } from "powerbi-visuals-utils-svgutils/lib/manipulation";
 
 interface IAdjustedFilterDatePeriod {
     period: DatePeriodBase;
@@ -964,8 +965,25 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 .append("g")
                 .classed(Timeline.TimelineSelectors.RangeTextArea.className, true)
                 .classed(settings.rangeHeader.position, true)
-                .append("text");
+                .append("text")
+                // .attr("transform", (settings:Settings) =>{
+                //     var dx: number = 0;
+                //     var dy: number = 0;
+                //     if (settings.rangeHeader.position == 'right'){
+                //         dx = parseInt(d3SelectAll(Timeline.TimelineSelectors.RangeTextArea.className).style("width"));
+                //         dy = 0;
+                //     }
+                //     else if (settings.rangeHeader.position == 'left'){
+                //         dx = 0;
+                //         dy = 0;
+                //     }
+                //     else{
+                //         dx = parseInt(d3SelectAll(Timeline.TimelineSelectors.RangeTextArea.className).style("width"))/2;
+                //         dy = 0;
+                //     }
 
+                //     return svgManipulation.translate(dx, dy);
+                // });
             const timeRangeText: string = Utils.TIME_RANGE_TEXT(timelineData, settings.dateFormat);
 
             const labelFormattedTextOptions: dataLabelInterfaces.LabelFormattedTextOptions = {
@@ -1755,7 +1773,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             .enter()
             .append("text")
             .classed(Timeline.TimelineSelectors.TextLabel.className, true)
-            .classed(labels[0].text,true)
             .merge(labelsGroupSelection)
             .style("font-weight", this.settings.labels.fontBold ? '700' : 'normal')
             .style("font-style", this.settings.labels.fontItalic ? 'italic' : 'initial')
@@ -1782,7 +1799,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
                     const diff: number = this.timelineProperties.cellWidth
                         * (labels[1].id - labels[0].id);
-
                     if (diff < halfFirstTextWidth + halfSecondTextWidth) {
                         return "";
                     }

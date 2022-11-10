@@ -104,9 +104,10 @@ export class WeekGranularity extends GranularityBase {
 
         currentdate.setDate(currentdate.getDate() - currentdateday);
         // var day: Number = currentdate.getDate();
-        var dayName: string = this.getDayName(currentdate);
-        var monthName: string = this.getMonthName(currentdate);
-        var yearName: string = this.getYearName(currentdate);
+        const dayofweekName: string = this.getDayofWeekName(datePeriod.startDate);
+        const dayName: string = this.getDayName(currentdate);
+        const monthName: string = this.getMonthName(currentdate);
+        const yearName: string = this.getYearName(currentdate);
         // var year: Number = currentdate.getFullYear();
 
         currentdate.setDate(currentdate.getDate()+currentdateday);
@@ -115,8 +116,8 @@ export class WeekGranularity extends GranularityBase {
 
         return {
             id: datePeriod.index,
-            text: `${monthName} ${dayName} ${yearName}`,
-            title: `${monthName} ${dayName} ${yearName}`
+            text: `${dayofweekName} ${monthName} ${dayName} ${yearName}`,
+            title: `${dayofweekName} ${monthName} ${dayName} ${yearName}`
             // text: `${monthName} ${day} ${year}`,
             // title: `${monthName} ${day} ${year}`,
         };
