@@ -12,5 +12,5 @@ export declare class DayGranularity extends GranularityBase {
     getType(): GranularityType;
     splitDate(date: Date): (string | number)[];
     sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean;
-    generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel;
+    generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel;
 }

@@ -92,29 +92,36 @@ export class WeekGranularity extends GranularityBase {
         return Utils.IS_ARRAYS_EQUAL(firstDatePeriod.week, secondDatePeriod.week);
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel {
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
         const localizedWeek = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
 
-        const quarter: string = this.quarterText(datePeriod.startDate);
+        // const quarter: string = this.getQuarterName(datePeriod.startDate);
         
         var currentdate: Date = datePeriod.startDate;
         var currentdateday = currentdate.getDay();
 
         currentdate.setDate(currentdate.getDate() - currentdateday);
-        var day: Number = currentdate.getDate();
-        var monthName: string = this.getMonthName(currentdate);
-        var year: Number = currentdate.getFullYear();
+        
+        var dayofweek: string
+        if (dateFormatSettings.dayofweek == true){
+            dayofweek = this.getDayofWeekName(datePeriod.startDate);
+        }
+        else{
+            dayofweek = "";
+        }
+
+        const day: Number = currentdate.getDate();
+        const monthName: string = this.getMonthName(currentdate);
+        const yearName: string = this.getYearName(datePeriod.startDate);
 
         currentdate.setDate(currentdate.getDate()+currentdateday);
 
-        
-
         return {
             id: datePeriod.index,
-            text: `${monthName} ${day} ${year}`,
-            title: `${monthName} ${day} ${year}`,
+            text: `${dayofweek} ${monthName} ${day} ${yearName}`,
+            title: `${dayofweek} ${monthName} ${day} ${yearName}`,
         };
     }
 }

@@ -65,14 +65,26 @@ export class DayGranularity extends GranularityBase {
         return firstDatePeriod.startDate.getTime() === secondDatePeriod.startDate.getTime();
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel {
-        const quarter: string = this.quarterText(datePeriod.startDate);
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
+        // const quarter: string = this.getQuarterName(datePeriod.startDate);
+        var dayofweek: string
+        if (dateFormatSettings.dayofweek == true){
+            dayofweek = this.getDayofWeekName(datePeriod.startDate);
+        }
+        else{
+            dayofweek = "";
+        }
+        
         const monthName: string = this.getMonthName(datePeriod.startDate);
-        const title: string = `${monthName} ${datePeriod.startDate.getDate()} ${datePeriod.year}`;
+        const dayName: string = this.getDayName(datePeriod.startDate);
+        const yearName: string = this.getYearName(datePeriod.startDate);
+
+        const text: string = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+        const title: string = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
 
         return {
             id: datePeriod.index,
-            text: `${monthName} ${datePeriod.startDate.getDate()} ${datePeriod.year}`,
+            text,
             title,
         };
     }

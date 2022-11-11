@@ -465,13 +465,23 @@ class DayGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .Gr
     sameLabel(firstDatePeriod, secondDatePeriod) {
         return firstDatePeriod.startDate.getTime() === secondDatePeriod.startDate.getTime();
     }
-    generateLabel(datePeriod) {
-        const quarter = this.quarterText(datePeriod.startDate);
+    generateLabel(datePeriod, dateFormatSettings) {
+        // const quarter: string = this.getQuarterName(datePeriod.startDate);
+        var dayofweek;
+        if (dateFormatSettings.dayofweek == true) {
+            dayofweek = this.getDayofWeekName(datePeriod.startDate);
+        }
+        else {
+            dayofweek = "";
+        }
         const monthName = this.getMonthName(datePeriod.startDate);
-        const title = `${monthName} ${datePeriod.startDate.getDate()} ${datePeriod.year}`;
+        const dayName = this.getDayName(datePeriod.startDate);
+        const yearName = this.getYearName(datePeriod.startDate);
+        const text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+        const title = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
         return {
             id: datePeriod.index,
-            text: `${monthName} ${datePeriod.startDate.getDate()} ${datePeriod.year}`,
+            text,
             title,
         };
     }
@@ -544,7 +554,10 @@ class GranularityBase {
         this.granularityProps = null;
         this.DefaultQuarter = 3;
         this.calendar = calendar;
+        this.shortDayFormatter = powerbi_visuals_utils_formattingutils__WEBPACK_IMPORTED_MODULE_1__.create({ format: dateFormatSettings.dayFormat, cultureSelector: this.locale });
+        this.shortDayOfWeekFormatter = powerbi_visuals_utils_formattingutils__WEBPACK_IMPORTED_MODULE_1__.create({ format: dateFormatSettings.dayofweekFormat, cultureSelector: this.locale });
         this.shortMonthFormatter = powerbi_visuals_utils_formattingutils__WEBPACK_IMPORTED_MODULE_1__.create({ format: dateFormatSettings.monthFormat, cultureSelector: this.locale });
+        this.shortYearFormatter = powerbi_visuals_utils_formattingutils__WEBPACK_IMPORTED_MODULE_1__.create({ format: dateFormatSettings.yearFormat, cultureSelector: this.locale });
         this.granularityProps = granularityProps;
     }
     measures() {
@@ -609,18 +622,27 @@ class GranularityBase {
         granularitySelection.attr("fill", props.granularSettings.scaleColor);
         return granularitySelection;
     }
-    splitDate(date) {
+    splitDate(date, dateFormatSettings) {
         return [
             this.getMonthName(date),
             date.getDate(),
             this.calendar.determineYear(date),
         ];
     }
-    splitDateForTitle(date) {
-        return this.splitDate(date);
+    splitDateForTitle(date, dateFormatSettings) {
+        return this.splitDate(date, dateFormatSettings);
+    }
+    getDayName(date) {
+        return this.shortDayFormatter.format(date);
+    }
+    getDayofWeekName(date) {
+        return this.shortDayOfWeekFormatter.format(date);
     }
     getMonthName(date) {
         return this.shortMonthFormatter.format(date);
+    }
+    getYearName(date) {
+        return this.shortYearFormatter.format(date);
     }
     resetDatePeriods() {
         this.datePeriods = [];
@@ -634,13 +656,13 @@ class GranularityBase {
     setExtendedLabel(extendedLabel) {
         this.extendedLabel = extendedLabel;
     }
-    createLabels(granularity) {
+    createLabels(granularity, dateFormatSettings) {
         const labels = [];
         let lastDatePeriod;
         this.datePeriods.forEach((datePeriod) => {
-            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod)) {
+            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod, dateFormatSettings)) {
                 lastDatePeriod = datePeriod;
-                labels.push(granularity.generateLabel(datePeriod));
+                labels.push(granularity.generateLabel(datePeriod, dateFormatSettings));
             }
         });
         return labels;
@@ -652,10 +674,10 @@ class GranularityBase {
      * i.e. using Month granularity, Feb 2 2015 corresponds to Feb 3 2015.
      * It is assumed that the given date does not correspond to previous date periods, other than the last date period
      */
-    addDate(date) {
+    addDate(date, dateFormatSettings) {
         const datePeriods = this.getDatePeriods();
         const lastDatePeriod = datePeriods[datePeriods.length - 1];
-        const identifierArray = this.splitDate(date);
+        const identifierArray = this.splitDate(date, dateFormatSettings);
         if (datePeriods.length === 0
             || !_utils__WEBPACK_IMPORTED_MODULE_0__/* .Utils.IS_ARRAYS_EQUAL */ .c.IS_ARRAYS_EQUAL(lastDatePeriod.identifierArray, identifierArray)) {
             if (datePeriods.length > 0) {
@@ -704,7 +726,7 @@ class GranularityBase {
      * Returns the date's quarter name (e.g. Q1, Q2, Q3, Q4)
      * @param date A date
      */
-    quarterText(date) {
+    getQuarterName(date, dateFormatSettings) {
         let quarter = this.DefaultQuarter;
         let year = this.calendar.determineYear(date);
         while (date < this.calendar.getQuarterStartDate(year, quarter)) {
@@ -717,7 +739,12 @@ class GranularityBase {
             }
         }
         quarter++;
-        return `Q${quarter}`;
+        if (dateFormatSettings.quarterFormat == "Quarter X") {
+            return `Quarter ${quarter}`;
+        }
+        else if (dateFormatSettings.quarterFormat == "QX") {
+            return `Q${quarter}`;
+        }
     }
     renderSlider(selection, granularSettings) {
         if (granularSettings.selectedOutlineLeft == true && granularSettings.selectedOutlineRight == true && granularSettings.selectedOutlineTop == true && granularSettings.selectedOutlineBottom == true) {
@@ -869,10 +896,10 @@ class GranularityData {
      * Resets the new granularity, adds all dates to it, and then edits the last date period with the ending date.
      * @param granularity The new granularity to be added
      */
-    addGranularity(granularity) {
+    addGranularity(granularity, dateFormatSettings) {
         granularity.resetDatePeriods();
         for (const date of this.dates) {
-            granularity.addDate(date);
+            granularity.addDate(date, dateFormatSettings);
         }
         granularity.setNewEndDate(this.endingDate);
         this.granularities.push(granularity);
@@ -934,29 +961,29 @@ class GranularityData {
     }
     createGranularities(calendar, locale, localizationManager, dateFormatSettings) {
         this.granularities = [];
-        this.addGranularity(new _yearGranularity__WEBPACK_IMPORTED_MODULE_5__/* .YearGranularity */ .O(calendar, locale, localizationManager, dateFormatSettings));
-        this.addGranularity(new _quarterGranularity__WEBPACK_IMPORTED_MODULE_3__/* .QuarterGranularity */ .c(calendar, locale, dateFormatSettings));
-        this.addGranularity(new _monthGranularity__WEBPACK_IMPORTED_MODULE_2__/* .MonthGranularity */ .W(calendar, locale, dateFormatSettings));
-        this.addGranularity(new _weekGranularity__WEBPACK_IMPORTED_MODULE_4__/* .WeekGranularity */ .G(calendar, locale, localizationManager, dateFormatSettings));
-        this.addGranularity(new _dayGranularity__WEBPACK_IMPORTED_MODULE_0__/* .DayGranularity */ .n(calendar, locale, dateFormatSettings));
+        this.addGranularity(new _yearGranularity__WEBPACK_IMPORTED_MODULE_5__/* .YearGranularity */ .O(calendar, locale, localizationManager, dateFormatSettings), dateFormatSettings);
+        this.addGranularity(new _quarterGranularity__WEBPACK_IMPORTED_MODULE_3__/* .QuarterGranularity */ .c(calendar, locale, dateFormatSettings), dateFormatSettings);
+        this.addGranularity(new _monthGranularity__WEBPACK_IMPORTED_MODULE_2__/* .MonthGranularity */ .W(calendar, locale, dateFormatSettings), dateFormatSettings);
+        this.addGranularity(new _weekGranularity__WEBPACK_IMPORTED_MODULE_4__/* .WeekGranularity */ .G(calendar, locale, localizationManager, dateFormatSettings), dateFormatSettings);
+        this.addGranularity(new _dayGranularity__WEBPACK_IMPORTED_MODULE_0__/* .DayGranularity */ .n(calendar, locale, dateFormatSettings), dateFormatSettings);
     }
-    createLabels() {
+    createLabels(dateFormatSettings) {
         this.granularities.forEach((granularity) => {
             granularity.setExtendedLabel({
                 dayLabels: granularity.getType() >= _granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.day */ .k.day
-                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.day */ .k.day])
+                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.day */ .k.day], dateFormatSettings)
                     : [],
                 monthLabels: granularity.getType() >= _granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.month */ .k.month
-                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.month */ .k.month])
+                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.month */ .k.month], dateFormatSettings)
                     : [],
                 quarterLabels: granularity.getType() >= _granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.quarter */ .k.quarter
-                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.quarter */ .k.quarter])
+                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.quarter */ .k.quarter], dateFormatSettings)
                     : [],
                 weekLabels: granularity.getType() >= _granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.week */ .k.week
-                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.week */ .k.week])
+                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.week */ .k.week], dateFormatSettings)
                     : [],
                 yearLabels: granularity.getType() >= _granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.year */ .k.year
-                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.year */ .k.year])
+                    ? granularity.createLabels(this.granularities[_granularityType__WEBPACK_IMPORTED_MODULE_1__/* .GranularityType.year */ .k.year], dateFormatSettings)
                     : [],
             });
         });
@@ -1150,14 +1177,15 @@ class MonthGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .
             && this.calendar.determineYear(firstDatePeriod.startDate) === this.calendar.determineYear(secondDatePeriod.startDate);
     }
     generateLabel(datePeriod) {
-        const quarter = this.quarterText(datePeriod.startDate);
-        const monthName = `${this.getMonthName(datePeriod.startDate)} ${datePeriod.year}`;
-        const monthShortName = `${this.getMonthName(datePeriod.startDate)} 
-        ${datePeriod.year}`;
+        // const quarter: string = this.getQuarterName(datePeriod.startDate);
+        const monthName = this.getMonthName(datePeriod.startDate);
+        const yearName = this.getYearName(datePeriod.startDate);
+        const text = `${monthName} ${yearName}`;
+        const title = `${monthName} ${yearName}`;
         return {
             id: datePeriod.index,
-            text: monthShortName,
-            title: monthName,
+            text,
+            title
         };
     }
 }
@@ -1216,22 +1244,23 @@ class QuarterGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/*
     getType() {
         return _granularityType__WEBPACK_IMPORTED_MODULE_2__/* .GranularityType.quarter */ .k.quarter;
     }
-    splitDate(date) {
+    splitDate(date, dateFormatSettings) {
         return [
-            this.quarterText(date),
+            this.getQuarterName(date, dateFormatSettings),
             this.calendar.determineYear(date),
         ];
     }
-    sameLabel(firstDatePeriod, secondDatePeriod) {
-        return this.quarterText(firstDatePeriod.startDate) === this.quarterText(secondDatePeriod.startDate)
+    sameLabel(firstDatePeriod, secondDatePeriod, dateFormatSettings) {
+        return this.getQuarterName(firstDatePeriod.startDate, dateFormatSettings) === this.getQuarterName(secondDatePeriod.startDate, dateFormatSettings)
             && firstDatePeriod.year === secondDatePeriod.year;
     }
-    generateLabel(datePeriod) {
-        const quarter = this.quarterText(datePeriod.startDate);
+    generateLabel(datePeriod, dateFormatSettings) {
+        const quarter = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
+        const yearName = this.getYearName(datePeriod.startDate);
         return {
             id: datePeriod.index,
-            text: `${quarter} ${datePeriod.year}`,
-            title: `${quarter} ${datePeriod.year}`,
+            text: `${quarter} ${yearName}`,
+            title: `${quarter} ${yearName}`,
         };
     }
 }
@@ -1313,22 +1342,29 @@ class WeekGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .G
     sameLabel(firstDatePeriod, secondDatePeriod) {
         return _utils__WEBPACK_IMPORTED_MODULE_0__/* .Utils.IS_ARRAYS_EQUAL */ .c.IS_ARRAYS_EQUAL(firstDatePeriod.week, secondDatePeriod.week);
     }
-    generateLabel(datePeriod) {
+    generateLabel(datePeriod, dateFormatSettings) {
         const localizedWeek = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
-        const quarter = this.quarterText(datePeriod.startDate);
+        // const quarter: string = this.getQuarterName(datePeriod.startDate);
         var currentdate = datePeriod.startDate;
         var currentdateday = currentdate.getDay();
         currentdate.setDate(currentdate.getDate() - currentdateday);
-        var day = currentdate.getDate();
-        var monthName = this.getMonthName(currentdate);
-        var year = currentdate.getFullYear();
+        var dayofweek;
+        if (dateFormatSettings.dayofweek == true) {
+            dayofweek = this.getDayofWeekName(datePeriod.startDate);
+        }
+        else {
+            dayofweek = "";
+        }
+        const day = currentdate.getDate();
+        const monthName = this.getMonthName(currentdate);
+        const yearName = this.getYearName(datePeriod.startDate);
         currentdate.setDate(currentdate.getDate() + currentdateday);
         return {
             id: datePeriod.index,
-            text: `${monthName} ${day} ${year}`,
-            title: `${monthName} ${day} ${year}`,
+            text: `${dayofweek} ${monthName} ${day} ${yearName}`,
+            title: `${dayofweek} ${monthName} ${day} ${yearName}`,
         };
     }
 }
@@ -1399,10 +1435,11 @@ class YearGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .G
         const localizedYear = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
+        const yearName = this.getYearName(datePeriod.startDate);
         return {
             id: datePeriod.index,
-            text: `${datePeriod.year}`,
-            title: `${localizedYear} ${datePeriod.year}`,
+            text: `${yearName}`,
+            title: `${localizedYear} ${yearName}`,
         };
     }
 }
@@ -1626,7 +1663,7 @@ class dateFormatSettings {
         this.yearFormat = "YYYY";
         this.quarterFormat = "QX";
         this.monthFormat = "MMM";
-        this.dayFormat = "DD";
+        this.dayFormat = "dd";
         this.dayofweek = false;
         this.dayofweekFormat = "ddd";
         this.datecategorization = false;
@@ -2516,7 +2553,7 @@ class Timeline {
                 : cellsSettings.innerPadding / 100;
         });
     }
-    renderCells(timelineData, timelineProperties, yPos) {
+    renderCells(timelineData, timelineProperties, yPos, dateFormatSettings) {
         const dataPoints = timelineData.timelineDataPoints;
         let totalX = 0;
         const cellsSelection = this.cellsSelection
@@ -2546,7 +2583,7 @@ class Timeline {
             return powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_13__/* .toString */ .BB(dataPoint.datePeriod.fraction * timelineProperties.cellWidth);
         })
             .append("title")
-            .text((dataPoint) => timelineData.currentGranularity.generateLabel(dataPoint.datePeriod).title);
+            .text((dataPoint) => timelineData.currentGranularity.generateLabel(dataPoint.datePeriod, dateFormatSettings).title);
         this.fillCells(this.settings);
     }
     renderCursors(timelineData, cellHeight, cellsYPosition, cellSettings) {
@@ -2621,23 +2658,23 @@ class Timeline {
         // .style("stroke", cellSettings.capoutlineColor)
         // .call(this.cursorDragBehavior);
     }
-    renderTimeRangeText(timelineData, rangeHeaderSettings) {
+    renderTimeRangeText(timelineData, settings) {
         const leftMargin = (_granularity_granularityNames__WEBPACK_IMPORTED_MODULE_5__/* .GranularityNames.length */ .z.length + Timeline.GranularityNamesLength)
             * this.timelineProperties.elementWidth;
         const maxWidth = this.svgWidth
             - leftMargin
             - this.timelineProperties.leftMargin
-            - rangeHeaderSettings.textSize;
+            - settings.rangeHeader.textSize;
         (0,d3_selection__WEBPACK_IMPORTED_MODULE_14__/* ["default"] */ .Z)("g." + Timeline.TimelineSelectors.RangeTextArea.className).remove();
-        if (rangeHeaderSettings.show && maxWidth > 0) {
+        if (settings.rangeHeader.show && maxWidth > 0) {
             this.rangeTextSelection = this.headerSelection
                 .append("g")
                 .classed(Timeline.TimelineSelectors.RangeTextArea.className, true)
-                .classed(rangeHeaderSettings.position, true)
+                .classed(settings.rangeHeader.position, true)
                 .append("text");
-            const timeRangeText = _utils__WEBPACK_IMPORTED_MODULE_8__/* .Utils.TIME_RANGE_TEXT */ .c.TIME_RANGE_TEXT(timelineData);
+            const timeRangeText = _utils__WEBPACK_IMPORTED_MODULE_8__/* .Utils.TIME_RANGE_TEXT */ .c.TIME_RANGE_TEXT(timelineData, settings.dateFormat);
             const labelFormattedTextOptions = {
-                fontSize: rangeHeaderSettings.textSize,
+                fontSize: settings.rangeHeader.textSize,
                 label: timeRangeText,
                 maxWidth,
             };
@@ -2647,12 +2684,12 @@ class Timeline {
                 .classed(Timeline.TimelineSelectors.SelectionRangeContainer.className, true)
                 .attr("x", Timeline.DefaultRangeTextSelectionX)
                 .attr("y", Timeline.DefaultRangeTextSelectionY - positionOffset)
-                .attr("fill", rangeHeaderSettings.fontColor)
-                .style("font-family", rangeHeaderSettings.fontFamily)
-                .style("font-size", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_13__/* .fromPointToPixel */ .tl(rangeHeaderSettings.textSize))
-                .style("font-weight", rangeHeaderSettings.Bold ? '700' : 'normal')
-                .style("font-style", rangeHeaderSettings.Italic ? 'italic' : 'initial')
-                .style("text-decoration", rangeHeaderSettings.Underline ? 'underline' : 'initial')
+                .attr("fill", settings.rangeHeader.fontColor)
+                .style("font-family", settings.rangeHeader.fontFamily)
+                .style("font-size", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_13__/* .fromPointToPixel */ .tl(settings.rangeHeader.textSize))
+                .style("font-weight", settings.rangeHeader.Bold ? '700' : 'normal')
+                .style("font-style", settings.rangeHeader.Italic ? 'italic' : 'initial')
+                .style("text-decoration", settings.rangeHeader.Underline ? 'underline' : 'initial')
                 .text(actualText)
                 .append("title")
                 .text(timeRangeText);
@@ -2859,7 +2896,7 @@ class Timeline {
         }
         this.fillCells(this.settings);
         this.renderCursors(this.timelineData, this.timelineProperties.cellHeight, this.timelineProperties.cellsYPosition, this.settings.cells);
-        this.renderTimeRangeText(this.timelineData, this.settings.rangeHeader);
+        this.renderTimeRangeText(this.timelineData, this.settings);
     }
     /**
      * Note: Public for testability.
@@ -2999,7 +3036,7 @@ class Timeline {
     createTimelineData(timelineSettings, startDate, endDate, timelineGranularityData, locale, localizationManager) {
         const calendar = this.calendarFactory.create(timelineSettings.calendaType, timelineSettings.calendar, timelineSettings.weekDay);
         timelineGranularityData.createGranularities(calendar, locale, localizationManager, timelineSettings.dateFormat);
-        timelineGranularityData.createLabels();
+        timelineGranularityData.createLabels(timelineSettings.dateFormat);
         if (this.initialized) {
             const actualEndDate = _granularity_granularityData__WEBPACK_IMPORTED_MODULE_4__/* .GranularityData.NEXT_DAY */ .S.NEXT_DAY(endDate);
             const daysPeriods = this.timelineGranularityData
@@ -3030,7 +3067,7 @@ class Timeline {
         this.svgWidth = Timeline.SvgWidthOffset
             + this.timelineProperties.cellHeight
             + timelineProperties.cellWidth * timelineDatapointsCount;
-        this.renderTimeRangeText(timelineData, timelineSettings.rangeHeader);
+        this.renderTimeRangeText(timelineData, timelineSettings);
         this.rootSelection
             .attr("drag-resize-disabled", true)
             .style("overflow-x", Timeline.DefaultOverflow)
@@ -3064,7 +3101,7 @@ class Timeline {
             .selectAll(Timeline.TimelineSelectors.TextLabel.selectorName)
             .remove();
         const yPos = this.renderBunchOfLabels(timelineSettings);
-        this.renderCells(timelineData, timelineProperties, this.calculateYOffset(yPos));
+        this.renderCells(timelineData, timelineProperties, this.calculateYOffset(yPos), timelineSettings.dateFormat);
         this.renderCursors(timelineData, timelineProperties.cellHeight, this.calculateYOffset(yPos), this.settings.cells);
         this.scrollAutoFocusFunc(this.selectedGranulaPos);
     }
@@ -3256,7 +3293,7 @@ class Timeline {
         }
         this.fillCells(this.settings);
         this.renderCursors(timelineData, timelineProperties.cellHeight, timelineProperties.cellsYPosition, this.settings.cells);
-        this.renderTimeRangeText(timelineData, this.settings.rangeHeader);
+        this.renderTimeRangeText(timelineData, this.settings);
         this.setSelection(timelineData);
         this.toggleForceSelectionOptions();
     }
@@ -3615,11 +3652,11 @@ class Utils {
     /**
      * Returns the time range text, depending on the given granularity (e.g. "Feb 3 2014 - Apr 5 2015", "Q1 2014 - Q2 2015")
      */
-    static TIME_RANGE_TEXT(timelineData) {
+    static TIME_RANGE_TEXT(timelineData, dateFormatSettings) {
         const startSelectionDateArray = timelineData.currentGranularity
-            .splitDateForTitle(Utils.GET_START_SELECTION_DATE(timelineData));
+            .splitDateForTitle(Utils.GET_START_SELECTION_DATE(timelineData), dateFormatSettings);
         const endSelectionDateArray = timelineData.currentGranularity
-            .splitDateForTitle(Utils.GET_END_SELECTION_PERIOD(timelineData).startDate);
+            .splitDateForTitle(Utils.GET_END_SELECTION_PERIOD(timelineData).startDate, dateFormatSettings);
         const startSelectionString = startSelectionDateArray.join(Utils.DateArrayJoiner);
         const endSelectionString = endSelectionDateArray.join(Utils.DateArrayJoiner);
         return `${startSelectionString}${Utils.DateSplitter}${endSelectionString}`;

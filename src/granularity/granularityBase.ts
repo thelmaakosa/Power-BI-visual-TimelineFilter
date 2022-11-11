@@ -79,7 +79,12 @@ export class GranularityBase implements IGranularity {
 
     private datePeriods: ITimelineDatePeriod[] = [];
     private extendedLabel: IExtendedLabel;
+    private shortDayFormatter: valueFormatter.IValueFormatter;
+    private shortDayOfWeekFormatter: valueFormatter.IValueFormatter;
     private shortMonthFormatter: valueFormatter.IValueFormatter;
+    private shortYearFormatter: valueFormatter.IValueFormatter;
+
+
     private granularityProps: IGranularityName = null;
     
 
@@ -87,7 +92,11 @@ export class GranularityBase implements IGranularity {
 
     constructor(calendar: Calendar, private locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings) {
         this.calendar = calendar;
+        this.shortDayFormatter = valueFormatter.create({ format: dateFormatSettings.dayFormat, cultureSelector: this.locale });
+        this.shortDayOfWeekFormatter = valueFormatter.create({ format: dateFormatSettings.dayofweekFormat, cultureSelector: this.locale });
         this.shortMonthFormatter = valueFormatter.create({ format: dateFormatSettings.monthFormat, cultureSelector: this.locale });
+        this.shortYearFormatter = valueFormatter.create({ format: dateFormatSettings.yearFormat, cultureSelector: this.locale });
+
         this.granularityProps = granularityProps;
     }
 
@@ -182,7 +191,7 @@ export class GranularityBase implements IGranularity {
         return granularitySelection;
     }
 
-    public splitDate(date: Date): (string | number)[] {
+    public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
         return [
             this.getMonthName(date),
             date.getDate(),
@@ -190,12 +199,21 @@ export class GranularityBase implements IGranularity {
         ];
     }
 
-    public splitDateForTitle(date: Date): (string | number)[] {
-        return this.splitDate(date);
+    public splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
+        return this.splitDate(date, dateFormatSettings);
     }
 
+    public getDayName(date: Date): string {
+        return this.shortDayFormatter.format(date);
+    }
+    public getDayofWeekName(date: Date): string {
+        return this.shortDayOfWeekFormatter.format(date);
+    }
     public getMonthName(date: Date): string {
         return this.shortMonthFormatter.format(date);
+    }
+    public getYearName(date: Date): string {
+        return this.shortYearFormatter.format(date);
     }
 
     public resetDatePeriods(): void {
@@ -214,13 +232,13 @@ export class GranularityBase implements IGranularity {
         this.extendedLabel = extendedLabel;
     }
 
-    public createLabels(granularity: IGranularity): ITimelineLabel[] {
+    public createLabels(granularity: IGranularity, dateFormatSettings: dateFormatSettings): ITimelineLabel[] {
         const labels: ITimelineLabel[] = [];
         let lastDatePeriod: ITimelineDatePeriod;
         this.datePeriods.forEach((datePeriod: ITimelineDatePeriod) => {
-            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod)) {
+            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod, dateFormatSettings)) {
                 lastDatePeriod = datePeriod;
-                labels.push(granularity.generateLabel(datePeriod));
+                labels.push(granularity.generateLabel(datePeriod, dateFormatSettings));
             }
         });
 
@@ -234,10 +252,10 @@ export class GranularityBase implements IGranularity {
      * i.e. using Month granularity, Feb 2 2015 corresponds to Feb 3 2015.
      * It is assumed that the given date does not correspond to previous date periods, other than the last date period
      */
-    public addDate(date: Date): void {
+    public addDate(date: Date, dateFormatSettings: dateFormatSettings): void {
         const datePeriods: ITimelineDatePeriod[] = this.getDatePeriods();
         const lastDatePeriod: ITimelineDatePeriod = datePeriods[datePeriods.length - 1];
-        const identifierArray: (string | number)[] = this.splitDate(date);
+        const identifierArray: (string | number)[] = this.splitDate(date, dateFormatSettings);
 
         if (datePeriods.length === 0
             || !Utils.IS_ARRAYS_EQUAL(lastDatePeriod.identifierArray, identifierArray)) {
@@ -296,7 +314,7 @@ export class GranularityBase implements IGranularity {
      * Returns the date's quarter name (e.g. Q1, Q2, Q3, Q4)
      * @param date A date
      */
-    protected quarterText(date: Date): string {
+    protected getQuarterName(date: Date, dateFormatSettings: dateFormatSettings): string {
         let quarter: number = this.DefaultQuarter;
         let year: number = this.calendar.determineYear(date);
 
@@ -312,7 +330,13 @@ export class GranularityBase implements IGranularity {
 
         quarter++;
 
-        return `Q${quarter}`;
+        if (dateFormatSettings.quarterFormat == "Quarter X"){
+            return `Quarter ${quarter}`;
+        }
+        else if(dateFormatSettings.quarterFormat == "QX"){
+            return `Q${quarter}`;
+        }
+        
     }
 
     private renderSlider(

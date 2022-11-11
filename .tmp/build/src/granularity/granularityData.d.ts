@@ -26,7 +26,7 @@ export declare class GranularityData {
      * Resets the new granularity, adds all dates to it, and then edits the last date period with the ending date.
      * @param granularity The new granularity to be added
      */
-    addGranularity(granularity: IGranularity): void;
+    addGranularity(granularity: IGranularity, dateFormatSettings: dateFormatSettings): void;
     /**
      * Renders all available granularities
      */
@@ -37,7 +37,7 @@ export declare class GranularityData {
      */
     getGranularity(index: number): IGranularity;
     createGranularities(calendar: Calendar, locale: string, localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager, dateFormatSettings: dateFormatSettings): void;
-    createLabels(): void;
+    createLabels(dateFormatSettings: dateFormatSettings): void;
     /**
      * Returns an array of dates with all the days between the start date and the end date
      */

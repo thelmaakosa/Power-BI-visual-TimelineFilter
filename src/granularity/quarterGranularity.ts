@@ -54,25 +54,26 @@ export class QuarterGranularity extends GranularityBase {
         return GranularityType.quarter;
     }
 
-    public splitDate(date: Date): (string | number)[] {
+    public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
         return [
-            this.quarterText(date),
+            this.getQuarterName(date, dateFormatSettings),
             this.calendar.determineYear(date),
         ];
     }
 
-    public sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean {
-        return this.quarterText(firstDatePeriod.startDate) === this.quarterText(secondDatePeriod.startDate)
+    public sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): boolean {
+        return this.getQuarterName(firstDatePeriod.startDate, dateFormatSettings) === this.getQuarterName(secondDatePeriod.startDate, dateFormatSettings)
             && firstDatePeriod.year === secondDatePeriod.year;
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel {
-        const quarter: string = this.quarterText(datePeriod.startDate);
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
+        const quarter: string = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
+        const yearName: string = this.getYearName(datePeriod.startDate);
 
         return {
             id: datePeriod.index,
-            text: `${quarter} ${datePeriod.year}`,
-            title: `${quarter} ${datePeriod.year}`,
+            text: `${quarter} ${yearName}`,
+            title: `${quarter} ${yearName}`,
         };
     }
 }

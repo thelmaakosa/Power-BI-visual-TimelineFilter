@@ -72,11 +72,13 @@ export class YearGranularity extends GranularityBase {
         const localizedYear = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
+        
+        const yearName: string = this.getYearName(datePeriod.startDate);
 
         return {
             id: datePeriod.index,
-            text: `${datePeriod.year}`,
-            title: `${localizedYear} ${datePeriod.year}`,
+            text: `${yearName}`,
+            title: `${localizedYear} ${yearName}`,
         };
     }
 }
