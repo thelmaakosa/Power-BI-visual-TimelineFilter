@@ -6,10 +6,11 @@ import { ITimelineDatePeriod } from "../datePeriod/datePeriod";
 import { GranularityBase } from "./granularityBase";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
+import { dateFormatSettings } from "../settings/dateFormatSettings";
 export declare class YearGranularity extends GranularityBase {
     protected localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager;
     private localizationKey;
-    constructor(calendar: Calendar, locale: string, localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager);
+    constructor(calendar: Calendar, locale: string, localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager, dateFormatSettings: dateFormatSettings);
     getType(): GranularityType;
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
     splitDate(date: Date): (string | number)[];

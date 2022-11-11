@@ -4,6 +4,7 @@ import { ITimelineDatePeriod } from "../datePeriod/datePeriod";
 import { IGranularity } from "./granularity";
 import { IGranularityName } from "./granularityName";
 import { IGranularityRenderProps } from "./granularityRenderProps";
+import { dateFormatSettings } from "../settings/dateFormatSettings";
 import { IExtendedLabel, ITimelineLabel } from "../dataInterfaces";
 export declare class GranularityBase implements IGranularity {
     private locale;
@@ -29,12 +30,12 @@ export declare class GranularityBase implements IGranularity {
     private shortMonthFormatter;
     private granularityProps;
     private DefaultQuarter;
-    constructor(calendar: Calendar, locale: string, granularityProps: IGranularityName);
+    constructor(calendar: Calendar, locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings);
     measures(): void;
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
     splitDate(date: Date): (string | number)[];
     splitDateForTitle(date: Date): (string | number)[];
-    shortMonthName(date: Date): string;
+    getMonthName(date: Date): string;
     resetDatePeriods(): void;
     getDatePeriods(): ITimelineDatePeriod[];
     getExtendedLabel(): IExtendedLabel;

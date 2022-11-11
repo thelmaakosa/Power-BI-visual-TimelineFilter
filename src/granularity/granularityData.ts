@@ -39,6 +39,7 @@ import { YearGranularity } from "./yearGranularity";
 import { Calendar } from "../calendars/calendar";
 import { Utils } from "../utils";
 import { GranularitySettings } from "../settings/granularitySettings";
+import { dateFormatSettings } from "../settings/dateFormatSettings";
 
 export class GranularityData {
     /**
@@ -161,14 +162,15 @@ export class GranularityData {
         calendar: Calendar,
         locale: string,
         localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager,
+        dateFormatSettings: dateFormatSettings
     ): void {
         this.granularities = [];
 
-        this.addGranularity(new YearGranularity(calendar, locale, localizationManager));
-        this.addGranularity(new QuarterGranularity(calendar, locale));
-        this.addGranularity(new MonthGranularity(calendar, locale));
-        this.addGranularity(new WeekGranularity(calendar, locale, localizationManager));
-        this.addGranularity(new DayGranularity(calendar, locale));
+        this.addGranularity(new YearGranularity(calendar, locale, localizationManager, dateFormatSettings));
+        this.addGranularity(new QuarterGranularity(calendar, locale, dateFormatSettings));
+        this.addGranularity(new MonthGranularity(calendar, locale, dateFormatSettings));
+        this.addGranularity(new WeekGranularity(calendar, locale, localizationManager, dateFormatSettings));
+        this.addGranularity(new DayGranularity(calendar, locale, dateFormatSettings));
     }
 
     public createLabels(): void {

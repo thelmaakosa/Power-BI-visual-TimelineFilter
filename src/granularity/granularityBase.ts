@@ -41,7 +41,7 @@ import { IGranularity } from "./granularity";
 import { IGranularityName } from "./granularityName";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import powerbiVisualsApi from "powerbi-visuals-api";
-
+import { dateFormatSettings } from "../settings/dateFormatSettings";
 
 import {
     IExtendedLabel,
@@ -85,9 +85,9 @@ export class GranularityBase implements IGranularity {
 
     private DefaultQuarter: number = 3;
 
-    constructor(calendar: Calendar, private locale: string, granularityProps: IGranularityName) {
+    constructor(calendar: Calendar, private locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings) {
         this.calendar = calendar;
-        this.shortMonthFormatter = valueFormatter.create({ format: "MMM", cultureSelector: this.locale });
+        this.shortMonthFormatter = valueFormatter.create({ format: dateFormatSettings.monthFormat, cultureSelector: this.locale });
         this.granularityProps = granularityProps;
     }
 
@@ -184,7 +184,7 @@ export class GranularityBase implements IGranularity {
 
     public splitDate(date: Date): (string | number)[] {
         return [
-            this.shortMonthName(date),
+            this.getMonthName(date),
             date.getDate(),
             this.calendar.determineYear(date),
         ];
@@ -194,7 +194,7 @@ export class GranularityBase implements IGranularity {
         return this.splitDate(date);
     }
 
-    public shortMonthName(date: Date): string {
+    public getMonthName(date: Date): string {
         return this.shortMonthFormatter.format(date);
     }
 

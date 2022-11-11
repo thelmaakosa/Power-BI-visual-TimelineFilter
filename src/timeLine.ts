@@ -1450,7 +1450,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     ) {
         const calendar: Calendar = this.calendarFactory.create(timelineSettings.calendaType, timelineSettings.calendar, timelineSettings.weekDay);
 
-        timelineGranularityData.createGranularities(calendar, locale, localizationManager);
+        timelineGranularityData.createGranularities(calendar, locale, localizationManager, timelineSettings.dateFormat);
         timelineGranularityData.createLabels();
 
         if (this.initialized) {

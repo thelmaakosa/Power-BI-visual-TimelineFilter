@@ -35,10 +35,11 @@ import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
 import { YearGranularity } from "./yearGranularity";
 import powerbiVisualsApi from "powerbi-visuals-api";
+import { dateFormatSettings } from "../settings/dateFormatSettings";
 
 export class QuarterGranularity extends GranularityBase {
-    constructor(calendar: Calendar, locale: string) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Quarter"));
+    constructor(calendar: Calendar, locale: string, dateFormatSettings: dateFormatSettings) {
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Quarter"), dateFormatSettings);
     }
 
     public render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any> {
