@@ -33,11 +33,11 @@ export class CellsSettings {
     public innerPadding: number = 100;
     public strokeColor: string = "#8C9093";
     public unselectedoutlineThickness: number = 1;
-    public capSize: number = 5;
+    public capSize: number = 10;
     public capfillColor: string = "#8C9093";
     public capfillOpacity: number = 100;
     public capoutlineColor: string = "#8C9093";
     public capoutlineThickness: number = 2;
-    public capoutlineRadius: number = 5;
+    public capoutlineRadius: number = 20;
 
 }

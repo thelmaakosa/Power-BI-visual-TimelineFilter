@@ -30,8 +30,8 @@ export class rangeHeaderSettings {
     public fontFamily: string = 'Segoe UI';
     public textSize: number = 9;
     public fontColor: string = "#000000";
-    public fontBold: boolean = false;
-    public fontItalic: boolean = false;
-    public fontUnderline: boolean = false;
+    public Bold: boolean = false;
+    public Italic: boolean = false;
+    public Underline: boolean = false;
 
 }

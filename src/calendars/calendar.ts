@@ -27,7 +27,7 @@
 import { GranularityData } from "../granularity/granularityData";
 import { CalendarSettings } from "../settings/calendarSettings";
 import { WeekDaySettings } from "../settings/weekDaySettings";
-import { WeeksDetermintaionStandardsSettings } from "../settings/weeksDetermintaionStandardsSettings";
+import { calendaTypeSettings } from "../settings/calendaTypeSettings";
 import { Utils } from "../utils";
 import { WeekStandards } from "./weekStandards";
 
@@ -54,7 +54,7 @@ export class Calendar {
     protected YearOffset: number = 1;
 
     constructor(calendarFormat: CalendarSettings, weekDaySettings: WeekDaySettings) {
-        this.isDaySelection = weekDaySettings.daySelection;
+        this.isDaySelection = true;
         this.firstDayOfWeek = weekDaySettings.day;
         this.firstMonthOfYear = calendarFormat.month;
         this.firstDayOfYear = calendarFormat.day;
@@ -192,12 +192,12 @@ export class Calendar {
     public isChanged(
         calendarSettings: CalendarSettings,
         weekDaySettings: WeekDaySettings,
-        weeksDetermintaionStandardsSettings: WeeksDetermintaionStandardsSettings
+        calendaTypeSettings: calendaTypeSettings
     ): boolean {
         return this.firstMonthOfYear !== calendarSettings.month
             || this.firstDayOfYear !== calendarSettings.day
             || this.firstDayOfWeek !== weekDaySettings.day
-            || weeksDetermintaionStandardsSettings.weekStandard !== WeekStandards.NotSet;
+            || calendaTypeSettings.weekStandard !== WeekStandards.NotSet;
     }
 
     public getDateOfFirstWeek(year: number): Date {

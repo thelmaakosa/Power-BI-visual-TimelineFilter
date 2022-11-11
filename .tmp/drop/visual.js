@@ -44,7 +44,7 @@ class Calendar {
     constructor(calendarFormat, weekDaySettings) {
         this.EmptyYearOffset = 0;
         this.YearOffset = 1;
-        this.isDaySelection = weekDaySettings.daySelection;
+        this.isDaySelection = true;
         this.firstDayOfWeek = weekDaySettings.day;
         this.firstMonthOfYear = calendarFormat.month;
         this.firstDayOfYear = calendarFormat.day;
@@ -141,11 +141,11 @@ class Calendar {
         const endDate = new Date(year + 1, this.firstMonthOfYear, this.firstDayOfYear);
         return { startDate, endDate };
     }
-    isChanged(calendarSettings, weekDaySettings, weeksDetermintaionStandardsSettings) {
+    isChanged(calendarSettings, weekDaySettings, calendaTypeSettings) {
         return this.firstMonthOfYear !== calendarSettings.month
             || this.firstDayOfYear !== calendarSettings.day
             || this.firstDayOfWeek !== weekDaySettings.day
-            || weeksDetermintaionStandardsSettings.weekStandard !== _weekStandards__WEBPACK_IMPORTED_MODULE_2__/* .WeekStandards.NotSet */ .d.NotSet;
+            || calendaTypeSettings.weekStandard !== _weekStandards__WEBPACK_IMPORTED_MODULE_2__/* .WeekStandards.NotSet */ .d.NotSet;
     }
     getDateOfFirstWeek(year) {
         if (!this.dateOfFirstWeek[year]) {
@@ -189,9 +189,9 @@ Calendar.QuarterFirstMonths = [0, 3, 6, 9];
 
 
 class CalendarFactory {
-    create(weeksDetermintaionStandardsSettings, calendarSettings, weekDaySettings) {
+    create(calendaTypeSettings, calendarSettings, weekDaySettings) {
         let calendar = null;
-        switch (weeksDetermintaionStandardsSettings.weekStandard) {
+        switch (calendaTypeSettings.weekStandard) {
             case _weekStandards__WEBPACK_IMPORTED_MODULE_1__/* .WeekStandards.ISO8061 */ .d.ISO8061:
                 calendar = new _calendarISO8061__WEBPACK_IMPORTED_MODULE_2__/* .CalendarISO8061 */ .E();
                 break;
@@ -305,8 +305,8 @@ class CalendarISO8061 extends _calendar__WEBPACK_IMPORTED_MODULE_0__/* .Calendar
         }
         return this.dateOfFirstFullWeek[year];
     }
-    isChanged(calendarSettings, weekDaySettings, weeksDetermintaionStandardsSettings) {
-        return weeksDetermintaionStandardsSettings.weekStandard !== _weekStandards__WEBPACK_IMPORTED_MODULE_1__/* .WeekStandards.ISO8061 */ .d.ISO8061;
+    isChanged(calendarSettings, weekDaySettings, calendaTypeSettings) {
+        return calendaTypeSettings.weekStandard !== _weekStandards__WEBPACK_IMPORTED_MODULE_1__/* .WeekStandards.ISO8061 */ .d.ISO8061;
     }
 }
 
@@ -531,7 +531,7 @@ class GranularityBase {
         this.hLineYOffset = 2;
         this.hLineWidth = 45;
         this.hLineXOffset = 45;
-        this.sliderXOffset = 24;
+        this.sliderXOffset = 22.5;
         this.sliderYOffset = 17;
         this.sliderRx = 4;
         this.sliderWidth = 45;
@@ -720,21 +720,68 @@ class GranularityBase {
         return `Q${quarter}`;
     }
     renderSlider(selection, granularSettings) {
-        selection
-            .append("rect")
-            .classed("periodSlicerRect", true)
-            .attr("x", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset))
-            .attr("y", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
-            .attr("rx", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineRadius))
-            .attr("ry", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineRadius))
-            .attr("width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderWidth))
-            .attr("height", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight))
-            .style("fill", granularSettings.selectedfillColor)
-            .style("fill-opacity", granularSettings.transparency / 100)
-            .style("stroke", granularSettings.outlineColor)
-            .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness))
-            .style("stroke-opacity", granularSettings.innerPadding / 100)
-            .data([granularSettings.granularity]);
+        if (granularSettings.selectedOutlineLeft == true && granularSettings.selectedOutlineRight == true && granularSettings.selectedOutlineTop == true && granularSettings.selectedOutlineBottom == true) {
+            selection
+                .append("rect")
+                .classed("periodSlicerRect", true)
+                .attr("x", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset))
+                .attr("y", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
+                .attr("rx", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineRadius))
+                .attr("ry", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineRadius))
+                .attr("width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderWidth))
+                .attr("height", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight))
+                .style("fill", granularSettings.selectedfillColor)
+                .style("fill-opacity", granularSettings.transparency / 100)
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness))
+                .data([granularSettings.granularity]);
+        }
+        else {
+            if (granularSettings.selectedOutlineLeft == true) {
+                selection
+                    .append("line")
+                    .classed("periodSlicerRect", true)
+                    .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset))
+                    .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
+                    .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset))
+                    .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
+                    .style("stroke", granularSettings.outlineColor)
+                    .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness));
+            }
+            if (granularSettings.selectedOutlineRight == true) {
+                selection
+                    .append("line")
+                    .classed("periodSlicerRect", true)
+                    .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderXOffset))
+                    .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
+                    .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderXOffset))
+                    .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
+                    .style("stroke", granularSettings.outlineColor)
+                    .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness));
+            }
+            if (granularSettings.selectedOutlineTop == true) {
+                selection
+                    .append("line")
+                    .classed("periodSlicerRect", true)
+                    .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset))
+                    .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
+                    .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderXOffset))
+                    .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
+                    .style("stroke", granularSettings.outlineColor)
+                    .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness));
+            }
+            if (granularSettings.selectedOutlineBottom == true) {
+                selection
+                    .append("line")
+                    .classed("periodSlicerRect", true)
+                    .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset))
+                    .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
+                    .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderXOffset))
+                    .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
+                    .style("stroke", granularSettings.outlineColor)
+                    .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness));
+            }
+        }
     }
 }
 GranularityBase.DefaultFraction = 1;
@@ -1363,6 +1410,47 @@ class YearGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .G
 
 /***/ }),
 
+/***/ 11939:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Y": () => (/* binding */ calendaTypeSettings)
+/* harmony export */ });
+/*
+ *  Power BI Visualizations
+ *
+ *  Copyright (c) Microsoft Corporation
+ *  All rights reserved.
+ *  MIT License
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy
+ *  of this software and associated documentation files (the ""Software""), to deal
+ *  in the Software without restriction, including without limitation the rights
+ *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *  copies of the Software, and to permit persons to whom the Software is
+ *  furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in
+ *  all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ *  THE SOFTWARE.
+ */
+class calendaTypeSettings {
+    constructor() {
+        this.weekStandard = 1;
+    }
+}
+
+
+/***/ }),
+
 /***/ 22342:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -1399,6 +1487,7 @@ class CalendarSettings {
     constructor() {
         this.month = 0;
         this.day = 1;
+        this.firstdayofweek = 0;
     }
 }
 
@@ -1447,12 +1536,12 @@ class CellsSettings {
         this.innerPadding = 100;
         this.strokeColor = "#8C9093";
         this.unselectedoutlineThickness = 1;
-        this.capSize = 5;
+        this.capSize = 10;
         this.capfillColor = "#8C9093";
         this.capfillOpacity = 100;
         this.capoutlineColor = "#8C9093";
         this.capoutlineThickness = 2;
-        this.capoutlineRadius = 5;
+        this.capoutlineRadius = 20;
     }
 }
 
@@ -1583,6 +1672,7 @@ class ForceSelectionSettings {
     constructor() {
         this.currentPeriod = false;
         this.latestAvailableDate = false;
+        this.periodoftime = 0;
     }
 }
 
@@ -1669,32 +1759,31 @@ class GeneralSettings {
 class GranularitySettings {
     constructor() {
         this.show = true;
+        this.granularityYearVisibility = true;
+        this.granularityQuarterVisibility = true;
+        this.granularityMonthVisibility = true;
+        this.granularityWeekVisibility = true;
+        this.granularityDayVisibility = true;
+        this.granularity = _granularity_granularityType__WEBPACK_IMPORTED_MODULE_0__/* .GranularityType.month */ .k.month;
         this.position = "right";
         this.scale = true;
-        this.scaleThickness = 2;
         this.scaleColor = "#8C9093";
+        this.scaleThickness = 2;
+        this.fontFamily = 'Segoe UI';
+        this.textSize = 9;
         this.fontColor = "#00458F";
+        this.Bold = false;
+        this.Italic = false;
+        this.Underline = false;
         this.selectedfillColor = "transparent";
         this.transparency = 50;
         this.selectedOutlineLeft = true;
         this.selectedOutlineRight = true;
         this.selectedOutlineTop = true;
         this.selectedOutlineBottom = true;
+        this.outlineColor = "#3F464B";
         this.selectedOutlineThickness = 2;
         this.selectedOutlineRadius = 0;
-        this.outlineColor = "#3F464B";
-        this.innerPadding = 50;
-        this.fontFamily = 'Segoe UI';
-        this.textSize = 9;
-        this.Bold = false;
-        this.Italic = false;
-        this.Underline = false;
-        this.granularity = _granularity_granularityType__WEBPACK_IMPORTED_MODULE_0__/* .GranularityType.month */ .k.month;
-        this.granularityYearVisibility = true;
-        this.granularityQuarterVisibility = true;
-        this.granularityMonthVisibility = true;
-        this.granularityWeekVisibility = true;
-        this.granularityDayVisibility = true;
     }
 }
 
@@ -1788,9 +1877,9 @@ class rangeHeaderSettings {
         this.fontFamily = 'Segoe UI';
         this.textSize = 9;
         this.fontColor = "#000000";
-        this.fontBold = false;
-        this.fontItalic = false;
-        this.fontUnderline = false;
+        this.Bold = false;
+        this.Italic = false;
+        this.Underline = false;
     }
 }
 
@@ -1845,7 +1934,8 @@ class ScrollAutoAdjustment {
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Z": () => (/* binding */ Settings)
 /* harmony export */ });
-/* harmony import */ var powerbi_visuals_utils_dataviewutils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(24554);
+/* harmony import */ var powerbi_visuals_utils_dataviewutils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(24554);
+/* harmony import */ var _calendaTypeSettings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11939);
 /* harmony import */ var _calendarSettings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22342);
 /* harmony import */ var _cellsSettings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(44226);
 /* harmony import */ var _cursorSettings__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(74049);
@@ -1855,7 +1945,6 @@ class ScrollAutoAdjustment {
 /* harmony import */ var _labelsSettings__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(82081);
 /* harmony import */ var _scrollAutoAdjustment__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(50822);
 /* harmony import */ var _weekDaySettings__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(551);
-/* harmony import */ var _weeksDetermintaionStandardsSettings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(782);
 /* harmony import */ var _dateFormatSettings__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(90820);
 /* harmony import */ var _rangeHeaderSettings__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(89929);
 /*
@@ -1896,10 +1985,11 @@ class ScrollAutoAdjustment {
 
 
 
-class Settings extends powerbi_visuals_utils_dataviewutils__WEBPACK_IMPORTED_MODULE_3__/* .DataViewObjectsParser */ .U {
+class Settings extends powerbi_visuals_utils_dataviewutils__WEBPACK_IMPORTED_MODULE_2__/* .DataViewObjectsParser */ .U {
     constructor() {
         super(...arguments);
         this.general = new _generalSettings__WEBPACK_IMPORTED_MODULE_0__/* .GeneralSettings */ .q();
+        this.calendaType = new _calendaTypeSettings__WEBPACK_IMPORTED_MODULE_3__/* .calendaTypeSettings */ .Y();
         this.calendar = new _calendarSettings__WEBPACK_IMPORTED_MODULE_4__/* .CalendarSettings */ .C();
         this.forceSelection = new _forceSelectionSettings__WEBPACK_IMPORTED_MODULE_5__/* .ForceSelectionSettings */ .x();
         this.weekDay = new _weekDaySettings__WEBPACK_IMPORTED_MODULE_6__/* .WeekDaySettings */ .w();
@@ -1909,7 +1999,6 @@ class Settings extends powerbi_visuals_utils_dataviewutils__WEBPACK_IMPORTED_MOD
         this.labels = new _labelsSettings__WEBPACK_IMPORTED_MODULE_9__/* .LabelsSettings */ .m();
         this.scrollAutoAdjustment = new _scrollAutoAdjustment__WEBPACK_IMPORTED_MODULE_10__/* .ScrollAutoAdjustment */ .s();
         this.cursor = new _cursorSettings__WEBPACK_IMPORTED_MODULE_11__/* .CursorSettings */ .e();
-        this.weeksDetermintaionStandards = new _weeksDetermintaionStandardsSettings__WEBPACK_IMPORTED_MODULE_2__/* .WeeksDetermintaionStandardsSettings */ .i();
         this.dateFormat = new _dateFormatSettings__WEBPACK_IMPORTED_MODULE_12__/* .dateFormatSettings */ .s();
     }
 }
@@ -1953,49 +2042,6 @@ class WeekDaySettings {
     constructor() {
         this.daySelection = true;
         this.day = 0;
-    }
-}
-
-
-/***/ }),
-
-/***/ 782:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "i": () => (/* binding */ WeeksDetermintaionStandardsSettings)
-/* harmony export */ });
-/* harmony import */ var _calendars_weekStandards__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35962);
-/*
- *  Power BI Visualizations
- *
- *  Copyright (c) Microsoft Corporation
- *  All rights reserved.
- *  MIT License
- *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the ""Software""), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
- *
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
- *
- *  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
- */
-
-class WeeksDetermintaionStandardsSettings {
-    constructor() {
-        this.weekStandard = _calendars_weekStandards__WEBPACK_IMPORTED_MODULE_0__/* .WeekStandards.NotSet */ .d.NotSet;
     }
 }
 
@@ -2162,13 +2208,13 @@ class Timeline {
                 }];
         }
         const isCalendarChanged = previousCalendar
-            && previousCalendar.isChanged(timelineSettings.calendar, timelineSettings.weekDay, timelineSettings.weeksDetermintaionStandards);
+            && previousCalendar.isChanged(timelineSettings.calendar, timelineSettings.weekDay, timelineSettings.calendaType);
         if (timelineData && timelineData.currentGranularity) {
             startDate = _utils__WEBPACK_IMPORTED_MODULE_8__/* .Utils.GET_START_SELECTION_DATE */ .c.GET_START_SELECTION_DATE(timelineData);
             endDate = _utils__WEBPACK_IMPORTED_MODULE_8__/* .Utils.GET_END_SELECTION_DATE */ .c.GET_END_SELECTION_DATE(timelineData);
         }
         if (!initialized || isCalendarChanged) {
-            calendar = new _calendars_calendarFactory__WEBPACK_IMPORTED_MODULE_10__/* .CalendarFactory */ .d().create(timelineSettings.weeksDetermintaionStandards, timelineSettings.calendar, timelineSettings.weekDay);
+            calendar = new _calendars_calendarFactory__WEBPACK_IMPORTED_MODULE_10__/* .CalendarFactory */ .d().create(timelineSettings.calendaType, timelineSettings.calendar, timelineSettings.weekDay);
             timelineData.currentGranularity = timelineGranularityData.getGranularity(timelineSettings.granularity.granularity);
         }
         else {
@@ -2532,10 +2578,10 @@ class Timeline {
             // )
             .attr("d", ((cursorDataPoint) => {
             if (cursorDataPoint.cursorIndex == 0) {
-                return "M1.2246467991473533e-15,20A" + (cellSettings.capSize + cellSettings.capoutlineRadius) + ",20,0,1,1,-3.673940397442059e-15,-20L0,0Z";
+                return "M1.2246467991473533e-15," + cellSettings.capoutlineRadius + "A+" + (cellSettings.capSize) + "," + cellSettings.capoutlineRadius + ",0,1,1,-3.673940397442059e-15,-" + cellSettings.capoutlineRadius + "L0,0Z";
             }
             else if (cursorDataPoint.cursorIndex == 1) {
-                return "M-3.673940397442059e-15,-20A" + (cellSettings.capSize + cellSettings.capoutlineRadius) + ",20,0,1,1,6.123233995736766e-15,20L0,0Z";
+                return "M-3.673940397442059e-15,-" + cellSettings.capoutlineRadius + "A+" + (cellSettings.capSize) + "," + cellSettings.capoutlineRadius + ",0,1,1,6.123233995736766e-15," + cellSettings.capoutlineRadius + "L0,0Z";
             }
         }))
             // .attr("d", "M-3.673940397442059e-15,-20A20,20,0,1,1,6.123233995736766e-15,20L0,0Z")
@@ -2669,6 +2715,13 @@ class Timeline {
         if (options.objectName === "general") {
             return [];
         }
+        if (options.objectName === "forceSelection"
+            && !settings.forceSelection.latestAvailableDate
+            && instances
+            && instances[0]
+            && instances[0].properties) {
+            delete instances[0].properties.periodoftime;
+        }
         if (options.objectName === "dateFormat"
             && !settings.dateFormat.dayofweek
             && instances
@@ -2684,6 +2737,13 @@ class Timeline {
             delete instances[0].properties.scaleColor;
             delete instances[0].properties.scaleThickness;
         }
+        if (options.objectName === "granularity"
+            && !settings.granularity.selectedOutlineLeft
+            || !settings.granularity.selectedOutlineRight
+            || !settings.granularity.selectedOutlineTop
+            || !settings.granularity.selectedOutlineBottom) {
+            delete instances[0].properties.selectedOutlineRadius;
+        }
         if (options.objectName === "cells") {
             instances[0].validValues = {
                 capSize: { numberRange: { min: 0 } },
@@ -2694,7 +2754,7 @@ class Timeline {
         }
         // This options have no sense if ISO standard was picked
         if ((options.objectName === "weekDay" || options.objectName === "calendar")
-            && settings.weeksDetermintaionStandards.weekStandard !== _calendars_weekStandards__WEBPACK_IMPORTED_MODULE_9__/* .WeekStandards.NotSet */ .d.NotSet) {
+            && settings.calendaType.weekStandard !== _calendars_weekStandards__WEBPACK_IMPORTED_MODULE_9__/* .WeekStandards.NotSet */ .d.NotSet) {
             return null;
         }
         switch (options.objectName) {
@@ -2934,7 +2994,7 @@ class Timeline {
         return _utils__WEBPACK_IMPORTED_MODULE_8__/* .Utils.GET_DATE_PERIOD */ .c.GET_DATE_PERIOD(dataView.categorical.categories[0].values);
     }
     createTimelineData(timelineSettings, startDate, endDate, timelineGranularityData, locale, localizationManager) {
-        const calendar = this.calendarFactory.create(timelineSettings.weeksDetermintaionStandards, timelineSettings.calendar, timelineSettings.weekDay);
+        const calendar = this.calendarFactory.create(timelineSettings.calendaType, timelineSettings.calendar, timelineSettings.weekDay);
         timelineGranularityData.createGranularities(calendar, locale, localizationManager);
         timelineGranularityData.createLabels();
         if (this.initialized) {

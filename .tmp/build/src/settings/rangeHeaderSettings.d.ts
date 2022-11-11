@@ -4,7 +4,7 @@ export declare class rangeHeaderSettings {
     fontFamily: string;
     textSize: number;
     fontColor: string;
-    fontBold: boolean;
-    fontItalic: boolean;
-    fontUnderline: boolean;
+    Bold: boolean;
+    Italic: boolean;
+    Underline: boolean;
 }

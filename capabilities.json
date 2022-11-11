@@ -357,19 +357,19 @@
                         }
                     }
                 },
-                "fontBold": {
+                "Bold": {
                     "displayName": "Font Bold",
                     "type": {
                         "bool": true
                     }
                 },
-                "fontItalic": {
+                "Italic": {
                     "displayName": "Font Italic",
                     "type": {
                         "bool": true
                     }
                 },
-                "fontUnderline": {
+                "Underline": {
                     "displayName": "Font Underline",
                     "type": {
                         "bool": true
@@ -419,18 +419,6 @@
                         "bool": true
                     }
                 },
-                "selectedOutlineThickness": {
-                    "displayName": "Selected Outline Thickness",
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "selectedOutlineRadius": {
-                    "displayName": "Selected Outline Radius",
-                    "type": {
-                        "numeric": true
-                    }
-                },
                 "outlineColor": {
                     "displayName": "Selected Outline Color",
                     "displayNameKey": "Visual_OutlineColor",
@@ -442,12 +430,20 @@
                         }
                     }
                 },
-                "innerPadding": {
-                    "displayName": "Selected Outline Opacity",
+                "selectedOutlineThickness": {
+                    "displayName": "Selected Outline Thickness",
                     "type": {
-                        "integer": true
+                        "numeric": true
+                    }
+                },
+                "selectedOutlineRadius": {
+                    "displayName": "Selected Outline Radius",
+                    "type": {
+                        "numeric": true
                     }
                 }
+                
+                
                 
             }
         },
@@ -463,7 +459,7 @@
                     }
                 },
                 "position": {
-                    "displayName": "Position",
+                    "displayName": "Header Position",
                     "displayNameKey": "Visual_Position",
                     "type": {
                         "formatting": {
@@ -497,19 +493,19 @@
                         }
                     }
                 },
-                "fontBold": {
+                "Bold": {
                     "displayName": "Font Bold",
                     "type": {
                         "bool": true
                     }
                 },
-                "fontItalic": {
+                "Italic": {
                     "displayName": "Font Italic",
                     "type": {
                         "bool": true
                     }
                 },
-                "fontUnderline": {
+                "Underline": {
                     "displayName": "Font Underline",
                     "type": {
                         "bool": true
@@ -734,7 +730,7 @@
                 "selectedoutlineThickness": {
                     "displayName": "Selected Outline Thickness",
                     "type": {
-                        "integer": true
+                        "numeric": true
                     }
                 },
                 "fillUnselected": {

@@ -163,7 +163,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
 
         const isCalendarChanged: boolean = previousCalendar
-        && previousCalendar.isChanged(timelineSettings.calendar, timelineSettings.weekDay, timelineSettings.weeksDetermintaionStandards);
+        && previousCalendar.isChanged(timelineSettings.calendar, timelineSettings.weekDay, timelineSettings.calendaType);
 
         if (timelineData && timelineData.currentGranularity) {
             startDate = Utils.GET_START_SELECTION_DATE(timelineData);
@@ -171,7 +171,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
 
         if (!initialized || isCalendarChanged) {
-            calendar = new CalendarFactory().create(timelineSettings.weeksDetermintaionStandards, timelineSettings.calendar, timelineSettings.weekDay);
+            calendar = new CalendarFactory().create(timelineSettings.calendaType, timelineSettings.calendar, timelineSettings.weekDay);
             timelineData.currentGranularity = timelineGranularityData.getGranularity(
                 timelineSettings.granularity.granularity);
         } else {
@@ -898,10 +898,10 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             // )
             .attr("d", ((cursorDataPoint: ICursorDataPoint) => {
                     if (cursorDataPoint.cursorIndex == 0){
-                        return "M1.2246467991473533e-15,20A"+(cellSettings.capSize+cellSettings.capoutlineRadius)+",20,0,1,1,-3.673940397442059e-15,-20L0,0Z"
+                        return "M1.2246467991473533e-15,"+cellSettings.capoutlineRadius+"A+"+(cellSettings.capSize)+","+cellSettings.capoutlineRadius+",0,1,1,-3.673940397442059e-15,-"+cellSettings.capoutlineRadius+"L0,0Z"
                     }
                     else if (cursorDataPoint.cursorIndex == 1){
-                        return "M-3.673940397442059e-15,-20A"+(cellSettings.capSize+cellSettings.capoutlineRadius)+",20,0,1,1,6.123233995736766e-15,20L0,0Z"
+                        return "M-3.673940397442059e-15,-"+cellSettings.capoutlineRadius+"A+"+(cellSettings.capSize)+","+cellSettings.capoutlineRadius+",0,1,1,6.123233995736766e-15,"+cellSettings.capoutlineRadius+"L0,0Z"
                     }
                 }),
             )
@@ -947,7 +947,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             // .call(this.cursorDragBehavior);
     }
 
-    public renderTimeRangeText(timelineData: ITimelineData, rangeHeaderSettings: LabelsSettings): void {
+    public renderTimeRangeText(timelineData: ITimelineData, rangeHeaderSettings: rangeHeaderSettings): void {
         
         const leftMargin: number = (GranularityNames.length + Timeline.GranularityNamesLength)
             * this.timelineProperties.elementWidth;
@@ -1088,6 +1088,15 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             return [];
         }
 
+        if (options.objectName === "forceSelection"
+            && !settings.forceSelection.latestAvailableDate
+            && instances
+            && instances[0]
+            && instances[0].properties
+        ) {
+            delete instances[0].properties.periodoftime;
+        }
+
         if (options.objectName === "dateFormat"
             && !settings.dateFormat.dayofweek
             && instances
@@ -1107,6 +1116,14 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             delete instances[0].properties.scaleThickness;
 
         }
+        if (options.objectName === "granularity"
+            && !settings.granularity.selectedOutlineLeft
+            || !settings.granularity.selectedOutlineRight
+            || !settings.granularity.selectedOutlineTop
+            || !settings.granularity.selectedOutlineBottom
+        ){
+            delete instances[0].properties.selectedOutlineRadius;
+        }
 
         if (options.objectName === "cells") {
  
@@ -1121,7 +1138,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
         // This options have no sense if ISO standard was picked
         if ((options.objectName === "weekDay" || options.objectName === "calendar")
-            && settings.weeksDetermintaionStandards.weekStandard !== WeekStandards.NotSet) {
+            && settings.calendaType.weekStandard !== WeekStandards.NotSet) {
             return null;
         }
 
@@ -1428,7 +1445,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         locale: string,
         localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager
     ) {
-        const calendar: Calendar = this.calendarFactory.create(timelineSettings.weeksDetermintaionStandards, timelineSettings.calendar, timelineSettings.weekDay);
+        const calendar: Calendar = this.calendarFactory.create(timelineSettings.calendaType, timelineSettings.calendar, timelineSettings.weekDay);
 
         timelineGranularityData.createGranularities(calendar, locale, localizationManager);
         timelineGranularityData.createLabels();

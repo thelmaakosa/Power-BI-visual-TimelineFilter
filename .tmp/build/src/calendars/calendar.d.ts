@@ -1,6 +1,6 @@
 import { CalendarSettings } from "../settings/calendarSettings";
 import { WeekDaySettings } from "../settings/weekDaySettings";
-import { WeeksDetermintaionStandardsSettings } from "../settings/weeksDetermintaionStandardsSettings";
+import { calendaTypeSettings } from "../settings/calendaTypeSettings";
 interface IDateDictionary {
     [year: number]: Date;
 }
@@ -34,7 +34,7 @@ export declare class Calendar {
     getQuarterPeriod(date: Date): IPeriodDates;
     getMonthPeriod(date: Date): IPeriodDates;
     getYearPeriod(date: Date): IPeriodDates;
-    isChanged(calendarSettings: CalendarSettings, weekDaySettings: WeekDaySettings, weeksDetermintaionStandardsSettings: WeeksDetermintaionStandardsSettings): boolean;
+    isChanged(calendarSettings: CalendarSettings, weekDaySettings: WeekDaySettings, calendaTypeSettings: calendaTypeSettings): boolean;
     getDateOfFirstWeek(year: number): Date;
     getDateOfFirstFullWeek(year: number): Date;
     private calculateDateOfFirstFullWeek;

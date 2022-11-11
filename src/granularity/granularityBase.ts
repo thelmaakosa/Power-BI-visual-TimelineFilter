@@ -65,7 +65,7 @@ export class GranularityBase implements IGranularity {
     private hLineWidth: number = 45;
     private hLineXOffset: number = 45;
 
-    private sliderXOffset: number = 24;
+    private sliderXOffset: number = 22.5;
     private sliderYOffset: number = 17;
     private sliderRx: number = 4;
     private sliderWidth: number = 45;
@@ -319,7 +319,8 @@ export class GranularityBase implements IGranularity {
         selection: Selection<any, any, any, any>,
         granularSettings: GranularitySettings,
     ): void {
-        selection
+        if (granularSettings.selectedOutlineLeft == true && granularSettings.selectedOutlineRight == true && granularSettings.selectedOutlineTop == true && granularSettings.selectedOutlineBottom == true){
+            selection
             .append("rect")
             .classed("periodSlicerRect", true)
             .attr("x", pixelConverter.toString(0 - this.sliderXOffset))
@@ -332,7 +333,54 @@ export class GranularityBase implements IGranularity {
             .style("fill-opacity", granularSettings.transparency/100)
             .style("stroke", granularSettings.outlineColor)
             .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
-            .style("stroke-opacity", granularSettings.innerPadding/100)
             .data([granularSettings.granularity])
+        }
+        else {
+            if (granularSettings.selectedOutlineLeft == true){
+                selection
+                .append("line")
+                .classed("periodSlicerRect", true)
+                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset))
+                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
+                .attr("x2", pixelConverter.toString(0 - this.sliderXOffset))
+                .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+            }
+            
+            if (granularSettings.selectedOutlineRight == true){
+                selection
+                .append("line")
+                .classed("periodSlicerRect", true)
+                .attr("x1", pixelConverter.toString(0 + this.sliderXOffset))
+                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
+                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset))
+                .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+            }
+            if (granularSettings.selectedOutlineTop == true){
+                selection
+                .append("line")
+                .classed("periodSlicerRect", true)
+                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset))
+                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
+                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset))
+                .attr("y2", pixelConverter.toString(0 - this.sliderYOffset))
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+            }
+            if (granularSettings.selectedOutlineBottom == true){
+                selection
+                .append("line")
+                .classed("periodSlicerRect", true)
+                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset))
+                .attr("y1", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
+                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset))
+                .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+            }
+        }
     }
 }
