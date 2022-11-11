@@ -2,21 +2,20 @@ import { Selection } from "d3-selection";
 import { ITimelineDatePeriod } from "../datePeriod/datePeriod";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
-import { dateFormatSettings } from "../settings/dateFormatSettings";
 import { IExtendedLabel, ITimelineLabel } from "../dataInterfaces";
 export interface IGranularity {
     getType?(): GranularityType;
-    splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
+    splitDate(date: Date): (string | number)[];
     getDatePeriods(): ITimelineDatePeriod[];
     resetDatePeriods(): void;
     getExtendedLabel(): IExtendedLabel;
     setExtendedLabel(extendedLabel: IExtendedLabel): void;
-    createLabels(granularity: IGranularity, dateFormatSettings: dateFormatSettings): ITimelineLabel[];
-    sameLabel?(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): boolean;
-    generateLabel?(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel;
-    addDate(date: Date, dateFormatSettings: dateFormatSettings): any;
+    createLabels(granularity: IGranularity): ITimelineLabel[];
+    sameLabel?(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean;
+    generateLabel?(datePeriod: ITimelineDatePeriod): ITimelineLabel;
+    addDate(date: Date): any;
     setNewEndDate(date: Date): void;
     splitPeriod(index: number, newFraction: number, newDate: Date): void;
-    splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
+    splitDateForTitle(date: Date): (string | number)[];
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
 }

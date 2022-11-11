@@ -26,7 +26,8 @@
 
 import { GranularityData } from "../granularity/granularityData";
 import { CalendarSettings } from "../settings/calendarSettings";
-import { calendaTypeSettings } from "../settings/calendaTypeSettings";
+import { WeekDaySettings } from "../settings/weekDaySettings";
+import { WeeksDetermintaionStandardsSettings } from "../settings/weeksDetermintaionStandardsSettings";
 import { Utils } from "../utils";
 import { WeekStandards } from "./weekStandards";
 
@@ -48,11 +49,13 @@ export class Calendar {
     protected dateOfFirstWeek: IDateDictionary;
     protected dateOfFirstFullWeek: IDateDictionary;
     protected quarterFirstMonths: number[];
+    protected isDaySelection: boolean;
     protected EmptyYearOffset: number = 0;
     protected YearOffset: number = 1;
 
-    constructor(calendarFormat: CalendarSettings) {
-        this.firstDayOfWeek = calendarFormat.firstdayofweek;
+    constructor(calendarFormat: CalendarSettings, weekDaySettings: WeekDaySettings) {
+        this.isDaySelection = weekDaySettings.daySelection;
+        this.firstDayOfWeek = weekDaySettings.day;
         this.firstMonthOfYear = calendarFormat.month;
         this.firstDayOfYear = calendarFormat.day;
 
@@ -126,7 +129,9 @@ export class Calendar {
         const month: number = date.getMonth();
         const dayOfWeek: number = date.getDay();
 
-        const weekDay = this.firstDayOfWeek
+        const weekDay = this.isDaySelection
+            ? this.firstDayOfWeek
+            : new Date(year, this.firstMonthOfYear, this.firstDayOfYear).getDay();
 
         let deltaDays: number = 0;
         if (weekDay !== dayOfWeek) {
@@ -186,12 +191,13 @@ export class Calendar {
 
     public isChanged(
         calendarSettings: CalendarSettings,
-        calendaTypeSettings: calendaTypeSettings
+        weekDaySettings: WeekDaySettings,
+        weeksDetermintaionStandardsSettings: WeeksDetermintaionStandardsSettings
     ): boolean {
         return this.firstMonthOfYear !== calendarSettings.month
             || this.firstDayOfYear !== calendarSettings.day
-            || this.firstDayOfWeek !== calendarSettings.firstdayofweek
-            || calendaTypeSettings.weekStandard !== WeekStandards.NotSet;
+            || this.firstDayOfWeek !== weekDaySettings.day
+            || weeksDetermintaionStandardsSettings.weekStandard !== WeekStandards.NotSet;
     }
 
     public getDateOfFirstWeek(year: number): Date {
@@ -213,7 +219,9 @@ export class Calendar {
     private calculateDateOfFirstFullWeek(year: number): Date {
         let date: Date = new Date(year, this.firstMonthOfYear, this.firstDayOfYear);
 
-        const weekDay = this.firstDayOfWeek
+        const weekDay = this.isDaySelection
+            ? this.firstDayOfWeek
+            : new Date(year, this.firstMonthOfYear, this.firstDayOfYear).getDay();
 
         while (date.getDay() !== weekDay) {
             date = GranularityData.NEXT_DAY(date);

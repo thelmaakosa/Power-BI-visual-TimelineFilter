@@ -24,7 +24,8 @@
  *  THE SOFTWARE.
  */
 
-export class ForceSelectionSettings {
-    public currentPeriod: boolean = false;
-    public latestAvailableDate: boolean = false;
+import { WeekStandards } from "../calendars/weekStandards";
+
+export class WeeksDetermintaionStandardsSettings {
+    public weekStandard: number = WeekStandards.NotSet;
 }

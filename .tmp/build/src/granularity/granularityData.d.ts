@@ -1,7 +1,6 @@
 import powerbiVisualsApi from "powerbi-visuals-api";
 import { IGranularity } from "./granularity";
 import { IGranularityRenderProps } from "./granularityRenderProps";
-import { dateFormatSettings } from "../settings/dateFormatSettings";
 import { Calendar } from "../calendars/calendar";
 export declare class GranularityData {
     /**
@@ -26,7 +25,7 @@ export declare class GranularityData {
      * Resets the new granularity, adds all dates to it, and then edits the last date period with the ending date.
      * @param granularity The new granularity to be added
      */
-    addGranularity(granularity: IGranularity, dateFormatSettings: dateFormatSettings): void;
+    addGranularity(granularity: IGranularity): void;
     /**
      * Renders all available granularities
      */
@@ -36,8 +35,8 @@ export declare class GranularityData {
      * @param index The index of the requested granularity
      */
     getGranularity(index: number): IGranularity;
-    createGranularities(calendar: Calendar, locale: string, localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager, dateFormatSettings: dateFormatSettings): void;
-    createLabels(dateFormatSettings: dateFormatSettings): void;
+    createGranularities(calendar: Calendar, locale: string, localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager): void;
+    createLabels(): void;
     /**
      * Returns an array of dates with all the days between the start date and the end date
      */

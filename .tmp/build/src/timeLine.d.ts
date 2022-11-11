@@ -12,7 +12,6 @@ import { GranularityData } from "./granularity/granularityData";
 import { GranularityType } from "./granularity/granularityType";
 import { ITimelineDatePeriodBase } from "./datePeriod/datePeriod";
 import { Calendar } from "./calendars/calendar";
-import { dateFormatSettings } from "./settings/dateFormatSettings";
 export declare class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual {
     static SET_VALID_CALENDAR_SETTINGS(calendarSettings: CalendarSettings): void;
     static SELECT_CURRENT_PERIOD(datePeriod: ITimelineDatePeriodBase, granularity: GranularityType, calendar: any): {
@@ -103,9 +102,9 @@ export declare class Timeline implements powerbiVisualsApi.extensibility.visual.
     redrawPeriod(granularity: GranularityType): void;
     update(options: powerbiVisualsApi.extensibility.visual.VisualUpdateOptions): void;
     fillCells(visSettings: Settings): void;
-    renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number, dateFormatSettings: dateFormatSettings): void;
+    renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number): void;
     renderCursors(timelineData: ITimelineData, cellHeight: number, cellsYPosition: number, cellSettings: CellsSettings): D3Selection<any, any, any, any>;
-    renderTimeRangeText(timelineData: ITimelineData, settings: Settings): void;
+    renderTimeRangeText(timelineData: ITimelineData, rangeHeaderSettings: LabelsSettings): void;
     setSelection(timelineData: ITimelineData): void;
     applyDatePeriod(startDate: Date, endDate: Date, target: IFilterColumnTarget): void;
     getFilterAction(startDate: Date, endDate: Date): powerbiVisualsApi.FilterAction;

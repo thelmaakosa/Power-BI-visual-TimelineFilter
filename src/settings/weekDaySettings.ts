@@ -24,7 +24,7 @@
  *  THE SOFTWARE.
  */
 
-export class ForceSelectionSettings {
-    public currentPeriod: boolean = false;
-    public latestAvailableDate: boolean = false;
+export class WeekDaySettings {
+    public daySelection: boolean = true;
+    public day: number = 0;
 }

@@ -103,7 +103,6 @@ import { WeekStandards } from "./calendars/weekStandards";
 import { CalendarFactory } from "./calendars/calendarFactory";
 import { truncate } from "fs";
 import { dateFormatSettings } from "./settings/dateFormatSettings";
-import { translate } from "powerbi-visuals-utils-svgutils/lib/manipulation";
 
 interface IAdjustedFilterDatePeriod {
     period: DatePeriodBase;
@@ -164,7 +163,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
 
         const isCalendarChanged: boolean = previousCalendar
-            && previousCalendar.isChanged(timelineSettings.calendar, timelineSettings.calendaType);
+        && previousCalendar.isChanged(timelineSettings.calendar, timelineSettings.weekDay, timelineSettings.weeksDetermintaionStandards);
 
         if (timelineData && timelineData.currentGranularity) {
             startDate = Utils.GET_START_SELECTION_DATE(timelineData);
@@ -172,7 +171,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
 
         if (!initialized || isCalendarChanged) {
-            calendar = new CalendarFactory().create(timelineSettings.calendaType, timelineSettings.calendar);
+            calendar = new CalendarFactory().create(timelineSettings.weeksDetermintaionStandards, timelineSettings.calendar, timelineSettings.weekDay);
             timelineData.currentGranularity = timelineGranularityData.getGranularity(
                 timelineSettings.granularity.granularity);
         } else {
@@ -718,7 +717,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             const adjustedPeriod: IAdjustedFilterDatePeriod = this.adjustFilterDatePeriod();
             const datePeriod: ITimelineDatePeriodBase = this.datePeriod;
             const granularity: GranularityType = this.settings.granularity.granularity;
-            const isCurrentPeriodSelected: boolean = !this.isForceSelectionReset;
+            const isCurrentPeriodSelected: boolean = !this.isForceSelectionReset && this.settings.forceSelection.currentPeriod;
             const isLatestAvailableDateSelected: boolean = !this.isForceSelectionReset && this.settings.forceSelection.latestAvailableDate;
             const isForceSelected: boolean = !this.isForceSelectionReset && (isCurrentPeriodSelected || isLatestAvailableDateSelected);
             this.isForceSelectionReset = false; // Reset it to default state to allow re-enabling Force Selection
@@ -821,7 +820,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             })
     }
 
-    public renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number, dateFormatSettings:dateFormatSettings): void {
+    public renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number): void {
         const dataPoints: ITimelineDataPoint[] = timelineData.timelineDataPoints;
         let totalX: number = 0;
 
@@ -857,7 +856,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 return pixelConverter.toString(dataPoint.datePeriod.fraction * timelineProperties.cellWidth);
             })
             .append("title")
-            .text((dataPoint: ITimelineDataPoint) => timelineData.currentGranularity.generateLabel(dataPoint.datePeriod, dateFormatSettings).title);
+            .text((dataPoint: ITimelineDataPoint) => timelineData.currentGranularity.generateLabel(dataPoint.datePeriod).title);
 
         this.fillCells(this.settings);
     }
@@ -908,7 +907,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             )
             // .attr("d", "M-3.673940397442059e-15,-20A20,20,0,1,1,6.123233995736766e-15,20L0,0Z")
             .style("fill", cellSettings.capfillColor)
-            .style("opacity", cellSettings.opacity/100)
+            .style("opcaity", cellSettings.capfillOpacity)
             .style("stroke", cellSettings.capoutlineColor)
             .style("stroke-width", cellSettings.capoutlineThickness)
             .call(this.cursorDragBehavior);
@@ -948,7 +947,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             // .call(this.cursorDragBehavior);
     }
 
-    public renderTimeRangeText(timelineData: ITimelineData, settings: Settings): void {
+    public renderTimeRangeText(timelineData: ITimelineData, rangeHeaderSettings: LabelsSettings): void {
         
         const leftMargin: number = (GranularityNames.length + Timeline.GranularityNamesLength)
             * this.timelineProperties.elementWidth;
@@ -956,38 +955,21 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         const maxWidth: number = this.svgWidth
             - leftMargin
             - this.timelineProperties.leftMargin
-            - settings.rangeHeader.textSize;
+            - rangeHeaderSettings.textSize;
 
         d3SelectAll("g." + Timeline.TimelineSelectors.RangeTextArea.className).remove();
 
-        if (settings.rangeHeader.show && maxWidth > 0) {
+        if (rangeHeaderSettings.show && maxWidth > 0) {
             this.rangeTextSelection = this.headerSelection
                 .append("g")
                 .classed(Timeline.TimelineSelectors.RangeTextArea.className, true)
-                .classed(settings.rangeHeader.position, true)
-                .append("text")
-                // .attr("transform", (settings:Settings) =>{
-                //     var dx: number = 0;
-                //     var dy: number = 0;
-                //     if (settings.rangeHeader.position == 'right'){
-                //         dx = parseInt(d3SelectAll(Timeline.TimelineSelectors.RangeTextArea.className).style("width"));
-                //         dy = 0;
-                //     }
-                //     else if (settings.rangeHeader.position == 'left'){
-                //         dx = 0;
-                //         dy = 0;
-                //     }
-                //     else{
-                //         dx = parseInt(d3SelectAll(Timeline.TimelineSelectors.RangeTextArea.className).style("width"))/2;
-                //         dy = 0;
-                //     }
+                .classed(rangeHeaderSettings.position, true)
+                .append("text");
 
-                //     return svgManipulation.translate(dx, dy);
-                // });
-            const timeRangeText: string = Utils.TIME_RANGE_TEXT(timelineData, settings.dateFormat);
+            const timeRangeText: string = Utils.TIME_RANGE_TEXT(timelineData);
 
             const labelFormattedTextOptions: dataLabelInterfaces.LabelFormattedTextOptions = {
-                fontSize: settings.rangeHeader.textSize,
+                fontSize: rangeHeaderSettings.textSize,
                 label: timeRangeText,
                 maxWidth,
             };
@@ -1000,12 +982,9 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
                 .attr("x", Timeline.DefaultRangeTextSelectionX)
                 .attr("y", Timeline.DefaultRangeTextSelectionY - positionOffset)
-                .attr("fill", settings.rangeHeader.fontColor)
-                .style("font-family", settings.rangeHeader.fontFamily)
-                .style("font-size", pixelConverter.fromPointToPixel(settings.rangeHeader.textSize))
-                .style("font-weight", settings.rangeHeader.fontBold ? '700' : 'normal')
-                .style("font-style", settings.rangeHeader.fontItalic ? 'italic' : 'initial')
-                .style("text-decoration", settings.rangeHeader.fontUnderline ? 'underline' : 'initial')
+                .attr("fill", rangeHeaderSettings.fontColor)
+                .style("font-family", rangeHeaderSettings.fontFamily)
+                .style("font-size", pixelConverter.fromPointToPixel(rangeHeaderSettings.textSize))
                 .text(actualText)
                 .append("title")
                 .text(timeRangeText);
@@ -1129,30 +1108,20 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
         }
 
-        if (options.objectName === "granularity"
-            && !settings.granularity.selectedOutlineLeft
-            || !settings.granularity.selectedOutlineRight
-            || !settings.granularity.selectedOutlineTop
-            || !settings.granularity.selectedOutlineBottom
-        ){
-            delete instances[0].properties.selectedOutlineRadius;
-        }
-
         if (options.objectName === "cells") {
  
             instances[0].validValues = {
                 capSize: { numberRange: { min: 0 } },
                 unselectedoutlineThickness: { numberRange: { min: 0 } },
                 capoutlineThickness: { numberRange: { min: 0 } },
-                capoutlineRadius: { numberRange: { min: 0} },
-                opacity: {numberRange: {min:0, max:100}}
+                capoutlineRadius: { numberRange: { min: 0} }
          
             };
         }
 
         // This options have no sense if ISO standard was picked
-        if ((options.objectName === "calendar")
-            && settings.calendaType.weekStandard !== WeekStandards.NotSet) {
+        if ((options.objectName === "weekDay" || options.objectName === "calendar")
+            && settings.weeksDetermintaionStandards.weekStandard !== WeekStandards.NotSet) {
             return null;
         }
 
@@ -1272,7 +1241,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             this.timelineProperties.cellsYPosition,
             this.settings.cells);
 
-        this.renderTimeRangeText(this.timelineData, this.settings);
+        this.renderTimeRangeText(this.timelineData, this.settings.rangeHeader);
     }
 
     /**
@@ -1459,10 +1428,10 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         locale: string,
         localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager
     ) {
-        const calendar: Calendar = this.calendarFactory.create(timelineSettings.calendaType, timelineSettings.calendar);
+        const calendar: Calendar = this.calendarFactory.create(timelineSettings.weeksDetermintaionStandards, timelineSettings.calendar, timelineSettings.weekDay);
 
-        timelineGranularityData.createGranularities(calendar, locale, localizationManager, timelineSettings.dateFormat);
-        timelineGranularityData.createLabels(timelineSettings.dateFormat);
+        timelineGranularityData.createGranularities(calendar, locale, localizationManager);
+        timelineGranularityData.createLabels();
 
         if (this.initialized) {
             const actualEndDate: Date = GranularityData.NEXT_DAY(endDate);
@@ -1521,7 +1490,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             + this.timelineProperties.cellHeight
             + timelineProperties.cellWidth * timelineDatapointsCount;
 
-        this.renderTimeRangeText(timelineData, timelineSettings);
+        this.renderTimeRangeText(timelineData, timelineSettings.rangeHeader);
 
         this.rootSelection
             .attr("drag-resize-disabled", true)
@@ -1589,7 +1558,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             timelineData,
             timelineProperties,
             this.calculateYOffset(yPos),
-            timelineSettings.dateFormat
         );
 
         this.renderCursors(
@@ -1622,12 +1590,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                     extendedLabels.yearLabels,
                     this.yearLabelsSelection,
                     this.calculateYOffset(yPos),
-                    granularityType === 0,
-                    timelineSettings.dateFormat.yearFormat,
-                    timelineSettings.dateFormat.quarterFormat,
-                    timelineSettings.dateFormat.monthFormat,
-                    timelineSettings.dateFormat.dayFormat,
-                    );
+                    granularityType === 0);
                 if (granularityType >= GranularityType.year) {
                     yPos += yDiff;
                 }
@@ -1646,11 +1609,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                     extendedLabels.quarterLabels,
                     this.quarterLabelsSelection,
                     this.calculateYOffset(yPos),
-                    granularityType === 1,
-                    timelineSettings.dateFormat.yearFormat,
-                    timelineSettings.dateFormat.quarterFormat,
-                    timelineSettings.dateFormat.monthFormat,
-                    timelineSettings.dateFormat.dayFormat);
+                    granularityType === 1);
                 if (granularityType >= GranularityType.quarter) {
                     yPos += yDiff;
                 }
@@ -1670,11 +1629,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                     extendedLabels.monthLabels,
                     this.monthLabelsSelection,
                     this.calculateYOffset(yPos),
-                    granularityType === 2,
-                    timelineSettings.dateFormat.yearFormat,
-                    timelineSettings.dateFormat.quarterFormat,
-                    timelineSettings.dateFormat.monthFormat,
-                    timelineSettings.dateFormat.dayFormat);
+                    granularityType === 2);
                 if (granularityType >= GranularityType.month) {
                     yPos += yDiff;
                 }
@@ -1694,11 +1649,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                     extendedLabels.weekLabels,
                     this.weekLabelsSelection,
                     this.calculateYOffset(yPos),
-                    granularityType === 3,
-                    timelineSettings.dateFormat.yearFormat,
-                    timelineSettings.dateFormat.quarterFormat,
-                    timelineSettings.dateFormat.monthFormat,
-                    timelineSettings.dateFormat.dayFormat);
+                    granularityType === 3);
                 if (granularityType >= GranularityType.week) {
                     yPos += yDiff;
                 }
@@ -1718,11 +1669,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                     extendedLabels.dayLabels,
                     this.dayLabelsSelection,
                     this.calculateYOffset(yPos),
-                    granularityType === 4,
-                    timelineSettings.dateFormat.yearFormat,
-                    timelineSettings.dateFormat.quarterFormat,
-                    timelineSettings.dateFormat.monthFormat,
-                    timelineSettings.dateFormat.dayFormat);
+                    granularityType === 4);
                 if (granularityType >= GranularityType.day) {
                     yPos += yDiff;
                 }
@@ -1748,10 +1695,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         labelsElement: D3Selection<any, any, any, any>,
         yPosition: number,
         isLast: boolean,
-        yearFormat: string,
-        quarterFormat: string,
-        monthFormat: string,
-        dayFormat: string,
     ): void {
         const labelTextSelection: D3Selection<any, ITimelineLabel, any, any> = labelsElement
             .selectAll(Timeline.TimelineSelectors.TextLabel.selectorName);
@@ -1774,9 +1717,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             .append("text")
             .classed(Timeline.TimelineSelectors.TextLabel.className, true)
             .merge(labelsGroupSelection)
-            .style("font-weight", this.settings.labels.fontBold ? '700' : 'normal')
-            .style("font-style", this.settings.labels.fontItalic ? 'italic' : 'initial')
-            .style("text-decoration", this.settings.labels.fontUnderline ? 'underline' : 'initial')
             .text((label: ITimelineLabel, id: number) => {
                 if (!isLast && id === 0 && labels.length > 1) {
                     let textProperties: formattingInterfaces.TextProperties = {
@@ -1799,6 +1739,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
                     const diff: number = this.timelineProperties.cellWidth
                         * (labels[1].id - labels[0].id);
+
                     if (diff < halfFirstTextWidth + halfSecondTextWidth) {
                         return "";
                     }
@@ -1887,7 +1828,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             this.settings.cells,
         );
 
-        this.renderTimeRangeText(timelineData, this.settings);
+        this.renderTimeRangeText(timelineData, this.settings.rangeHeader);
 
         this.setSelection(timelineData);
         this.toggleForceSelectionOptions();
@@ -1902,7 +1843,8 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     }
 
     private toggleForceSelectionOptions(): void {
-        const isForceSelectionTurnedOn: boolean = this.settings.forceSelection.latestAvailableDate;
+        const isForceSelectionTurnedOn: boolean = this.settings.forceSelection.currentPeriod
+            || this.settings.forceSelection.latestAvailableDate;
 
         if (isForceSelectionTurnedOn) {
             this.turnOffForceSelectionOptions();
@@ -1914,6 +1856,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             merge: [{
                 objectName: "forceSelection",
                 properties: {
+                    currentPeriod: false,
                     latestAvailableDate: false,
                 },
                 selector: null,

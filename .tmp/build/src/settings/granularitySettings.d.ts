@@ -1,22 +1,11 @@
 import { GranularityType } from "../granularity/granularityType";
 export declare class GranularitySettings {
     show: boolean;
-    granularityYearVisibility: boolean;
-    granularityQuarterVisibility: boolean;
-    granularityMonthVisibility: boolean;
-    granularityWeekVisibility: boolean;
-    granularityDayVisibility: boolean;
-    granularity: GranularityType;
     position: string;
     scale: boolean;
-    scaleColor: string;
     scaleThickness: number;
-    fontFamily: string;
-    textSize: number;
+    scaleColor: string;
     fontColor: string;
-    fontBold: boolean;
-    fontItalic: boolean;
-    fontUnderline: boolean;
     selectedfillColor: string;
     transparency: number;
     selectedOutlineLeft: boolean;
@@ -27,4 +16,15 @@ export declare class GranularitySettings {
     selectedOutlineRadius: number;
     outlineColor: string;
     innerPadding: number;
+    fontFamily: string;
+    textSize: number;
+    Bold: boolean;
+    Italic: boolean;
+    Underline: boolean;
+    granularity: GranularityType;
+    granularityYearVisibility: boolean;
+    granularityQuarterVisibility: boolean;
+    granularityMonthVisibility: boolean;
+    granularityWeekVisibility: boolean;
+    granularityDayVisibility: boolean;
 }

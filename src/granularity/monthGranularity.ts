@@ -34,11 +34,10 @@ import { GranularityBase } from "./granularityBase";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
 import powerbiVisualsApi from "powerbi-visuals-api";
-import { dateFormatSettings } from "../settings/dateFormatSettings";
 
 export class MonthGranularity extends GranularityBase {
-    constructor(calendar: Calendar, locale: string, dateFormatSettings: dateFormatSettings) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Month"), dateFormatSettings);
+    constructor(calendar: Calendar, locale: string) {
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Month"));
     }
 
     public render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any> {
@@ -55,23 +54,21 @@ export class MonthGranularity extends GranularityBase {
 
     public splitDate(date: Date): (string | number)[] {
         return [
-            this.getMonthName(date),
-            this.getYearName(date),
-            // this.calendar.determineYear(date),
+            this.shortMonthName(date),
+            this.calendar.determineYear(date),
         ];
     }
 
     public sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean {
-        return this.getMonthName(firstDatePeriod.startDate) === this.getMonthName(secondDatePeriod.startDate)
-            // && this.calendar.determineYear(firstDatePeriod.startDate) === this.calendar.determineYear(secondDatePeriod.startDate);
-            && this.getYearName(firstDatePeriod.startDate) === this.getYearName(secondDatePeriod.startDate)
+        return this.shortMonthName(firstDatePeriod.startDate) === this.shortMonthName(secondDatePeriod.startDate)
+            && this.calendar.determineYear(firstDatePeriod.startDate) === this.calendar.determineYear(secondDatePeriod.startDate);
     }
 
     public generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel {
-        // const monthName: string = `${this.getMonthName(datePeriod.startDate)} ${datePeriod.year}`;
-        // const monthShortName: string = `${this.getMonthName(datePeriod.startDate)} ${datePeriod.year}`;
-        const monthName: string = `${this.getMonthName(datePeriod.startDate)} ${this.getYearName(datePeriod.startDate)}`
-        const monthShortName: string = `${this.getMonthName(datePeriod.startDate)} ${this.getYearName(datePeriod.startDate)}`
+        const quarter: string = this.quarterText(datePeriod.startDate);
+        const monthName: string = `${this.shortMonthName(datePeriod.startDate)} ${datePeriod.year}`;
+        const monthShortName: string = `${this.shortMonthName(datePeriod.startDate)} 
+        ${datePeriod.year}`;
 
         return {
             id: datePeriod.index,

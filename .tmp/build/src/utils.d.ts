@@ -3,7 +3,6 @@ import { ITimelineData, ITimelineDataPoint } from "./dataInterfaces";
 import { IGranularityName } from "./granularity/granularityName";
 import { GranularityType } from "./granularity/granularityType";
 import { CellsSettings } from "./settings/cellsSettings";
-import { dateFormatSettings } from "./settings/dateFormatSettings";
 export declare class Utils {
     static DefaultCellColor: string;
     static TotalMilliseconds: number;
@@ -81,7 +80,7 @@ export declare class Utils {
     /**
      * Returns the time range text, depending on the given granularity (e.g. "Feb 3 2014 - Apr 5 2015", "Q1 2014 - Q2 2015")
      */
-    static TIME_RANGE_TEXT(timelineData: ITimelineData, dateFormatSettings: dateFormatSettings): string;
+    static TIME_RANGE_TEXT(timelineData: ITimelineData): string;
     static DATE_RANGE_TEXT(datePeriod: ITimelineDatePeriod): string;
     /**
      * Combines the first two partial date periods, into a single date period.

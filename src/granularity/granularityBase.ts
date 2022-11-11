@@ -41,7 +41,7 @@ import { IGranularity } from "./granularity";
 import { IGranularityName } from "./granularityName";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import powerbiVisualsApi from "powerbi-visuals-api";
-import { dateFormatSettings } from "../settings/dateFormatSettings";
+
 
 import {
     IExtendedLabel,
@@ -65,7 +65,7 @@ export class GranularityBase implements IGranularity {
     private hLineWidth: number = 45;
     private hLineXOffset: number = 45;
 
-    private sliderXOffset: number = 22.5;
+    private sliderXOffset: number = 24;
     private sliderYOffset: number = 17;
     private sliderRx: number = 4;
     private sliderWidth: number = 45;
@@ -79,30 +79,26 @@ export class GranularityBase implements IGranularity {
 
     private datePeriods: ITimelineDatePeriod[] = [];
     private extendedLabel: IExtendedLabel;
-    private dayofweekFormatter: valueFormatter.IValueFormatter;
-    private shortDayFormatter: valueFormatter.IValueFormatter;
     private shortMonthFormatter: valueFormatter.IValueFormatter;
-    private shortQuarterFormatter: valueFormatter.IValueFormatter;
-    private shortYearFormatter: valueFormatter.IValueFormatter;
-
     private granularityProps: IGranularityName = null;
-    public dateFormatSettings: dateFormatSettings;
+    
 
     private DefaultQuarter: number = 3;
 
-    constructor(calendar: Calendar, private locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings) {
+    constructor(calendar: Calendar, private locale: string, granularityProps: IGranularityName) {
         this.calendar = calendar;
-        this.dayofweekFormatter = valueFormatter.create({ format: dateFormatSettings.dayofweekFormat, cultureSelector: this.locale });
-        this.shortDayFormatter = valueFormatter.create({ format: dateFormatSettings.dayFormat, cultureSelector: this.locale });
-        this.shortMonthFormatter = valueFormatter.create({ format: dateFormatSettings.monthFormat, cultureSelector: this.locale });
-        this.shortQuarterFormatter = valueFormatter.create({ format: dateFormatSettings.quarterFormat, cultureSelector: this.locale });
-        this.shortYearFormatter = valueFormatter.create({ format: dateFormatSettings.yearFormat, cultureSelector: this.locale });
+        this.shortMonthFormatter = valueFormatter.create({ format: "MMM", cultureSelector: this.locale });
         this.granularityProps = granularityProps;
     }
 
     public measures(){
 
+
+
     }
+    
+    
+    
     
     public render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any> {
         
@@ -140,9 +136,9 @@ export class GranularityBase implements IGranularity {
             .attr("y", pixelConverter.toString(0 - this.textLabelYOffset))
             .style("font-size", pixelConverter.fromPointToPixel(props.granularSettings.textSize))
             .style("font-family", props.granularSettings.fontFamily)
-            .style("font-weight", props.granularSettings.fontBold ? '700' : 'normal')
-            .style("font-style", props.granularSettings.fontItalic ? 'italic' : 'initial')
-            .style("text-decoration", props.granularSettings.fontUnderline ? 'underline' : 'initial')
+            .style("font-weight", props.granularSettings.Bold ? '900' : 'normal')
+            .style("font-style", props.granularSettings.Italic ? 'italic' : 'initial')
+            .style("text-decoration", props.granularSettings.Underline ? 'underline' : 'initial')
             .style("fill", props.granularSettings.fontColor)
             .attr("dx", this.textLabelDx);
 
@@ -186,31 +182,22 @@ export class GranularityBase implements IGranularity {
         return granularitySelection;
     }
 
-    public splitDate(date: Date, dateFormatSettings:dateFormatSettings): (string | number)[] {
+    public splitDate(date: Date): (string | number)[] {
         return [
-            this.getMonthName(date),
-            this.getDayName(date),
-            this.getYearName(date)
-            // date.getDate(),
-            // this.calendar.determineYear(date),
+            this.shortMonthName(date),
+            date.getDate(),
+            this.calendar.determineYear(date),
         ];
     }
 
-    public splitDateForTitle(date: Date, dateFormatSettings:dateFormatSettings): (string | number)[] {
-        return this.splitDate(date, dateFormatSettings);
+    public splitDateForTitle(date: Date): (string | number)[] {
+        return this.splitDate(date);
     }
-    public getDayofWeekName(date: Date): string {
-        return this.dayofweekFormatter.format(date);
-    }
-    public getDayName(date: Date): string {
-        return this.shortDayFormatter.format(date);
-    }
-    public getMonthName(date: Date): string {
+
+    public shortMonthName(date: Date): string {
         return this.shortMonthFormatter.format(date);
     }
-    public getYearName(date: Date): string {
-        return this.shortYearFormatter.format(date);
-    }
+
     public resetDatePeriods(): void {
         this.datePeriods = [];
     }
@@ -227,13 +214,13 @@ export class GranularityBase implements IGranularity {
         this.extendedLabel = extendedLabel;
     }
 
-    public createLabels(granularity: IGranularity, dateFormatSettings:dateFormatSettings): ITimelineLabel[] {
+    public createLabels(granularity: IGranularity): ITimelineLabel[] {
         const labels: ITimelineLabel[] = [];
         let lastDatePeriod: ITimelineDatePeriod;
         this.datePeriods.forEach((datePeriod: ITimelineDatePeriod) => {
-            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod, dateFormatSettings)) {
+            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod)) {
                 lastDatePeriod = datePeriod;
-                labels.push(granularity.generateLabel(datePeriod, dateFormatSettings));
+                labels.push(granularity.generateLabel(datePeriod));
             }
         });
 
@@ -247,10 +234,10 @@ export class GranularityBase implements IGranularity {
      * i.e. using Month granularity, Feb 2 2015 corresponds to Feb 3 2015.
      * It is assumed that the given date does not correspond to previous date periods, other than the last date period
      */
-    public addDate(date: Date, dateFormatSettings:dateFormatSettings): void {
+    public addDate(date: Date): void {
         const datePeriods: ITimelineDatePeriod[] = this.getDatePeriods();
         const lastDatePeriod: ITimelineDatePeriod = datePeriods[datePeriods.length - 1];
-        const identifierArray: (string | number)[] = this.splitDate(date, dateFormatSettings);
+        const identifierArray: (string | number)[] = this.splitDate(date);
 
         if (datePeriods.length === 0
             || !Utils.IS_ARRAYS_EQUAL(lastDatePeriod.identifierArray, identifierArray)) {
@@ -309,7 +296,7 @@ export class GranularityBase implements IGranularity {
      * Returns the date's quarter name (e.g. Q1, Q2, Q3, Q4)
      * @param date A date
      */
-    protected quarterText(date: Date, dateFormatSettings:dateFormatSettings): string {
+    protected quarterText(date: Date): string {
         let quarter: number = this.DefaultQuarter;
         let year: number = this.calendar.determineYear(date);
 
@@ -324,21 +311,15 @@ export class GranularityBase implements IGranularity {
         }
 
         quarter++;
-        if (dateFormatSettings.quarterFormat == 'Quarter X'){
-            return `Quarter ${quarter}`;
-        }
-        else{
-            return `Q${quarter}`;
-        }
+
+        return `Q${quarter}`;
     }
 
     private renderSlider(
         selection: Selection<any, any, any, any>,
         granularSettings: GranularitySettings,
     ): void {
-
-        if (granularSettings.selectedOutlineLeft == true && granularSettings.selectedOutlineRight == true && granularSettings.selectedOutlineTop == true && granularSettings.selectedOutlineBottom == true){
-            selection
+        selection
             .append("rect")
             .classed("periodSlicerRect", true)
             .attr("x", pixelConverter.toString(0 - this.sliderXOffset))
@@ -353,58 +334,5 @@ export class GranularityBase implements IGranularity {
             .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
             .style("stroke-opacity", granularSettings.innerPadding/100)
             .data([granularSettings.granularity])
-        }
-        else {
-            if (granularSettings.selectedOutlineLeft == true){
-                selection
-                .append("line")
-                .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset))
-                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 - this.sliderXOffset))
-                .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .style("stroke", granularSettings.outlineColor)
-                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
-                .style("stroke-opacity", granularSettings.innerPadding/100)
-            }
-            
-            if (granularSettings.selectedOutlineRight == true){
-                selection
-                .append("line")
-                .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 + this.sliderXOffset))
-                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset))
-                .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .style("stroke", granularSettings.outlineColor)
-                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
-                .style("stroke-opacity", granularSettings.innerPadding/100)
-            }
-            if (granularSettings.selectedOutlineTop == true){
-                selection
-                .append("line")
-                .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset))
-                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset))
-                .attr("y2", pixelConverter.toString(0 - this.sliderYOffset))
-                .style("stroke", granularSettings.outlineColor)
-                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
-                .style("stroke-opacity", granularSettings.innerPadding/100)
-            }
-            if (granularSettings.selectedOutlineBottom == true){
-                selection
-                .append("line")
-                .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset))
-                .attr("y1", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset))
-                .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .style("stroke", granularSettings.outlineColor)
-                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
-                .style("stroke-opacity", granularSettings.innerPadding/100)
-            }
-        }
-        
     }
 }

@@ -34,22 +34,25 @@ import { GeneralSettings } from "./generalSettings";
 import { GranularitySettings } from "./granularitySettings";
 import { LabelsSettings } from "./labelsSettings";
 import { ScrollAutoAdjustment } from "./scrollAutoAdjustment";
-import { calendaTypeSettings } from "./calendaTypeSettings";
+import { WeekDaySettings } from "./weekDaySettings";
+import { WeeksDetermintaionStandardsSettings } from "./weeksDetermintaionStandardsSettings";
 import { dateFormatSettings} from "./dateFormatSettings"
 import {rangeHeaderSettings} from "./rangeHeaderSettings"
 
 export class Settings extends dataViewObjectsParser.DataViewObjectsParser {
     public general: GeneralSettings = new GeneralSettings();
-    public calendaType: calendaTypeSettings = new calendaTypeSettings();
 
     public calendar: CalendarSettings = new CalendarSettings();
     public forceSelection: ForceSelectionSettings = new ForceSelectionSettings();
+    public weekDay: WeekDaySettings = new WeekDaySettings();
     public rangeHeader: rangeHeaderSettings = new rangeHeaderSettings();
     public cells: CellsSettings = new CellsSettings();
     public granularity: GranularitySettings = new GranularitySettings();
     public labels: LabelsSettings = new LabelsSettings();
     public scrollAutoAdjustment: ScrollAutoAdjustment = new ScrollAutoAdjustment();
     public cursor: CursorSettings = new CursorSettings();
+    public weeksDetermintaionStandards: WeeksDetermintaionStandardsSettings = new WeeksDetermintaionStandardsSettings();
+
     public dateFormat: dateFormatSettings = new dateFormatSettings();
 
 }

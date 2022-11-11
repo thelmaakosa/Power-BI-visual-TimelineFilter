@@ -602,11 +602,11 @@
                     "type": {
                         "enumeration": [
                             {
-                                "value": "yyyy",
+                                "value": "YYYY",
                                 "displayName": "YYYY"
                             },
                             {
-                                "value": "yy",
+                                "value": "YY",
                                 "displayName": "'YY"
                             }
                         ]
@@ -618,8 +618,8 @@
                     "type": {
                         "enumeration": [
                             {
-                                "value": "Quarter X",
-                                "displayName": "Quarter X"
+                                "value": "Quanter X",
+                                "displayName": "Quanter X"
                             },
                             {
                                 "value": "QX",
@@ -634,16 +634,20 @@
                     "type": {
                         "enumeration": [
                             {
-                                "value": "MMM",
-                                "displayName": "MMM"
+                                "value": "mmm",
+                                "displayName": "mmm"
                             },
                             {
-                                "value": "MMMM",
-                                "displayName": "MMMM"
+                                "value": "mmmm",
+                                "displayName": "mmmm"
                             },
                             {
                                 "value": "MM",
                                 "displayName": "MM"
+                            },
+                            {
+                                "value": "M",
+                                "displayName": "M"
                             }
                         ]
                     },
@@ -654,8 +658,12 @@
                     "type": {
                         "enumeration": [
                             {
-                                "value": "dd",
+                                "value": "DD",
                                 "displayName": "DD"
+                            },
+                            {
+                                "value": "D",
+                                "displayName": "D"
                             }
                         ]
                     },
@@ -781,7 +789,7 @@
                         }
                     }
                 },
-                "opacity": {
+                "outlineWeight": {
                     "displayName": "Cap Fill Opacity",
                     "type": {
                         "numeric": true

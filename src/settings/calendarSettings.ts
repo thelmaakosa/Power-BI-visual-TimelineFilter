@@ -27,5 +27,4 @@
 export class CalendarSettings {
     public month: number = 0;
     public day: number = 1;
-    public firstdayofweek: number = 0;
 }

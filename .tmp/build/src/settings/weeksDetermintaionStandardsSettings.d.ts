@@ -1,3 +1,3 @@
-export declare class calendaTypeSettings {
+export declare class WeeksDetermintaionStandardsSettings {
     weekStandard: number;
 }

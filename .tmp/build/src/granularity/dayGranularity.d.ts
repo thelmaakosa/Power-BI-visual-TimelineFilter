@@ -5,9 +5,8 @@ import { ITimelineDatePeriod } from "../datePeriod/datePeriod";
 import { GranularityBase } from "./granularityBase";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
-import { dateFormatSettings } from "../settings/dateFormatSettings";
 export declare class DayGranularity extends GranularityBase {
-    constructor(calendar: Calendar, locale: string, dateFormatSettings: dateFormatSettings);
+    constructor(calendar: Calendar, locale: string);
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
     getType(): GranularityType;
     splitDate(date: Date): (string | number)[];

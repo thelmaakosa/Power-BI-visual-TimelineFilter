@@ -1,6 +1,7 @@
 import { CalendarSettings } from "../settings/calendarSettings";
-import { calendaTypeSettings } from "../settings/calendaTypeSettings";
+import { WeekDaySettings } from "../settings/weekDaySettings";
+import { WeeksDetermintaionStandardsSettings } from "../settings/weeksDetermintaionStandardsSettings";
 import { Calendar } from "./calendar";
 export declare class CalendarFactory {
-    create(calendaTypeSettings: calendaTypeSettings, calendarSettings: CalendarSettings): Calendar;
+    create(weeksDetermintaionStandardsSettings: WeeksDetermintaionStandardsSettings, calendarSettings: CalendarSettings, weekDaySettings: WeekDaySettings): Calendar;
 }

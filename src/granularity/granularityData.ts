@@ -35,7 +35,7 @@ import { MonthGranularity } from "./monthGranularity";
 import { QuarterGranularity } from "./quarterGranularity";
 import { WeekGranularity } from "./weekGranularity";
 import { YearGranularity } from "./yearGranularity";
-import { dateFormatSettings } from "../settings/dateFormatSettings";
+
 import { Calendar } from "../calendars/calendar";
 import { Utils } from "../utils";
 import { GranularitySettings } from "../settings/granularitySettings";
@@ -87,11 +87,11 @@ export class GranularityData {
      * Resets the new granularity, adds all dates to it, and then edits the last date period with the ending date.
      * @param granularity The new granularity to be added
      */
-    public addGranularity(granularity: IGranularity,dateFormatSettings:dateFormatSettings): void {
+    public addGranularity(granularity: IGranularity): void {
         granularity.resetDatePeriods();
 
         for (const date of this.dates) {
-            granularity.addDate(date, dateFormatSettings);
+            granularity.addDate(date);
         }
 
         granularity.setNewEndDate(this.endingDate);
@@ -161,34 +161,33 @@ export class GranularityData {
         calendar: Calendar,
         locale: string,
         localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager,
-        dateFormatSettings: dateFormatSettings
     ): void {
         this.granularities = [];
 
-        this.addGranularity(new YearGranularity(calendar, locale, localizationManager, dateFormatSettings), dateFormatSettings);
-        this.addGranularity(new QuarterGranularity(calendar, locale, dateFormatSettings), dateFormatSettings);
-        this.addGranularity(new MonthGranularity(calendar, locale, dateFormatSettings), dateFormatSettings);
-        this.addGranularity(new WeekGranularity(calendar, locale, localizationManager, dateFormatSettings), dateFormatSettings);
-        this.addGranularity(new DayGranularity(calendar, locale, dateFormatSettings), dateFormatSettings);
+        this.addGranularity(new YearGranularity(calendar, locale, localizationManager));
+        this.addGranularity(new QuarterGranularity(calendar, locale));
+        this.addGranularity(new MonthGranularity(calendar, locale));
+        this.addGranularity(new WeekGranularity(calendar, locale, localizationManager));
+        this.addGranularity(new DayGranularity(calendar, locale));
     }
 
-    public createLabels(dateFormatSettings:dateFormatSettings): void {
+    public createLabels(): void {
         this.granularities.forEach((granularity: IGranularity) => {
             granularity.setExtendedLabel({
                 dayLabels: granularity.getType() >= GranularityType.day
-                    ? granularity.createLabels(this.granularities[GranularityType.day], dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.day])
                     : [],
                 monthLabels: granularity.getType() >= GranularityType.month
-                    ? granularity.createLabels(this.granularities[GranularityType.month],dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.month])
                     : [],
                 quarterLabels: granularity.getType() >= GranularityType.quarter
-                    ? granularity.createLabels(this.granularities[GranularityType.quarter], dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.quarter])
                     : [],
                 weekLabels: granularity.getType() >= GranularityType.week
-                    ? granularity.createLabels(this.granularities[GranularityType.week], dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.week])
                     : [],
                 yearLabels: granularity.getType() >= GranularityType.year
-                    ? granularity.createLabels(this.granularities[GranularityType.year], dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.year])
                     : [],
             });
         });
