@@ -27,10 +27,11 @@
 export class CellsSettings {
     public selectedfillColor: string = "#ADD5FF";
     public transparency: number = 100;
-    public selectedStrokeColor: string = "#00458F";
-    public selectedoutlineThickness: number = 1;
     public fillUnselected: string = "#D9DADB";
     public innerPadding: number = 100;
+
+    public selectedStrokeColor: string = "#00458F";
+    public selectedoutlineThickness: number = 1;
     public strokeColor: string = "#8C9093";
     public unselectedoutlineThickness: number = 1;
     public capSize: number = 10;

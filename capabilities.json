@@ -570,19 +570,19 @@
                         }
                     }
                 },
-                "fontBold": {
+                "Bold": {
                     "displayName": "Font Bold",
                     "type": {
                         "bool": true
                     }
                 },
-                "fontItalic": {
+                "Italic": {
                     "displayName": "Font Italic",
                     "type": {
                         "bool": true
                     }
                 },
-                "fontUnderline": {
+                "Underline": {
                     "displayName": "Font Underline",
                     "type": {
                         "bool": true
@@ -785,7 +785,7 @@
                         }
                     }
                 },
-                "outlineWeight": {
+                "capfillOpacity": {
                     "displayName": "Cap Fill Opacity",
                     "type": {
                         "numeric": true

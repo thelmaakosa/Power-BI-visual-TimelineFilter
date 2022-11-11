@@ -907,7 +907,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             )
             // .attr("d", "M-3.673940397442059e-15,-20A20,20,0,1,1,6.123233995736766e-15,20L0,0Z")
             .style("fill", cellSettings.capfillColor)
-            .style("opcaity", cellSettings.capfillOpacity)
+            .style("opacity", cellSettings.capfillOpacity/100)
             .style("stroke", cellSettings.capoutlineColor)
             .style("stroke-width", cellSettings.capoutlineThickness)
             .call(this.cursorDragBehavior);
@@ -985,6 +985,9 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 .attr("fill", rangeHeaderSettings.fontColor)
                 .style("font-family", rangeHeaderSettings.fontFamily)
                 .style("font-size", pixelConverter.fromPointToPixel(rangeHeaderSettings.textSize))
+                .style("font-weight", rangeHeaderSettings.Bold ? '700' : 'normal')
+                .style("font-style", rangeHeaderSettings.Italic ? 'italic' : 'initial')
+                .style("text-decoration", rangeHeaderSettings.Underline ? 'underline' : 'initial')
                 .text(actualText)
                 .append("title")
                 .text(timeRangeText);
@@ -1775,6 +1778,9 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             })
             .style("font-size", pixelConverter.fromPoint(this.settings.labels.textSize))
             .style("font-family", this.settings.labels.fontFamily)
+            .style("font-weight", this.settings.labels.Bold ? '700' : 'normal')
+            .style("font-style", this.settings.labels.Italic ? 'italic' : 'initial')
+            .style("text-decoration", this.settings.labels.Underline ? 'underline' : 'initial')
             .attr("x", (label: ITimelineLabel) => {
                 return (label.id + Timeline.LabelIdOffset) * this.timelineProperties.cellWidth;
             })
