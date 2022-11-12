@@ -34,7 +34,7 @@ export declare class Calendar {
     getQuarterPeriod(date: Date): IPeriodDates;
     getMonthPeriod(date: Date): IPeriodDates;
     getYearPeriod(date: Date): IPeriodDates;
-    isChanged(calendarSettings: CalendarSettings, weekDaySettings: WeekDaySettings, calendaTypeSettings: calendaTypeSettings): boolean;
+    isChanged(calendarSettings: CalendarSettings, calendaTypeSettings: calendaTypeSettings): boolean;
     getDateOfFirstWeek(year: number): Date;
     getDateOfFirstFullWeek(year: number): Date;
     private calculateDateOfFirstFullWeek;

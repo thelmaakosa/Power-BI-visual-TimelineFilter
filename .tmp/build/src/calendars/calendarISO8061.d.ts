@@ -1,6 +1,5 @@
 import { Calendar } from "./calendar";
 import { CalendarSettings } from "../settings/calendarSettings";
-import { WeekDaySettings } from "../settings/weekDaySettings";
 import { calendaTypeSettings } from "../settings/calendaTypeSettings";
 export declare class CalendarISO8061 extends Calendar {
     constructor();
@@ -8,5 +7,5 @@ export declare class CalendarISO8061 extends Calendar {
     private determineWeekYear;
     getDateOfFirstWeek(year: number): Date;
     getDateOfFirstFullWeek(year: number): Date;
-    isChanged(calendarSettings: CalendarSettings, weekDaySettings: WeekDaySettings, calendaTypeSettings: calendaTypeSettings): boolean;
+    isChanged(calendarSettings: CalendarSettings, calendaTypeSettings: calendaTypeSettings): boolean;
 }

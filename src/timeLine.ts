@@ -163,7 +163,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
 
         const isCalendarChanged: boolean = previousCalendar
-        && previousCalendar.isChanged(timelineSettings.calendar, timelineSettings.weekDay, timelineSettings.calendaType);
+        && previousCalendar.isChanged(timelineSettings.calendar, timelineSettings.calendaType);
 
         if (timelineData && timelineData.currentGranularity) {
             startDate = Utils.GET_START_SELECTION_DATE(timelineData);

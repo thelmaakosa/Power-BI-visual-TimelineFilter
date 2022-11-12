@@ -55,7 +55,7 @@ export class Calendar {
 
     constructor(calendarFormat: CalendarSettings, weekDaySettings: WeekDaySettings) {
         this.isDaySelection = true;
-        this.firstDayOfWeek = weekDaySettings.day;
+        this.firstDayOfWeek = calendarFormat.firstdayofweek;
         this.firstMonthOfYear = calendarFormat.month;
         this.firstDayOfYear = calendarFormat.day;
 
@@ -191,12 +191,11 @@ export class Calendar {
 
     public isChanged(
         calendarSettings: CalendarSettings,
-        weekDaySettings: WeekDaySettings,
         calendaTypeSettings: calendaTypeSettings
     ): boolean {
         return this.firstMonthOfYear !== calendarSettings.month
             || this.firstDayOfYear !== calendarSettings.day
-            || this.firstDayOfWeek !== weekDaySettings.day
+            || this.firstDayOfWeek !== calendarSettings.firstdayofweek
             || calendaTypeSettings.weekStandard !== WeekStandards.NotSet;
     }
 

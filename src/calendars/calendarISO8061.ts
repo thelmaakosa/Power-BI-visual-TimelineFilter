@@ -103,7 +103,6 @@ export class CalendarISO8061 extends Calendar {
 
     public isChanged(
         calendarSettings: CalendarSettings,
-        weekDaySettings: WeekDaySettings,
         calendaTypeSettings: calendaTypeSettings
         ): boolean {
             return calendaTypeSettings.weekStandard !== WeekStandards.ISO8061
