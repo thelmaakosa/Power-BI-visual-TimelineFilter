@@ -53,11 +53,21 @@ export class DayGranularity extends GranularityBase {
         return GranularityType.day;
     }
 
-    public splitDate(date: Date): (string | number)[] {
+    public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
+        var month = this.getMonthName(date)
+        var day = date.getDate()
+        var year: string = ''
+        if (dateFormatSettings.yearFormat == "yy"){
+            year = "'" + this.getYearName(date);
+        }
+        else if (dateFormatSettings.yearFormat != "yy"){
+            year = this.getYearName(date);
+        }
+
         return [
-            this.getMonthName(date),
-            date.getDate(),
-            this.calendar.determineYear(date),
+            month,
+            day,
+            year,
         ];
     }
 
@@ -67,9 +77,13 @@ export class DayGranularity extends GranularityBase {
 
     public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
         // const quarter: string = this.getQuarterName(datePeriod.startDate);
-        var dayofweek: string
+        var dayofweek: string;
+        var nextdayofweek: string;
+        var text:string;
+        var title: string;
         if (dateFormatSettings.dayofweek == true){
             dayofweek = this.getDayofWeekName(datePeriod.startDate);
+            // nextdayofweek = this.getDayofWeekName(calendar.getNextDate(datePeriod.startDate));
         }
         else{
             dayofweek = "";
@@ -77,10 +91,22 @@ export class DayGranularity extends GranularityBase {
         
         const monthName: string = this.getMonthName(datePeriod.startDate);
         const dayName: string = this.getDayName(datePeriod.startDate);
-        const yearName: string = this.getYearName(datePeriod.startDate);
-
-        const text: string = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
-        const title: string = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+        var yearName: string = ''
+        if (dateFormatSettings.yearFormat == "yy"){
+            yearName = "'" + this.getYearName(datePeriod.startDate);
+        }
+        else if (dateFormatSettings.yearFormat != "yy"){
+            yearName = this.getYearName(datePeriod.startDate);
+        }
+        
+        if (dateFormatSettings.datecategorization == true ){
+            text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+            title = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+        }
+        else{
+            text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+            title = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+        }
 
         return {
             id: datePeriod.index,

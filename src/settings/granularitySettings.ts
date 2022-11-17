@@ -34,7 +34,7 @@ export class GranularitySettings {
     public granularityWeekVisibility: boolean = true;
     public granularityDayVisibility: boolean = true;
     public granularity: GranularityType = GranularityType.month;
-    public position: string = "right";
+    public position: string = "left";
     public scale: boolean = true;
     public scaleColor: string = "#8C9093";
     public scaleThickness: number = 2;

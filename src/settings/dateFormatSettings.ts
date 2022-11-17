@@ -25,7 +25,7 @@
  */
 
 export class dateFormatSettings {
-    public yearFormat: string = "YYYY";
+    public yearFormat: string = "yyyy";
     public quarterFormat: string = "QX";
     public monthFormat: string = "MMM";
     public dayFormat: string = "dd";

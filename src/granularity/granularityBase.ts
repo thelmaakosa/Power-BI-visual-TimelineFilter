@@ -387,9 +387,9 @@ export class GranularityBase implements IGranularity {
                 selection
                 .append("line")
                 .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset))
+                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset-granularSettings.selectedOutlineThickness/2))
                 .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset))
+                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset+granularSettings.selectedOutlineThickness/2))
                 .attr("y2", pixelConverter.toString(0 - this.sliderYOffset))
                 .style("stroke", granularSettings.outlineColor)
                 .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
@@ -398,9 +398,9 @@ export class GranularityBase implements IGranularity {
                 selection
                 .append("line")
                 .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset))
+                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset-granularSettings.selectedOutlineThickness/2))
                 .attr("y1", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset))
+                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset+granularSettings.selectedOutlineThickness/2))
                 .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
                 .style("stroke", granularSettings.outlineColor)
                 .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))

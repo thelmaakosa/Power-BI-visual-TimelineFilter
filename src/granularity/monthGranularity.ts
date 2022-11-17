@@ -53,10 +53,19 @@ export class MonthGranularity extends GranularityBase {
         return GranularityType.month;
     }
 
-    public splitDate(date: Date): (string | number)[] {
+    public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
+        var month = this.getMonthName(date)
+        var year: string = ''
+        if (dateFormatSettings.yearFormat == "yy"){
+            year = "'" + this.getYearName(date);
+        }
+        else if (dateFormatSettings.yearFormat != "yy"){
+            year = this.getYearName(date);
+        }
+        
         return [
-            this.getMonthName(date),
-            this.calendar.determineYear(date),
+            month,
+            year,
         ];
     }
 
@@ -65,10 +74,16 @@ export class MonthGranularity extends GranularityBase {
             && this.calendar.determineYear(firstDatePeriod.startDate) === this.calendar.determineYear(secondDatePeriod.startDate);
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel {
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
         // const quarter: string = this.getQuarterName(datePeriod.startDate);
         const monthName: string = this.getMonthName(datePeriod.startDate);
-        const yearName: string = this.getYearName(datePeriod.startDate);
+        var yearName: string = ''
+        if (dateFormatSettings.yearFormat == "yy"){
+            yearName = "'" + this.getYearName(datePeriod.startDate);
+        }
+        else if (dateFormatSettings.yearFormat != "yy"){
+            yearName = this.getYearName(datePeriod.startDate);
+        }
 
         const text: string = `${monthName} ${yearName}`;
         const title: string = `${monthName} ${yearName}`;

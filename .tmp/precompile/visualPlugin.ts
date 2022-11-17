@@ -5,8 +5,8 @@ import VisualConstructorOptions = powerbiVisualsApi.extensibility.visual.VisualC
 
 var powerbiKey: any = "powerbi";
 var powerbi: any = window[powerbiKey];
-var Timeline1447991079100: IVisualPlugin = {
-    name: 'Timeline1447991079100',
+var Timeline14479910791001: IVisualPlugin = {
+    name: 'Timeline14479910791001',
     displayName: 'Triskele Timeline Filter 2.0',
     class: 'Timeline',
     apiVersion: '3.5.0',
@@ -22,6 +22,6 @@ var Timeline1447991079100: IVisualPlugin = {
 if (typeof powerbi !== "undefined") {
     powerbi.visuals = powerbi.visuals || {};
     powerbi.visuals.plugins = powerbi.visuals.plugins || {};
-    powerbi.visuals.plugins["Timeline1447991079100"] = Timeline1447991079100;
+    powerbi.visuals.plugins["Timeline14479910791001"] = Timeline14479910791001;
 }
-export default Timeline1447991079100;
+export default Timeline14479910791001;

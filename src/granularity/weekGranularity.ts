@@ -65,7 +65,7 @@ export class WeekGranularity extends GranularityBase {
         return this.calendar.determineWeek(date);
     }
 
-    public splitDateForTitle(date: Date): (string | number)[] {
+    public splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
         const weekData = this.calendar.determineWeek(date);
 
 
@@ -76,7 +76,13 @@ export class WeekGranularity extends GranularityBase {
 
         var month = this.getMonthName(currentdate)
         var day = currentdate.getDate()
-        var year = currentdate.getFullYear()
+        var year: string = ''
+        if (dateFormatSettings.yearFormat == "yy"){
+            year = "'" + this.getYearName(currentdate);
+        }
+        else if (dateFormatSettings.yearFormat != "yy"){
+            year = this.getYearName(currentdate);
+        }
 
         currentdate.setDate(currentdate.getDate()+currentdateday)
 
@@ -114,7 +120,13 @@ export class WeekGranularity extends GranularityBase {
 
         const day: Number = currentdate.getDate();
         const monthName: string = this.getMonthName(currentdate);
-        const yearName: string = this.getYearName(datePeriod.startDate);
+        var yearName: string = ''
+        if (dateFormatSettings.yearFormat == "yy"){
+            yearName = "'" + this.getYearName(datePeriod.startDate);
+        }
+        else if (dateFormatSettings.yearFormat != "yy"){
+            yearName = this.getYearName(datePeriod.startDate);
+        }
 
         currentdate.setDate(currentdate.getDate()+currentdateday);
 

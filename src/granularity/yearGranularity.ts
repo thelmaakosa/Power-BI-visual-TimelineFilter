@@ -60,20 +60,33 @@ export class YearGranularity extends GranularityBase {
         return super.render(props, isFirst);
     }
 
-    public splitDate(date: Date): (string | number)[] {
-        return [this.calendar.determineYear(date)];
+    public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
+        var year: string = ''
+        if (dateFormatSettings.yearFormat == "yy"){
+            year = "'" + this.getYearName(date);
+        }
+        else if (dateFormatSettings.yearFormat != "yy"){
+            year = this.getYearName(date);
+        }
+        return [year];
     }
 
     public sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean {
         return firstDatePeriod.year === secondDatePeriod.year;
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel {
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
         const localizedYear = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
         
-        const yearName: string = this.getYearName(datePeriod.startDate);
+            var yearName: string = ''
+            if (dateFormatSettings.yearFormat == "yy"){
+                yearName = "'" + this.getYearName(datePeriod.startDate);
+            }
+            else if (dateFormatSettings.yearFormat != "yy"){
+                yearName = this.getYearName(datePeriod.startDate);
+            }
 
         return {
             id: datePeriod.index,

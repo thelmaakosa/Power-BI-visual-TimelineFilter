@@ -150,7 +150,7 @@
                 },
                 "firstdayofweek": {
                     "displayName": "First Day of Week",
-                    "displayNameKey": "Visual_Day",
+                    "displayNameKey": "Visual_Day_FirstDayOfWeek",
                     "type": {
                         "enumeration": [
                             {
@@ -198,7 +198,7 @@
             "displayNameKey": "Visual_ForceSelection",
             "properties": {
                 "latestAvailableDate": {
-                    "displayName": "Default View",
+                    "displayName": "Latest Period of Time",
                     "displayNameKey": "Visual_LatestAvailableDate",
                     "type": {
                         "bool": true
@@ -211,6 +211,10 @@
                             {
                                 "value": "0",
                                 "displayName": "1 month"
+                            },
+                            {
+                                "value": "1",
+                                "displayName": "1 year"
                             }
                         ]
                     }
@@ -308,7 +312,6 @@
                 },
                 "scale": {
                     "displayName": "Scale",
-                    "displayNameKey": "Visual_Show",
                     "type": {
                         "bool": true
                     }
@@ -393,28 +396,24 @@
                 },
                 "selectedOutlineLeft": {
                     "displayName": "Selected Outline Left",
-                    "displayNameKey": "Visual_Show",
                     "type": {
                         "bool": true
                     }
                 },
                 "selectedOutlineRight": {
                     "displayName": "Selected Outline Right",
-                    "displayNameKey": "Visual_Show",
                     "type": {
                         "bool": true
                     }
                 },
                 "selectedOutlineTop": {
                     "displayName": "Selected Outline Top",
-                    "displayNameKey": "Visual_Show",
                     "type": {
                         "bool": true
                     }
                 },
                 "selectedOutlineBottom": {
                     "displayName": "Selected Outline Bottom",
-                    "displayNameKey": "Visual_Show",
                     "type": {
                         "bool": true
                     }

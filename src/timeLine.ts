@@ -1132,8 +1132,8 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
  
             instances[0].validValues = {
                 capSize: { numberRange: { min: 0 } },
-                unselectedoutlineThickness: { numberRange: { min: 0 } },
-                capoutlineThickness: { numberRange: { min: 0 } },
+                unselectedoutlineThickness: { numberRange: { min: 0, max: 5 } },
+                capoutlineThickness: { numberRange: { min: 0, max: 5 } },
                 capoutlineRadius: { numberRange: { min: 0} }
          
             };
@@ -1162,13 +1162,13 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                         scaleThickness: {
                             numberRange: {
                                 min: 0,
-                                max: 10
+                                max: 5
                             }
                         },
                         selectedOutlineThickness: {
                             numberRange: {
                                 min: 0,
-                                max: 10
+                                max: 5
                             }
                         },
                         selectedOutlineRadius: {
@@ -1205,6 +1205,12 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                             numberRange: {
                                 min: 0,
                                 max: 10
+                            }
+                        },
+                        capoutlineRadius: {
+                            numberRange: {
+                                min: 0,
+                                max: 50
                             }
                         }
                     }

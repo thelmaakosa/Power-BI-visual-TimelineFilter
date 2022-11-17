@@ -13,7 +13,7 @@ export declare class YearGranularity extends GranularityBase {
     constructor(calendar: Calendar, locale: string, localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager, dateFormatSettings: dateFormatSettings);
     getType(): GranularityType;
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
-    splitDate(date: Date): (string | number)[];
+    splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
     sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean;
-    generateLabel(datePeriod: ITimelineDatePeriod): ITimelineLabel;
+    generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel;
 }
