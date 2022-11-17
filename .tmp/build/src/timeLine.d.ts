@@ -103,7 +103,7 @@ export declare class Timeline implements powerbiVisualsApi.extensibility.visual.
     redrawPeriod(granularity: GranularityType): void;
     update(options: powerbiVisualsApi.extensibility.visual.VisualUpdateOptions): void;
     fillCells(visSettings: Settings): void;
-    renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number, dateFormatSettings: dateFormatSettings): void;
+    renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): void;
     renderCursors(timelineData: ITimelineData, cellHeight: number, cellsYPosition: number, cellSettings: CellsSettings): D3Selection<any, any, any, any>;
     renderTimeRangeText(timelineData: ITimelineData, settings: Settings): void;
     setSelection(timelineData: ITimelineData): void;

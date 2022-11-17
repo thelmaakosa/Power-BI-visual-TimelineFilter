@@ -6,6 +6,7 @@ import { IGranularityName } from "./granularityName";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { dateFormatSettings } from "../settings/dateFormatSettings";
 import { IExtendedLabel, ITimelineLabel } from "../dataInterfaces";
+import { CalendarSettings } from "../settings/calendarSettings";
 export declare class GranularityBase implements IGranularity {
     private locale;
     private static DefaultFraction;
@@ -33,7 +34,7 @@ export declare class GranularityBase implements IGranularity {
     private shortYearFormatter;
     private granularityProps;
     private DefaultQuarter;
-    constructor(calendar: Calendar, locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings);
+    constructor(calendar: Calendar, locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings, CalendarSettings: CalendarSettings);
     measures(): void;
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
     splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
@@ -46,7 +47,7 @@ export declare class GranularityBase implements IGranularity {
     getDatePeriods(): ITimelineDatePeriod[];
     getExtendedLabel(): IExtendedLabel;
     setExtendedLabel(extendedLabel: IExtendedLabel): void;
-    createLabels(granularity: IGranularity, dateFormatSettings: dateFormatSettings): ITimelineLabel[];
+    createLabels(granularity: IGranularity, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): ITimelineLabel[];
     /**
      * Adds the new date into the given datePeriods array
      * If the date corresponds to the last date period, given the current granularity,
@@ -69,5 +70,6 @@ export declare class GranularityBase implements IGranularity {
      * @param date A date
      */
     protected getQuarterName(date: Date, dateFormatSettings: dateFormatSettings): string;
+    protected getNextQuarter(date: Date, dateFormatSettings: dateFormatSettings): string;
     private renderSlider;
 }

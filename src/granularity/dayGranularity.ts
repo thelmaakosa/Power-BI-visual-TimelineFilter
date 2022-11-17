@@ -35,10 +35,11 @@ import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
 import powerbiVisualsApi from "powerbi-visuals-api";
 import { dateFormatSettings } from "../settings/dateFormatSettings";
+import { CalendarSettings } from "../settings/calendarSettings";
 
 export class DayGranularity extends GranularityBase {
-    constructor(calendar: Calendar, locale: string, dateFormatSettings:dateFormatSettings) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Day"), dateFormatSettings);
+    constructor(calendar: Calendar, locale: string, dateFormatSettings:dateFormatSettings, CalendarSettings: CalendarSettings) {
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Day"), dateFormatSettings, CalendarSettings);
     }
 
     public render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any> {
@@ -75,43 +76,53 @@ export class DayGranularity extends GranularityBase {
         return firstDatePeriod.startDate.getTime() === secondDatePeriod.startDate.getTime();
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar): ITimelineLabel {
         // const quarter: string = this.getQuarterName(datePeriod.startDate);
         var dayofweek: string;
+        var monthName: string;
+        var dayName: string;
+        var yearName: string = ''
         var nextdayofweek: string;
+        var nextmonthName: string;
+        var nextdayName: string;
+        var nextyearName: string;
         var text:string;
-        var title: string;
+        var nexttext: string = '';
+
         if (dateFormatSettings.dayofweek == true){
             dayofweek = this.getDayofWeekName(datePeriod.startDate);
-            // nextdayofweek = this.getDayofWeekName(calendar.getNextDate(datePeriod.startDate));
+            nextdayofweek = this.getDayofWeekName(calendar.getNextDate(datePeriod.startDate));
         }
         else{
             dayofweek = "";
+            nextdayofweek = ""
         }
-        
-        const monthName: string = this.getMonthName(datePeriod.startDate);
-        const dayName: string = this.getDayName(datePeriod.startDate);
-        var yearName: string = ''
+
+        monthName = this.getMonthName(datePeriod.startDate);
+        dayName = this.getDayName(datePeriod.startDate);
+        nextmonthName = this.getMonthName(calendar.getNextDate(datePeriod.startDate));
+        nextdayName = this.getDayName(calendar.getNextDate(datePeriod.startDate));
         if (dateFormatSettings.yearFormat == "yy"){
             yearName = "'" + this.getYearName(datePeriod.startDate);
+            nextyearName = "'" + this.getYearName(calendar.getNextDate(datePeriod.startDate))
         }
         else if (dateFormatSettings.yearFormat != "yy"){
             yearName = this.getYearName(datePeriod.startDate);
+            nextyearName = this.getYearName(calendar.getNextDate(datePeriod.startDate))
         }
         
         if (dateFormatSettings.datecategorization == true ){
             text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
-            title = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+            nexttext = ` - ${nextdayofweek} ${nextmonthName} ${nextdayName} ${nextyearName}`
         }
         else{
             text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
-            title = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
         }
 
         return {
             id: datePeriod.index,
-            text,
-            title,
+            text: text + nexttext,
+            title: text  + nexttext
         };
     }
 }

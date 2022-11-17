@@ -50,6 +50,7 @@ import {
 import { left, right } from "powerbi-visuals-utils-chartutils/lib/legend/legendPosition";
 import { window } from "d3";
 import { GeneralSettings } from "../settings/generalSettings";
+import { CalendarSettings } from "../settings/calendarSettings";
 
 export class GranularityBase implements IGranularity {
 
@@ -90,13 +91,12 @@ export class GranularityBase implements IGranularity {
 
     private DefaultQuarter: number = 3;
 
-    constructor(calendar: Calendar, private locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings) {
+    constructor(calendar: Calendar, private locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings, CalendarSettings: CalendarSettings) {
         this.calendar = calendar;
         this.shortDayFormatter = valueFormatter.create({ format: dateFormatSettings.dayFormat, cultureSelector: this.locale });
         this.shortDayOfWeekFormatter = valueFormatter.create({ format: dateFormatSettings.dayofweekFormat, cultureSelector: this.locale });
         this.shortMonthFormatter = valueFormatter.create({ format: dateFormatSettings.monthFormat, cultureSelector: this.locale });
         this.shortYearFormatter = valueFormatter.create({ format: dateFormatSettings.yearFormat, cultureSelector: this.locale });
-
         this.granularityProps = granularityProps;
     }
 
@@ -232,13 +232,13 @@ export class GranularityBase implements IGranularity {
         this.extendedLabel = extendedLabel;
     }
 
-    public createLabels(granularity: IGranularity, dateFormatSettings: dateFormatSettings): ITimelineLabel[] {
+    public createLabels(granularity: IGranularity, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): ITimelineLabel[] {
         const labels: ITimelineLabel[] = [];
         let lastDatePeriod: ITimelineDatePeriod;
         this.datePeriods.forEach((datePeriod: ITimelineDatePeriod) => {
             if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod, dateFormatSettings)) {
                 lastDatePeriod = datePeriod;
-                labels.push(granularity.generateLabel(datePeriod, dateFormatSettings));
+                labels.push(granularity.generateLabel(datePeriod, dateFormatSettings, this.calendar, calendarSettings));
             }
         });
 
@@ -335,6 +335,30 @@ export class GranularityBase implements IGranularity {
         }
         else if(dateFormatSettings.quarterFormat == "QX"){
             return `Q${quarter}`;
+        }
+        
+    }
+    protected getNextQuarter(date: Date, dateFormatSettings: dateFormatSettings): string {
+        let quarter: number = this.DefaultQuarter;
+        let year: number = this.calendar.determineYear(date);
+
+        while (date < this.calendar.getQuarterStartDate(year, quarter)) {
+            if (quarter > 0) {
+                quarter--;
+            }
+            else {
+                quarter = this.DefaultQuarter;
+                year--;
+            }
+        }
+
+        quarter++;
+
+        if (dateFormatSettings.quarterFormat == "Quarter X"){
+            return `Quarter ${quarter+1}`;
+        }
+        else if(dateFormatSettings.quarterFormat == "QX"){
+            return `Q${quarter+1}`;
         }
         
     }

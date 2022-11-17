@@ -35,6 +35,7 @@ import { GranularityBase } from "./granularityBase";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
 import { dateFormatSettings } from "../settings/dateFormatSettings";
+import { CalendarSettings } from "../settings/calendarSettings";
 
 export class YearGranularity extends GranularityBase {
     private localizationKey: string = "Visual_Granularity_Year";
@@ -44,8 +45,9 @@ export class YearGranularity extends GranularityBase {
         locale: string,
         protected localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager,
         dateFormatSettings: dateFormatSettings,
+        CalendarSettings: CalendarSettings
     ) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Year"), dateFormatSettings);
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Year"), dateFormatSettings, CalendarSettings);
     }
 
     public getType(): GranularityType {
@@ -75,23 +77,36 @@ export class YearGranularity extends GranularityBase {
         return firstDatePeriod.year === secondDatePeriod.year;
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar): ITimelineLabel {
+        var yearName: string = '';
+        var nextyearName: string;
+        var text: string;
+        var nexttext: string = "";
+
         const localizedYear = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
         
-            var yearName: string = ''
-            if (dateFormatSettings.yearFormat == "yy"){
-                yearName = "'" + this.getYearName(datePeriod.startDate);
-            }
-            else if (dateFormatSettings.yearFormat != "yy"){
-                yearName = this.getYearName(datePeriod.startDate);
-            }
+        if (dateFormatSettings.yearFormat == "yy"){
+            yearName = "'" + this.getYearName(datePeriod.startDate);
+            nextyearName = "'" + this.getYearName(calendar.getNextYear(datePeriod.startDate))
+        }
+        else if (dateFormatSettings.yearFormat != "yy"){
+            yearName = this.getYearName(datePeriod.startDate);
+            nextyearName = this.getYearName(calendar.getNextYear(datePeriod.startDate))
+        }
 
+        if (dateFormatSettings.datecategorization == true ){
+            text = `${yearName}`;
+            nexttext = ` - ${nextyearName}`
+        }
+        else{
+            text = `${yearName}`;
+        }
         return {
             id: datePeriod.index,
-            text: `${yearName}`,
-            title: `${localizedYear} ${yearName}`,
+            text: text  + nexttext,
+            title: text + nexttext,
         };
     }
 }

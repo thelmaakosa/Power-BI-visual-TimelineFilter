@@ -27,6 +27,9 @@ export declare class Calendar {
     getFirstMonthOfYear(): number;
     getFirstDayOfYear(): number;
     getNextDate(date: Date): Date;
+    getNextWeek(date: Date): Date;
+    getNextMonth(date: Date): Date;
+    getNextYear(date: Date): Date;
     getWeekPeriod(date: Date): IPeriodDates;
     getQuarterIndex(date: Date): number;
     getQuarterStartDate(year: number, quarterIndex: number): Date;

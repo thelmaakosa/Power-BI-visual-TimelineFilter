@@ -40,6 +40,7 @@ import { Calendar } from "../calendars/calendar";
 import { Utils } from "../utils";
 import { GranularitySettings } from "../settings/granularitySettings";
 import { dateFormatSettings } from "../settings/dateFormatSettings";
+import { CalendarSettings } from "../settings/calendarSettings";
 
 export class GranularityData {
     /**
@@ -65,8 +66,32 @@ export class GranularityData {
 
         return nextDay;
     }
+    public static NEXT_WEEK(date: Date): Date {
+        const nextWeek: Date = Utils.RESET_TIME(date);
+
+        nextWeek.setDate(nextWeek.getDate() + 7);
+
+        return nextWeek;
+    }
+    
+    public static NEXT_MONTH(date: Date): Date {
+        const nextMonth: Date = Utils.RESET_TIME(date);
+
+        nextMonth.setMonth(nextMonth.getMonth() + GranularityData.MonthOffset);
+
+        return nextMonth;
+    }
+    public static NEXT_YEAR(date: Date): Date {
+        const nextYear: Date = Utils.RESET_TIME(date);
+
+        nextYear.setFullYear(nextYear.getFullYear() + GranularityData.YearOffset);
+
+        return nextYear;
+    }
 
     private static DayOffset: number = 1;
+    private static MonthOffset: number = 1;
+    private static YearOffset: number = 1;
 
     private dates: Date[];
     private granularities: IGranularity[];
@@ -162,34 +187,35 @@ export class GranularityData {
         calendar: Calendar,
         locale: string,
         localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager,
-        dateFormatSettings: dateFormatSettings
+        dateFormatSettings: dateFormatSettings,
+        calendarSettings: CalendarSettings
     ): void {
         this.granularities = [];
 
-        this.addGranularity(new YearGranularity(calendar, locale, localizationManager, dateFormatSettings), dateFormatSettings);
-        this.addGranularity(new QuarterGranularity(calendar, locale, dateFormatSettings), dateFormatSettings);
-        this.addGranularity(new MonthGranularity(calendar, locale, dateFormatSettings), dateFormatSettings);
-        this.addGranularity(new WeekGranularity(calendar, locale, localizationManager, dateFormatSettings), dateFormatSettings);
-        this.addGranularity(new DayGranularity(calendar, locale, dateFormatSettings), dateFormatSettings);
+        this.addGranularity(new YearGranularity(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings);
+        this.addGranularity(new QuarterGranularity(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings);
+        this.addGranularity(new MonthGranularity(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings);
+        this.addGranularity(new WeekGranularity(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings);
+        this.addGranularity(new DayGranularity(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings);
     }
 
-    public createLabels(dateFormatSettings: dateFormatSettings): void {
+    public createLabels(dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): void {
         this.granularities.forEach((granularity: IGranularity) => {
             granularity.setExtendedLabel({
                 dayLabels: granularity.getType() >= GranularityType.day
-                    ? granularity.createLabels(this.granularities[GranularityType.day], dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.day], dateFormatSettings, calendarSettings)
                     : [],
                 monthLabels: granularity.getType() >= GranularityType.month
-                    ? granularity.createLabels(this.granularities[GranularityType.month], dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.month], dateFormatSettings, calendarSettings)
                     : [],
                 quarterLabels: granularity.getType() >= GranularityType.quarter
-                    ? granularity.createLabels(this.granularities[GranularityType.quarter], dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.quarter], dateFormatSettings, calendarSettings)
                     : [],
                 weekLabels: granularity.getType() >= GranularityType.week
-                    ? granularity.createLabels(this.granularities[GranularityType.week], dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.week], dateFormatSettings, calendarSettings)
                     : [],
                 yearLabels: granularity.getType() >= GranularityType.year
-                    ? granularity.createLabels(this.granularities[GranularityType.year], dateFormatSettings)
+                    ? granularity.createLabels(this.granularities[GranularityType.year], dateFormatSettings, calendarSettings)
                     : [],
             });
         });

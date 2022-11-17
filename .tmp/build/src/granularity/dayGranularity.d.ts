@@ -6,11 +6,12 @@ import { GranularityBase } from "./granularityBase";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
 import { dateFormatSettings } from "../settings/dateFormatSettings";
+import { CalendarSettings } from "../settings/calendarSettings";
 export declare class DayGranularity extends GranularityBase {
-    constructor(calendar: Calendar, locale: string, dateFormatSettings: dateFormatSettings);
+    constructor(calendar: Calendar, locale: string, dateFormatSettings: dateFormatSettings, CalendarSettings: CalendarSettings);
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
     getType(): GranularityType;
     splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
     sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean;
-    generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel;
+    generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar): ITimelineLabel;
 }

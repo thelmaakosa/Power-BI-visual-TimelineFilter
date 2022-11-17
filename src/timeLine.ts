@@ -820,7 +820,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             })
     }
 
-    public renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number, dateFormatSettings: dateFormatSettings): void {
+    public renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): void {
         const dataPoints: ITimelineDataPoint[] = timelineData.timelineDataPoints;
         let totalX: number = 0;
 
@@ -856,7 +856,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 return pixelConverter.toString(dataPoint.datePeriod.fraction * timelineProperties.cellWidth);
             })
             .append("title")
-            .text((dataPoint: ITimelineDataPoint) => timelineData.currentGranularity.generateLabel(dataPoint.datePeriod, dateFormatSettings).title);
+            .text((dataPoint: ITimelineDataPoint) => timelineData.currentGranularity.generateLabel(dataPoint.datePeriod, dateFormatSettings, this.calendar, calendarSettings).title);
 
         this.fillCells(this.settings);
     }
@@ -1456,8 +1456,8 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     ) {
         const calendar: Calendar = this.calendarFactory.create(timelineSettings.calendaType, timelineSettings.calendar, timelineSettings.weekDay);
 
-        timelineGranularityData.createGranularities(calendar, locale, localizationManager, timelineSettings.dateFormat);
-        timelineGranularityData.createLabels(timelineSettings.dateFormat);
+        timelineGranularityData.createGranularities(calendar, locale, localizationManager, timelineSettings.dateFormat, timelineSettings.calendar);
+        timelineGranularityData.createLabels(timelineSettings.dateFormat, timelineSettings.calendar);
 
         if (this.initialized) {
             const actualEndDate: Date = GranularityData.NEXT_DAY(endDate);
@@ -1585,6 +1585,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             timelineProperties,
             this.calculateYOffset(yPos),
             timelineSettings.dateFormat,
+            timelineSettings.calendar
         );
 
         this.renderCursors(

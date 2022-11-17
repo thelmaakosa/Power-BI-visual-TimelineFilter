@@ -35,10 +35,11 @@ import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
 import powerbiVisualsApi from "powerbi-visuals-api";
 import { dateFormatSettings } from "../settings/dateFormatSettings";
+import { CalendarSettings } from "../settings/calendarSettings";
 
 export class MonthGranularity extends GranularityBase {
-    constructor(calendar: Calendar, locale: string, dateFormatSettings:dateFormatSettings) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Month"), dateFormatSettings);
+    constructor(calendar: Calendar, locale: string, dateFormatSettings:dateFormatSettings, CalendarSettings: CalendarSettings) {
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Month"), dateFormatSettings, CalendarSettings);
     }
 
     public render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any> {
@@ -74,24 +75,48 @@ export class MonthGranularity extends GranularityBase {
             && this.calendar.determineYear(firstDatePeriod.startDate) === this.calendar.determineYear(secondDatePeriod.startDate);
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings,calendar: Calendar, calendarSettings: CalendarSettings): ITimelineLabel {
         // const quarter: string = this.getQuarterName(datePeriod.startDate);
-        const monthName: string = this.getMonthName(datePeriod.startDate);
-        var yearName: string = ''
+        var monthName: string;
+        var yearName: string;
+        var text:string;
+        var nextmonthName: string ='';
+        var nextyearName: string = '';
+        var nexttext: string = '';
+        
+        var currentdate: Date = datePeriod.startDate;
+
+        currentdate.setDate(currentdate.getDate() + calendarSettings.day);
+
+        var nextdate: Date = calendar.getNextMonth(currentdate);
+
+        monthName = this.getMonthName(currentdate);
+        nextmonthName = this.getMonthName(nextdate)
         if (dateFormatSettings.yearFormat == "yy"){
-            yearName = "'" + this.getYearName(datePeriod.startDate);
+            yearName = "'" + this.getYearName(currentdate);
+            nextyearName = "'" + this.getYearName(nextdate);
+
         }
         else if (dateFormatSettings.yearFormat != "yy"){
-            yearName = this.getYearName(datePeriod.startDate);
+            yearName = this.getYearName(currentdate);
+            nextyearName = this.getYearName(nextdate);
+
         }
 
-        const text: string = `${monthName} ${yearName}`;
-        const title: string = `${monthName} ${yearName}`;
+        currentdate.setDate(currentdate.getDate()  - calendarSettings.day);
+
+        if (dateFormatSettings.datecategorization == true ){
+            text = `${monthName} ${yearName}`;
+            nexttext = ` - ${nextmonthName} ${nextyearName}`;
+        }
+        else{
+            text = `${monthName} ${yearName}`;
+        }
 
         return {
             id: datePeriod.index,
-            text, 
-            title
+            text: text + nexttext, 
+            title: text + nexttext
         };
     }
 }

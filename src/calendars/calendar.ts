@@ -123,6 +123,15 @@ export class Calendar {
     public getNextDate(date: Date): Date {
         return GranularityData.NEXT_DAY(date);
     }
+    public getNextWeek(date: Date): Date {
+        return GranularityData.NEXT_WEEK(date);
+    }
+    public getNextMonth(date: Date): Date {
+        return GranularityData.NEXT_MONTH(date);
+    }
+    public getNextYear(date: Date): Date {
+        return GranularityData.NEXT_YEAR(date);
+    }
 
     public getWeekPeriod(date: Date): IPeriodDates {
         const year: number = date.getFullYear();

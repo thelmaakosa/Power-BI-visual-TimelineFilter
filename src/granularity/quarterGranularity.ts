@@ -36,10 +36,11 @@ import { GranularityType } from "./granularityType";
 import { YearGranularity } from "./yearGranularity";
 import powerbiVisualsApi from "powerbi-visuals-api";
 import { dateFormatSettings } from "../settings/dateFormatSettings";
+import { CalendarSettings } from "../settings/calendarSettings";
 
 export class QuarterGranularity extends GranularityBase {
-    constructor(calendar: Calendar, locale: string, dateFormatSettings: dateFormatSettings) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Quarter"), dateFormatSettings);
+    constructor(calendar: Calendar, locale: string, dateFormatSettings: dateFormatSettings,CalendarSettings:CalendarSettings) {
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Quarter"), dateFormatSettings, CalendarSettings);
     }
 
     public render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any> {
@@ -75,20 +76,51 @@ export class QuarterGranularity extends GranularityBase {
             && firstDatePeriod.year === secondDatePeriod.year;
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
-        const quarter: string = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
-        var yearName: string = ''
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar): ITimelineLabel {
+        var quarter: string;
+        var nextquarter: string;
+        var yearName: string = '';
+        var nextyearName: string;
+        var text: string;
+        var nexttext: string = '';
+
+        quarter = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
+        nextquarter = this.getNextQuarter(datePeriod.startDate, dateFormatSettings);
+
         if (dateFormatSettings.yearFormat == "yy"){
             yearName = "'" + this.getYearName(datePeriod.startDate);
+            if (nextquarter.indexOf("5")>-1){
+                nextquarter = nextquarter.replace("5", "1");;
+                nextyearName = "'" + this.getYearName(calendar.getNextYear(datePeriod.startDate));
+            }
+            else{
+                nextyearName = yearName;
+            }
+
         }
         else if (dateFormatSettings.yearFormat != "yy"){
             yearName = this.getYearName(datePeriod.startDate);
+            if (nextquarter.indexOf("5")>-1){
+                nextquarter = nextquarter.replace("5", "1");;
+                nextyearName = this.getYearName(calendar.getNextYear(datePeriod.startDate));
+            }
+            else{
+                nextyearName = yearName;
+            }
+        }
+
+        if (dateFormatSettings.datecategorization == true ){
+            text = `${quarter} ${yearName}`;
+            nexttext = ` - ${nextquarter} ${nextyearName}`
+        }
+        else{
+            text = `${quarter} ${yearName}`;
         }
 
         return {
             id: datePeriod.index,
-            text: `${quarter} ${yearName}`,
-            title: `${quarter} ${yearName}`,
+            text: text + nexttext,
+            title: text + nexttext,
         };
     }
 }

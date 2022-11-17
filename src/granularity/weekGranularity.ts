@@ -36,6 +36,8 @@ import { GranularityBase } from "./granularityBase";
 import { IGranularityRenderProps } from "./granularityRenderProps";
 import { GranularityType } from "./granularityType";
 import { dateFormatSettings } from "../settings/dateFormatSettings"; 
+import { CalendarSettings } from "../settings/calendarSettings";
+import { calendaTypeSettings } from "../settings/calendaTypeSettings";
 
 export class WeekGranularity extends GranularityBase {
     private localizationKey: string = "Visual_Granularity_Year";
@@ -44,9 +46,10 @@ export class WeekGranularity extends GranularityBase {
         calendar: Calendar,
         locale: string,
         protected localizationManager: powerbiVisualsApi.extensibility.ILocalizationManager,
-        dateFormatSettings: dateFormatSettings
+        dateFormatSettings: dateFormatSettings,
+        CalendarSettings: CalendarSettings
     ) {
-        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Week"), dateFormatSettings);
+        super(calendar, locale, Utils.GET_GRANULARITY_PROPS_BY_MARKER("Week"), dateFormatSettings, CalendarSettings);
     }
 
     public render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any> {
@@ -98,18 +101,28 @@ export class WeekGranularity extends GranularityBase {
         return Utils.IS_ARRAYS_EQUAL(firstDatePeriod.week, secondDatePeriod.week);
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings): ITimelineLabel {
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar, CalendarSettings: CalendarSettings): ITimelineLabel {
         const localizedWeek = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
 
         // const quarter: string = this.getQuarterName(datePeriod.startDate);
-        
+        var dayName: Number;
+        var monthName: string;
+        var yearName: string
+        var nextdayName: Number;
+        var nextmonthName: string = '';
+        var nextyearName: string = '';
+        var text: string;
+        var nexttext: string = ''
+
         var currentdate: Date = datePeriod.startDate;
         var currentdateday = currentdate.getDay();
 
-        currentdate.setDate(currentdate.getDate() - currentdateday);
+        currentdate.setDate(currentdate.getDate() - currentdateday + CalendarSettings.firstdayofweek);
         
+        var nextdate: Date = calendar.getNextWeek(currentdate);
+
         var dayofweek: string
         if (dateFormatSettings.dayofweek == true){
             dayofweek = this.getDayofWeekName(datePeriod.startDate);
@@ -118,22 +131,35 @@ export class WeekGranularity extends GranularityBase {
             dayofweek = "";
         }
 
-        const day: Number = currentdate.getDate();
-        const monthName: string = this.getMonthName(currentdate);
-        var yearName: string = ''
+        dayName = currentdate.getDate();
+        monthName = this.getMonthName(currentdate);
+        nextdayName = nextdate.getDate();
+        nextmonthName = this.getMonthName(nextdate);
         if (dateFormatSettings.yearFormat == "yy"){
-            yearName = "'" + this.getYearName(datePeriod.startDate);
+            yearName = "'" + this.getYearName(currentdate);
+            nextyearName = "'" + this.getYearName(nextdate);
+
         }
         else if (dateFormatSettings.yearFormat != "yy"){
-            yearName = this.getYearName(datePeriod.startDate);
+            yearName = this.getYearName(currentdate);
+            nextyearName = this.getYearName(nextdate);
+
         }
 
-        currentdate.setDate(currentdate.getDate()+currentdateday);
+        currentdate.setDate(currentdate.getDate()+currentdateday - CalendarSettings.firstdayofweek);
+
+        if (dateFormatSettings.datecategorization == true ){
+            text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+            nexttext = `\n - ${dayofweek} ${nextmonthName} ${nextdayName} ${nextyearName}`;
+        }
+        else{
+            text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
+        }
 
         return {
             id: datePeriod.index,
-            text: `${dayofweek} ${monthName} ${day} ${yearName}`,
-            title: `${dayofweek} ${monthName} ${day} ${yearName}`,
+            text: text + nexttext,
+            title: text + nexttext,
         };
     }
 }
