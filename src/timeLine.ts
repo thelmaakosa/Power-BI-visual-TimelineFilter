@@ -238,6 +238,12 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         let startDate: Date = periodDate;
         let endDate: Date;
 
+        // if (calendar.ForceSelectionSettings.periodoftime ==0){
+        //     ({ startDate, endDate } = calendar.getMonthPeriod(periodDate));
+        // }
+        // else if(calendar.ForceSelectionSettings.periodoftime == 1){
+        //     ({ startDate, endDate } = calendar.getYearPeriod(periodDate));
+        // }
         switch (granularity) {
             case GranularityType.day:
                 endDate = calendar.getNextDate(periodDate);
@@ -1097,7 +1103,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             && instances[0]
             && instances[0].properties
         ) {
-            delete instances[0].properties.periodoftime;
+            // delete instances[0].properties.periodoftime;
         }
 
         if (options.objectName === "dateFormat"
