@@ -8,9 +8,6 @@ export declare class GranularitySettings {
     granularityDayVisibility: boolean;
     granularity: GranularityType;
     position: string;
-    scale: boolean;
-    scaleColor: string;
-    scaleThickness: number;
     fontFamily: string;
     textSize: number;
     fontColor: string;
@@ -26,4 +23,7 @@ export declare class GranularitySettings {
     outlineColor: string;
     selectedOutlineThickness: number;
     selectedOutlineRadius: number;
+    scale: boolean;
+    scaleColor: string;
+    scaleThickness: number;
 }

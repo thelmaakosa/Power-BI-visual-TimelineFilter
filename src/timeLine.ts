@@ -323,7 +323,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         FramePadding: 5,
         HeightOffset: 75,
         LeftMargin: 15,
-        LegendHeight: 25,
+        LegendHeight: 30,
         LegendHeightRange: 20,
         MaxCellHeight: 40,
         MinCellHeight: 15,
@@ -1097,7 +1097,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             && instances[0]
             && instances[0].properties
         ) {
-            // delete instances[0].properties.periodoftime;
+            delete instances[0].properties.periodoftime;
         }
 
         if (options.objectName === "dateFormat"

@@ -269,7 +269,6 @@
                 },
                 "granularity": {
                     "displayName": "Default View",
-                    "displayNameKey": "Visual_Granularity",
                     "type": {
                         "enumeration": [
                             {
@@ -310,29 +309,7 @@
                         }
                     }
                 },
-                "scale": {
-                    "displayName": "Scale",
-                    "type": {
-                        "bool": true
-                    }
-                },
-                "scaleColor": {
-                    "displayName": "Scale Color",
-                    "displayNameKey": "Visual_ScaleColor",
-                    "type": {
-                        "fill": {
-                            "solid": {
-                                "color": true
-                            }
-                        }
-                    }
-                },
-                "scaleThickness": {
-                    "displayName": "Scale Thickness",
-                    "type": {
-                        "numeric": true
-                    }
-                },
+                
                 "fontFamily": {
                     "displayName": "Font Family",
                     "description": "Font of the Scale text.",
@@ -440,10 +417,30 @@
                     "type": {
                         "numeric": true
                     }
+                },
+                "scale": {
+                    "displayName": "Scale",
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "scaleColor": {
+                    "displayName": "Scale Color",
+                    "displayNameKey": "Visual_ScaleColor",
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "scaleThickness": {
+                    "displayName": "Scale Thickness",
+                    "type": {
+                        "numeric": true
+                    }
                 }
-                
-                
-                
             }
         },
         "rangeHeader": {
@@ -663,7 +660,7 @@
                     }
                 },
                 "dayofweekFormat": {
-                    "displayName": "Day of week format",
+                    "displayName": "Day of Week Format",
                     "type": {
                         "enumeration": [
                             {
@@ -679,7 +676,7 @@
                     "filterState": true
                 },
                 "datecategorization": {
-                    "displayName": "Date categorization",
+                    "displayName": "Date Categorization",
                     "type": {
                         "bool": true
                     }
@@ -807,7 +804,7 @@
             }
         },
         "scrollAutoAdjustment": {
-            "displayName": "Scroll position auto adjustment",
+            "displayName": "Scroll Position Auto Adjustment",
             "displayNameKey": "Visual_ScrollAutoAdjustment",
             "properties": {
                 "show": {

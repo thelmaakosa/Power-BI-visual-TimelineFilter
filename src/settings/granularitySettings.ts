@@ -35,9 +35,6 @@ export class GranularitySettings {
     public granularityDayVisibility: boolean = true;
     public granularity: GranularityType = GranularityType.month;
     public position: string = "left";
-    public scale: boolean = true;
-    public scaleColor: string = "#8C9093";
-    public scaleThickness: number = 2;
     public fontFamily: string = 'Segoe UI';
     public textSize: number = 9;
     public fontColor: string = "#00458F";
@@ -53,4 +50,7 @@ export class GranularitySettings {
     public outlineColor: string = "#3F464B";
     public selectedOutlineThickness: number = 2;
     public selectedOutlineRadius: number = 0;
+    public scale: boolean = true;
+    public scaleColor: string = "#8C9093";
+    public scaleThickness: number = 2;
 }

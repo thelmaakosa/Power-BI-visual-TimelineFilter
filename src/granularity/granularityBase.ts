@@ -123,7 +123,7 @@ export class GranularityBase implements IGranularity {
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", props.granularSettings.scaleThickness)
-            .attr("height", pixelConverter.toString(this.vLineHeight))
+            .attr("height", pixelConverter.toString(this.vLineHeight + props.granularSettings.scaleThickness))
             .attr("fill", props.granularSettings.scale? props.granularSettings.scaleColor : "rgba(255, 255, 255, 0)");
 
         // render horizontal line
