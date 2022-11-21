@@ -1097,7 +1097,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             && instances[0]
             && instances[0].properties
         ) {
-            delete instances[0].properties.periodoftime;
+            // delete instances[0].properties.periodoftime;
         }
 
         if (options.objectName === "dateFormat"
@@ -1211,6 +1211,12 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                             numberRange: {
                                 min: 0,
                                 max: 50
+                            }
+                        },
+                        capfillOpacity: {
+                            numberRange: {
+                                min: 0,
+                                max: 100
                             }
                         }
                     }

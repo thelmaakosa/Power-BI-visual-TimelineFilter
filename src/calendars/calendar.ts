@@ -138,9 +138,7 @@ export class Calendar {
         const month: number = date.getMonth();
         const dayOfWeek: number = date.getDay();
 
-        const weekDay = this.isDaySelection
-            ? this.firstDayOfWeek
-            : new Date(year, this.firstMonthOfYear, this.firstDayOfYear).getDay();
+        const weekDay = this.firstDayOfWeek
 
         let deltaDays: number = 0;
         if (weekDay !== dayOfWeek) {
