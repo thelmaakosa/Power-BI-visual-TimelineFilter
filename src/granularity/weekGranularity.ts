@@ -68,7 +68,7 @@ export class WeekGranularity extends GranularityBase {
         return this.calendar.determineWeek(date);
     }
 
-    public splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
+    public splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[] {
         const weekData = this.calendar.determineWeek(date);
 
 
@@ -77,7 +77,7 @@ export class WeekGranularity extends GranularityBase {
         
         currentdate.setDate(currentdate.getDate() - currentdateday);
 
-        var month = this.getMonthName(currentdate)
+        var month = this.getMonthName(currentdate, calendarSettings)
         var day = currentdate.getDate()
         var year: string = ''
         if (dateFormatSettings.yearFormat == "yy"){
@@ -101,7 +101,7 @@ export class WeekGranularity extends GranularityBase {
         return Utils.IS_ARRAYS_EQUAL(firstDatePeriod.week, secondDatePeriod.week);
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar, CalendarSettings: CalendarSettings): ITimelineLabel {
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar, calendarSettings: CalendarSettings): ITimelineLabel {
         const localizedWeek = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
@@ -119,7 +119,7 @@ export class WeekGranularity extends GranularityBase {
         var currentdate: Date = datePeriod.startDate;
         var currentdateday = currentdate.getDay();
 
-        currentdate.setDate(currentdate.getDate() - currentdateday + CalendarSettings.firstdayofweek);
+        currentdate.setDate(currentdate.getDate() - currentdateday + calendarSettings.firstdayofweek);
         
         var nextdate: Date = calendar.getNextWeek(currentdate);
 
@@ -132,9 +132,9 @@ export class WeekGranularity extends GranularityBase {
         }
 
         dayName = currentdate.getDate();
-        monthName = this.getMonthName(currentdate);
+        monthName = this.getMonthName(currentdate, calendarSettings);
         nextdayName = nextdate.getDate();
-        nextmonthName = this.getMonthName(nextdate);
+        nextmonthName = this.getMonthName(nextdate, calendarSettings);
         if (dateFormatSettings.yearFormat == "yy"){
             yearName = "'" + this.getYearName(currentdate);
             nextyearName = "'" + this.getYearName(nextdate);
@@ -146,7 +146,7 @@ export class WeekGranularity extends GranularityBase {
 
         }
 
-        currentdate.setDate(currentdate.getDate()+currentdateday - CalendarSettings.firstdayofweek);
+        currentdate.setDate(currentdate.getDate()+currentdateday - calendarSettings.firstdayofweek);
 
         if (dateFormatSettings.datecategorization == true ){
             text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;

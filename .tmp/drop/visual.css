@@ -231,13 +231,13 @@
   pointer-events: none;
 }
 .timeline-component .rangeTextArea.left {
-  transform: translate(0, 0);
+  transform: translate(calc(0% + 20px), 0);
 }
 .timeline-component .rangeTextArea.right {
-  transform: translate(88%, 0);
+  transform: translate(calc(100% - 20px), 0);
 }
 .timeline-component .rangeTextArea.center {
-  transform: translate(44%, 0);
+  transform: translate(50%, 0);
 }
 .timeline-component .timelineWrapper {
   overflow: auto;

@@ -462,8 +462,8 @@ class DayGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .Gr
     getType() {
         return _granularityType__WEBPACK_IMPORTED_MODULE_2__/* .GranularityType.day */ .k.day;
     }
-    splitDate(date, dateFormatSettings) {
-        var month = this.getMonthName(date);
+    splitDate(date, dateFormatSettings, calendarSettings) {
+        var month = this.getMonthName(date, calendarSettings);
         var day = date.getDate();
         var year = '';
         if (dateFormatSettings.yearFormat == "yy") {
@@ -481,7 +481,7 @@ class DayGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .Gr
     sameLabel(firstDatePeriod, secondDatePeriod) {
         return firstDatePeriod.startDate.getTime() === secondDatePeriod.startDate.getTime();
     }
-    generateLabel(datePeriod, dateFormatSettings, calendar) {
+    generateLabel(datePeriod, dateFormatSettings, calendar, calendarSettings) {
         // const quarter: string = this.getQuarterName(datePeriod.startDate);
         var dayofweek;
         var monthName;
@@ -501,14 +501,14 @@ class DayGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .Gr
             dayofweek = "";
             nextdayofweek = "";
         }
-        monthName = this.getMonthName(datePeriod.startDate);
+        monthName = this.getMonthName(datePeriod.startDate, calendarSettings);
         if (dateFormatSettings.dayFormat == 'dd') {
             dayName = this.getDayName(datePeriod.startDate);
         }
         else {
             dayName = datePeriod.startDate.getDate().toString();
         }
-        nextmonthName = this.getMonthName(calendar.getNextDate(datePeriod.startDate));
+        nextmonthName = this.getMonthName(calendar.getNextDate(datePeriod.startDate), calendarSettings);
         nextdayName = this.getDayName(calendar.getNextDate(datePeriod.startDate));
         if (dateFormatSettings.yearFormat == "yy") {
             yearName = "'" + this.getYearName(datePeriod.startDate);
@@ -584,18 +584,16 @@ class GranularityBase {
         this.clickableRectHeight = 40;
         this.clickableRectFactor = 2;
         this.clickableRectWidth = 50;
-        this.granularityXOffset = 10;
         this.hLineYOffset = 2;
         this.hLineWidth = 45;
         this.hLineXOffset = 45;
         this.vLineHeight = 5;
         this.sliderXOffset = 25;
-        this.sliderYOffset = 17;
+        this.sliderYOffset = 18;
         this.sliderRx = 4;
         this.sliderWidth = 45;
-        this.sliderHeight = 15;
-        this.textLabelYOffset = 5;
-        this.textLabelDx = "0.5em";
+        this.sliderHeight = 17;
+        this.textLabelYOffset = -5;
         this.datePeriods = [];
         this.granularityProps = null;
         this.DefaultQuarter = 3;
@@ -615,7 +613,7 @@ class GranularityBase {
         // render vetical line
         granularitySelection.append("rect")
             .classed("timelineVertLine", true)
-            .attr("x", this.granularityXOffset.toString())
+            .attr("x", 0)
             .attr("y", 0)
             .attr("width", props.granularSettings.scaleThickness)
             .attr("height", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.vLineHeight + props.granularSettings.scaleThickness))
@@ -624,10 +622,10 @@ class GranularityBase {
         if (!isFirst) {
             granularitySelection.append("rect")
                 .classed("timelineHorzLine", true)
-                .attr("x", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.hLineXOffset + this.granularityXOffset))
+                .attr("x", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.hLineXOffset * props.granularSettings.textSize / 8))
                 .attr("y", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.hLineYOffset))
                 .attr("height", props.granularSettings.scaleThickness)
-                .attr("width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.hLineWidth))
+                .attr("width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.hLineWidth * props.granularSettings.textSize / 8))
                 .attr("fill", props.granularSettings.scale ? props.granularSettings.scaleColor : "rgba(255, 255, 255, 0)");
         }
         // render marker
@@ -635,14 +633,13 @@ class GranularityBase {
             .classed("periodSlicerGranularities", true)
             .text(this.granularityProps.marker)
             .attr("x", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0))
-            .attr("y", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.textLabelYOffset))
+            .attr("y", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.textLabelYOffset))
             .style("font-size", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .fromPointToPixel */ .tl(props.granularSettings.textSize))
             .style("font-family", props.granularSettings.fontFamily)
             .style("font-weight", props.granularSettings.Bold ? '900' : 'normal')
             .style("font-style", props.granularSettings.Italic ? 'italic' : 'initial')
             .style("text-decoration", props.granularSettings.Underline ? 'underline' : 'initial')
-            .style("fill", props.granularSettings.fontColor)
-            .attr("dx", this.textLabelDx);
+            .style("fill", props.granularSettings.fontColor);
         // render slider
         if (props.granularSettings.granularity === this.granularityProps.granularityType) {
             this.renderSlider(granularitySelection, props.granularSettings);
@@ -650,7 +647,7 @@ class GranularityBase {
         granularitySelection
             .append("rect")
             .classed("periodSlicerSelectionRect", true)
-            .attr("x", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.clickableRectWidth / this.clickableRectFactor + this.granularityXOffset))
+            .attr("x", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.clickableRectWidth / this.clickableRectFactor))
             .attr("y", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.clickableRectWidth / this.clickableRectFactor))
             .attr("width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.clickableRectWidth))
             .attr("height", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.clickableRectHeight))
@@ -668,15 +665,15 @@ class GranularityBase {
         granularitySelection.attr("fill", props.granularSettings.scaleColor);
         return granularitySelection;
     }
-    splitDate(date, dateFormatSettings) {
+    splitDate(date, dateFormatSettings, calendarSettings) {
         return [
-            this.getMonthName(date),
+            this.getMonthName(date, calendarSettings),
             date.getDate(),
             this.calendar.determineYear(date),
         ];
     }
-    splitDateForTitle(date, dateFormatSettings) {
-        return this.splitDate(date, dateFormatSettings);
+    splitDateForTitle(date, dateFormatSettings, calendarSettings) {
+        return this.splitDate(date, dateFormatSettings, calendarSettings);
     }
     getDayName(date) {
         return this.shortDayFormatter.format(date);
@@ -684,7 +681,7 @@ class GranularityBase {
     getDayofWeekName(date) {
         return this.shortDayOfWeekFormatter.format(date);
     }
-    getMonthName(date) {
+    getMonthName(date, calendarSettings) {
         return this.shortMonthFormatter.format(date);
     }
     getYearName(date) {
@@ -706,7 +703,7 @@ class GranularityBase {
         const labels = [];
         let lastDatePeriod;
         this.datePeriods.forEach((datePeriod) => {
-            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod, dateFormatSettings)) {
+            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod, dateFormatSettings, calendarSettings)) {
                 lastDatePeriod = datePeriod;
                 labels.push(granularity.generateLabel(datePeriod, dateFormatSettings, this.calendar, calendarSettings));
             }
@@ -720,10 +717,10 @@ class GranularityBase {
      * i.e. using Month granularity, Feb 2 2015 corresponds to Feb 3 2015.
      * It is assumed that the given date does not correspond to previous date periods, other than the last date period
      */
-    addDate(date, dateFormatSettings) {
+    addDate(date, dateFormatSettings, calendarSettings) {
         const datePeriods = this.getDatePeriods();
         const lastDatePeriod = datePeriods[datePeriods.length - 1];
-        const identifierArray = this.splitDate(date, dateFormatSettings);
+        const identifierArray = this.splitDate(date, dateFormatSettings, calendarSettings);
         if (datePeriods.length === 0
             || !_utils__WEBPACK_IMPORTED_MODULE_0__/* .Utils.IS_ARRAYS_EQUAL */ .c.IS_ARRAYS_EQUAL(lastDatePeriod.identifierArray, identifierArray)) {
             if (datePeriods.length > 0) {
@@ -813,67 +810,63 @@ class GranularityBase {
         }
     }
     renderSlider(selection, granularSettings) {
-        if (granularSettings.selectedOutlineLeft == true && granularSettings.selectedOutlineRight == true && granularSettings.selectedOutlineTop == true && granularSettings.selectedOutlineBottom == true) {
+        selection
+            .append("rect")
+            .classed("periodSlicerRect", true)
+            .attr("x", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderWidth * granularSettings.textSize / 16))
+            .attr("y", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
+            .attr("rx", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineRadius))
+            .attr("ry", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineRadius))
+            .attr("width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderWidth * granularSettings.textSize / 8))
+            .attr("height", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight))
+            .style("fill", granularSettings.selectedfillColor)
+            .style("fill-opacity", granularSettings.transparency / 100)
+            .style("stroke", granularSettings.outlineColor)
+            .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness))
+            .data([granularSettings.granularity]);
+        if (granularSettings.selectedOutlineLeft == false) {
             selection
-                .append("rect")
+                .append("line")
                 .classed("periodSlicerRect", true)
-                .attr("x", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset + this.granularityXOffset))
-                .attr("y", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
-                .attr("rx", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineRadius))
-                .attr("ry", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineRadius))
-                .attr("width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderWidth))
-                .attr("height", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight))
-                .style("fill", granularSettings.selectedfillColor)
-                .style("fill-opacity", granularSettings.transparency / 100)
-                .style("stroke", granularSettings.outlineColor)
-                .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness))
-                .data([granularSettings.granularity]);
+                .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderWidth * granularSettings.textSize / 16))
+                .attr("y1", -20)
+                .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderWidth * granularSettings.textSize / 16))
+                .attr("y2", 0)
+                .style("stroke", "#FFF")
+                .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness + 2));
         }
-        else {
-            if (granularSettings.selectedOutlineLeft == true) {
-                selection
-                    .append("line")
-                    .classed("periodSlicerRect", true)
-                    .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset))
-                    .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
-                    .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset))
-                    .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
-                    .style("stroke", granularSettings.outlineColor)
-                    .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness));
-            }
-            if (granularSettings.selectedOutlineRight == true) {
-                selection
-                    .append("line")
-                    .classed("periodSlicerRect", true)
-                    .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderXOffset))
-                    .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
-                    .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderXOffset))
-                    .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
-                    .style("stroke", granularSettings.outlineColor)
-                    .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness));
-            }
-            if (granularSettings.selectedOutlineTop == true) {
-                selection
-                    .append("line")
-                    .classed("periodSlicerRect", true)
-                    .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset - granularSettings.selectedOutlineThickness / 2))
-                    .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
-                    .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderXOffset + granularSettings.selectedOutlineThickness / 2))
-                    .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
-                    .style("stroke", granularSettings.outlineColor)
-                    .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness));
-            }
-            if (granularSettings.selectedOutlineBottom == true) {
-                selection
-                    .append("line")
-                    .classed("periodSlicerRect", true)
-                    .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderXOffset - granularSettings.selectedOutlineThickness / 2))
-                    .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
-                    .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderXOffset + granularSettings.selectedOutlineThickness / 2))
-                    .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
-                    .style("stroke", granularSettings.outlineColor)
-                    .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness));
-            }
+        if (granularSettings.selectedOutlineRight == false) {
+            selection
+                .append("line")
+                .classed("periodSlicerRect", true)
+                .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderWidth * granularSettings.textSize / 16))
+                .attr("y1", -20)
+                .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderWidth * granularSettings.textSize / 16))
+                .attr("y2", 0)
+                .style("stroke", "#FFF")
+                .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness + 2));
+        }
+        if (granularSettings.selectedOutlineTop == false) {
+            selection
+                .append("line")
+                .classed("periodSlicerRect", true)
+                .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderWidth * granularSettings.textSize / 16 - granularSettings.selectedOutlineThickness / 2))
+                .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
+                .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderWidth * granularSettings.textSize / 16 + granularSettings.selectedOutlineThickness / 2))
+                .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderYOffset))
+                .style("stroke", "#FFF")
+                .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness + 2));
+        }
+        if (granularSettings.selectedOutlineBottom == false) {
+            selection
+                .append("line")
+                .classed("periodSlicerRect", true)
+                .attr("x1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 - this.sliderWidth * granularSettings.textSize / 16 - granularSettings.selectedOutlineThickness / 2))
+                .attr("y1", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
+                .attr("x2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(0 + this.sliderWidth * granularSettings.textSize / 16 + granularSettings.selectedOutlineThickness / 2))
+                .attr("y2", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(this.sliderHeight - this.sliderYOffset))
+                .style("stroke", "#FFF")
+                .style("stroke-width", powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_3__/* .toString */ .BB(granularSettings.selectedOutlineThickness + 2));
         }
     }
 }
@@ -977,10 +970,10 @@ class GranularityData {
      * Resets the new granularity, adds all dates to it, and then edits the last date period with the ending date.
      * @param granularity The new granularity to be added
      */
-    addGranularity(granularity, dateFormatSettings) {
+    addGranularity(granularity, dateFormatSettings, calendarSettings) {
         granularity.resetDatePeriods();
         for (const date of this.dates) {
-            granularity.addDate(date, dateFormatSettings);
+            granularity.addDate(date, dateFormatSettings, calendarSettings);
         }
         granularity.setNewEndDate(this.endingDate);
         this.granularities.push(granularity);
@@ -1015,19 +1008,19 @@ class GranularityData {
             const granularitySelection = granularity.render(props, renderIndex === 0);
             if (props.granularSettings.position == 'right') {
                 if (granularitySelection !== null) {
-                    granularitySelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_7__/* .translate */ .Iu(viewport.width - (this.groupWidth * (count)) + renderIndex * this.groupWidth, 0));
+                    granularitySelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_7__/* .translate */ .Iu(viewport.width - (this.groupWidth * (count) * props.granularSettings.textSize / 8) + renderIndex * this.groupWidth * props.granularSettings.textSize / 8, 0));
                     renderIndex++;
                 }
             }
             else if (props.granularSettings.position == 'left') {
                 if (granularitySelection !== null) {
-                    granularitySelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_7__/* .translate */ .Iu(renderIndex * this.groupWidth, 0));
+                    granularitySelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_7__/* .translate */ .Iu(renderIndex * this.groupWidth * props.granularSettings.textSize / 8, 0));
                     renderIndex++;
                 }
             }
             else {
                 if (granularitySelection !== null) {
-                    granularitySelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_7__/* .translate */ .Iu(viewport.width / 2 - (this.groupWidth * (count)) / 2 + renderIndex * this.groupWidth, 0));
+                    granularitySelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_7__/* .translate */ .Iu(viewport.width / 2 - (this.groupWidth * props.granularSettings.textSize * (count)) / 2 + renderIndex * this.groupWidth * props.granularSettings.textSize / 8, 0));
                     renderIndex++;
                 }
             }
@@ -1042,11 +1035,11 @@ class GranularityData {
     }
     createGranularities(calendar, locale, localizationManager, dateFormatSettings, calendarSettings) {
         this.granularities = [];
-        this.addGranularity(new _yearGranularity__WEBPACK_IMPORTED_MODULE_5__/* .YearGranularity */ .O(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings);
-        this.addGranularity(new _quarterGranularity__WEBPACK_IMPORTED_MODULE_3__/* .QuarterGranularity */ .c(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings);
-        this.addGranularity(new _monthGranularity__WEBPACK_IMPORTED_MODULE_2__/* .MonthGranularity */ .W(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings);
-        this.addGranularity(new _weekGranularity__WEBPACK_IMPORTED_MODULE_4__/* .WeekGranularity */ .G(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings);
-        this.addGranularity(new _dayGranularity__WEBPACK_IMPORTED_MODULE_0__/* .DayGranularity */ .n(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings);
+        this.addGranularity(new _yearGranularity__WEBPACK_IMPORTED_MODULE_5__/* .YearGranularity */ .O(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
+        this.addGranularity(new _quarterGranularity__WEBPACK_IMPORTED_MODULE_3__/* .QuarterGranularity */ .c(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
+        this.addGranularity(new _monthGranularity__WEBPACK_IMPORTED_MODULE_2__/* .MonthGranularity */ .W(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
+        this.addGranularity(new _weekGranularity__WEBPACK_IMPORTED_MODULE_4__/* .WeekGranularity */ .G(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
+        this.addGranularity(new _dayGranularity__WEBPACK_IMPORTED_MODULE_0__/* .DayGranularity */ .n(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
     }
     createLabels(dateFormatSettings, calendarSettings) {
         this.granularities.forEach((granularity) => {
@@ -1249,8 +1242,8 @@ class MonthGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .
     getType() {
         return _granularityType__WEBPACK_IMPORTED_MODULE_2__/* .GranularityType.month */ .k.month;
     }
-    splitDate(date, dateFormatSettings) {
-        var month = this.getMonthName(date);
+    splitDate(date, dateFormatSettings, calendarSettings) {
+        var month = this.getMonthName(date, calendarSettings);
         var year = '';
         if (dateFormatSettings.yearFormat == "yy") {
             year = "'" + this.getYearName(date);
@@ -1263,8 +1256,8 @@ class MonthGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .
             year,
         ];
     }
-    sameLabel(firstDatePeriod, secondDatePeriod) {
-        return this.getMonthName(firstDatePeriod.startDate) === this.getMonthName(secondDatePeriod.startDate)
+    sameLabel(firstDatePeriod, secondDatePeriod, dateFormatSettings, calendarSettings) {
+        return this.getMonthName(firstDatePeriod.startDate, calendarSettings) === this.getMonthName(secondDatePeriod.startDate, calendarSettings)
             && this.calendar.determineYear(firstDatePeriod.startDate) === this.calendar.determineYear(secondDatePeriod.startDate);
     }
     generateLabel(datePeriod, dateFormatSettings, calendar, calendarSettings) {
@@ -1278,8 +1271,8 @@ class MonthGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .
         var currentdate = datePeriod.startDate;
         // currentdate.setDate(currentdate.getDate() + calendarSettings.day);
         var nextdate = calendar.getNextMonth(currentdate);
-        monthName = this.getMonthName(currentdate);
-        nextmonthName = this.getMonthName(nextdate);
+        monthName = this.getMonthName(currentdate, calendarSettings);
+        nextmonthName = this.getMonthName(nextdate, calendarSettings);
         if (dateFormatSettings.yearFormat == "yy") {
             yearName = "'" + this.getYearName(currentdate);
             nextyearName = "'" + this.getYearName(nextdate);
@@ -1481,12 +1474,12 @@ class WeekGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .G
     splitDate(date) {
         return this.calendar.determineWeek(date);
     }
-    splitDateForTitle(date, dateFormatSettings) {
+    splitDateForTitle(date, dateFormatSettings, calendarSettings) {
         const weekData = this.calendar.determineWeek(date);
         var currentdate = date;
         var currentdateday = currentdate.getDay();
         currentdate.setDate(currentdate.getDate() - currentdateday);
-        var month = this.getMonthName(currentdate);
+        var month = this.getMonthName(currentdate, calendarSettings);
         var day = currentdate.getDate();
         var year = '';
         if (dateFormatSettings.yearFormat == "yy") {
@@ -1505,7 +1498,7 @@ class WeekGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .G
     sameLabel(firstDatePeriod, secondDatePeriod) {
         return _utils__WEBPACK_IMPORTED_MODULE_0__/* .Utils.IS_ARRAYS_EQUAL */ .c.IS_ARRAYS_EQUAL(firstDatePeriod.week, secondDatePeriod.week);
     }
-    generateLabel(datePeriod, dateFormatSettings, calendar, CalendarSettings) {
+    generateLabel(datePeriod, dateFormatSettings, calendar, calendarSettings) {
         const localizedWeek = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
@@ -1520,7 +1513,7 @@ class WeekGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .G
         var nexttext = '';
         var currentdate = datePeriod.startDate;
         var currentdateday = currentdate.getDay();
-        currentdate.setDate(currentdate.getDate() - currentdateday + CalendarSettings.firstdayofweek);
+        currentdate.setDate(currentdate.getDate() - currentdateday + calendarSettings.firstdayofweek);
         var nextdate = calendar.getNextWeek(currentdate);
         var dayofweek;
         if (dateFormatSettings.dayofweek == true) {
@@ -1530,9 +1523,9 @@ class WeekGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .G
             dayofweek = "";
         }
         dayName = currentdate.getDate();
-        monthName = this.getMonthName(currentdate);
+        monthName = this.getMonthName(currentdate, calendarSettings);
         nextdayName = nextdate.getDate();
-        nextmonthName = this.getMonthName(nextdate);
+        nextmonthName = this.getMonthName(nextdate, calendarSettings);
         if (dateFormatSettings.yearFormat == "yy") {
             yearName = "'" + this.getYearName(currentdate);
             nextyearName = "'" + this.getYearName(nextdate);
@@ -1541,7 +1534,7 @@ class WeekGranularity extends _granularityBase__WEBPACK_IMPORTED_MODULE_1__/* .G
             yearName = this.getYearName(currentdate);
             nextyearName = this.getYearName(nextdate);
         }
-        currentdate.setDate(currentdate.getDate() + currentdateday - CalendarSettings.firstdayofweek);
+        currentdate.setDate(currentdate.getDate() + currentdateday - calendarSettings.firstdayofweek);
         if (dateFormatSettings.datecategorization == true) {
             text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
             nexttext = `\n - ${dayofweek} ${nextmonthName} ${nextdayName} ${nextyearName}`;
@@ -2498,7 +2491,7 @@ class Timeline {
             return datePeriod.index % 1 === 0;
         })
             .length;
-        Timeline.setMeasures(timelineSettings.labels, timelineData.currentGranularity.getType(), countFullCells, viewport, timelineProperties, Timeline.TimelineMargins);
+        Timeline.setMeasures(timelineSettings.labels, timelineData.currentGranularity.getType(), countFullCells, viewport, timelineProperties, Timeline.TimelineMargins, timelineSettings.dateFormat);
         Timeline.updateCursors(timelineData);
         return calendar;
     }
@@ -2593,7 +2586,8 @@ class Timeline {
         }
         return false;
     }
-    static setMeasures(labelsSettings, granularityType, datePeriodsCount, viewport, timelineProperties, timelineMargins) {
+    static setMeasures(labelsSettings, granularityType, datePeriodsCount, viewport, timelineProperties, timelineMargins, dateFormatSettings) {
+        var width;
         timelineProperties.cellsYPosition = timelineProperties.textYPosition;
         const labelSize = powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_13__/* .fromPointToPixel */ .tl(labelsSettings.textSize);
         if (labelsSettings.show) {
@@ -2609,9 +2603,29 @@ class Timeline {
             + (Timeline.TimelineMargins.LegendHeight - timelineProperties.legendHeight)));
         // Height is deducted here to take account of edge cursors width
         // that in fact is half of cell height for each of them
-        const width = Math.max(timelineMargins.MinCellWidth, (viewport.width - height - Timeline.ViewportWidthAdjustment) / (datePeriodsCount));
+        if (dateFormatSettings.dayofweek == true && dateFormatSettings.dayofweekFormat == 'dddd' && dateFormatSettings.monthFormat == 'MMMM') {
+            timelineMargins.MinCellWidth = 160;
+        }
+        if (dateFormatSettings.dayofweek == true && dateFormatSettings.dayofweekFormat == 'dddd' && dateFormatSettings.monthFormat == 'MMM') {
+            timelineMargins.MinCellWidth = 135;
+        }
+        if (dateFormatSettings.dayofweek == true && dateFormatSettings.dayofweekFormat == 'ddd') {
+            timelineMargins.MinCellWidth = 130;
+        }
+        if (dateFormatSettings.dayofweek == false && dateFormatSettings.monthFormat == 'MMMM') {
+            timelineMargins.MinCellWidth = 105;
+        }
+        if (dateFormatSettings.dayofweek == false && dateFormatSettings.monthFormat == 'MMM') {
+            timelineMargins.MinCellWidth = 90;
+        }
+        width = Math.max(timelineMargins.MinCellWidth * labelSize / 10.67, (viewport.width - height - Timeline.ViewportWidthAdjustment) / (datePeriodsCount));
         timelineProperties.cellHeight = height;
-        timelineProperties.cellWidth = width;
+        if (dateFormatSettings.datecategorization == true) {
+            timelineProperties.cellWidth = 2 * width + 30;
+        }
+        else {
+            timelineProperties.cellWidth = width;
+        }
     }
     static parseSettings(dataView, jsonFilters, colorPalette) {
         const settings = _settings_settings__WEBPACK_IMPORTED_MODULE_3__/* .Settings.parse */ .Z.parse(dataView);
@@ -2869,14 +2883,15 @@ class Timeline {
             .attr("ry", cellSettings.capoutlineRadius)
             .style("clip-path", (cursorDataPoint) => {
             if (cursorDataPoint.cursorIndex == 0) {
-                return "polygon(-5% 0, 50% 0, 50% 100%, -5% 100%)";
+                return "polygon(-100% -50%, 50% -50%, 50% 150%, -100% 150%)";
             }
             else {
-                return "polygon(50% 0, 105% 0, 105% 100%, 50% 100%)";
+                return "polygon(50% -50%, 150% -50px, 150% 150%, 50% 150%)";
             }
         })
             .style("fill", cellSettings.capfillColor)
             .style("stroke", cellSettings.capoutlineColor)
+            .style("stroke-width", cellSettings.capoutlineThickness)
             .call(this.cursorDragBehavior);
     }
     renderTimeRangeText(timelineData, settings) {
@@ -2893,7 +2908,7 @@ class Timeline {
                 .classed(Timeline.TimelineSelectors.RangeTextArea.className, true)
                 .classed(settings.rangeHeader.position, true)
                 .append("text");
-            const timeRangeText = _utils__WEBPACK_IMPORTED_MODULE_8__/* .Utils.TIME_RANGE_TEXT */ .c.TIME_RANGE_TEXT(timelineData, settings.dateFormat);
+            const timeRangeText = _utils__WEBPACK_IMPORTED_MODULE_8__/* .Utils.TIME_RANGE_TEXT */ .c.TIME_RANGE_TEXT(timelineData, settings.dateFormat, settings.calendar);
             const labelFormattedTextOptions = {
                 fontSize: settings.rangeHeader.textSize,
                 label: timeRangeText,
@@ -2914,6 +2929,22 @@ class Timeline {
                 .text(actualText)
                 .append("title")
                 .text(timeRangeText);
+            let textProperties = {
+                fontFamily: settings.rangeHeader.fontFamily,
+                fontSize: powerbi_visuals_utils_typeutils__WEBPACK_IMPORTED_MODULE_13__/* .fromPoint */ .SN(settings.rangeHeader.textSize),
+                text: timeRangeText,
+            };
+            switch (settings.rangeHeader.position) {
+                case "right":
+                    this.rangeTextSelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_15__/* .translate */ .Iu(-powerbi_visuals_utils_formattingutils__WEBPACK_IMPORTED_MODULE_17__/* .textMeasurementService.measureSvgTextWidth */ .y.measureSvgTextWidth(textProperties), 0));
+                    break;
+                case "center":
+                    this.rangeTextSelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_15__/* .translate */ .Iu(-powerbi_visuals_utils_formattingutils__WEBPACK_IMPORTED_MODULE_17__/* .textMeasurementService.measureSvgTextWidth */ .y.measureSvgTextWidth(textProperties) / 2, 0));
+                    break;
+                case "left":
+                    this.rangeTextSelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_15__/* .translate */ .Iu(0, 0));
+                    break;
+            }
         }
     }
     setSelection(timelineData) {
@@ -2998,13 +3029,14 @@ class Timeline {
             delete instances[0].properties.scaleColor;
             delete instances[0].properties.scaleThickness;
         }
-        if (options.objectName === "granularity"
-            && !settings.granularity.selectedOutlineLeft
-            || !settings.granularity.selectedOutlineRight
-            || !settings.granularity.selectedOutlineTop
-            || !settings.granularity.selectedOutlineBottom) {
-            delete instances[0].properties.selectedOutlineRadius;
-        }
+        // if (options.objectName === "granularity"
+        //     && !settings.granularity.selectedOutlineLeft
+        //     || !settings.granularity.selectedOutlineRight
+        //     || !settings.granularity.selectedOutlineTop
+        //     || !settings.granularity.selectedOutlineBottom
+        // ){
+        //     delete instances[0].properties.selectedOutlineRadius;
+        // }
         if (options.objectName === "cells") {
             instances[0].validValues = {
                 capSize: { numberRange: { min: 0 } },
@@ -3048,6 +3080,11 @@ class Timeline {
                         numberRange: {
                             min: 0,
                             max: 10
+                        }
+                    },
+                    textSize: {
+                        numberRange: {
+                            max: 15
                         }
                     }
                 };
@@ -3327,7 +3364,7 @@ class Timeline {
         const translateString = powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_15__/* .translate */ .Iu(timelineProperties.cellHeight / Timeline.CellHeightDivider, timelineProperties.topMargin - (Timeline.TimelineMargins.LegendHeight - Timeline.TimelineMargins.FramePadding));
         this.mainGroupSelection.attr("transform", translateString);
         if (this.selectorSelection) {
-            this.selectorSelection.attr("transform", fixedTranslateString);
+            this.selectorSelection.attr("transform", powerbi_visuals_utils_svgutils__WEBPACK_IMPORTED_MODULE_15__/* .translate */ .Iu(5 + 22.5 * timelineSettings.granularity.textSize / 8, timelineProperties.topMargin + this.timelineProperties.startYpoint));
         }
         this.cursorGroupSelection.attr("transform", translateString);
         // Removing currently displayed labels
@@ -3550,7 +3587,7 @@ Timeline.TimelineMargins = {
     LegendHeightRange: 20,
     MaxCellHeight: 40,
     MinCellHeight: 15,
-    MinCellWidth: 85,
+    MinCellWidth: 90,
     PeriodSlicerRectHeight: 20,
     PeriodSlicerRectWidth: 60,
     RightMargin: 15,
@@ -3580,7 +3617,7 @@ Timeline.CellWidthNotLastFactor = 20;
 Timeline.LabelIdOffset = 0.5;
 Timeline.GranularityNamesLength = 4;
 Timeline.DefaultRangeTextSelectionY = 20;
-Timeline.DefaultRangeTextSelectionX = 10;
+Timeline.DefaultRangeTextSelectionX = 0;
 Timeline.ViewportWidthAdjustment = 2;
 Timeline.filterObjectProperty = {
     objectName: "general",
@@ -3867,11 +3904,11 @@ class Utils {
     /**
      * Returns the time range text, depending on the given granularity (e.g. "Feb 3 2014 - Apr 5 2015", "Q1 2014 - Q2 2015")
      */
-    static TIME_RANGE_TEXT(timelineData, dateFormatSettings) {
+    static TIME_RANGE_TEXT(timelineData, dateFormatSettings, calendarSettings) {
         const startSelectionDateArray = timelineData.currentGranularity
-            .splitDateForTitle(Utils.GET_START_SELECTION_DATE(timelineData), dateFormatSettings);
+            .splitDateForTitle(Utils.GET_START_SELECTION_DATE(timelineData), dateFormatSettings, calendarSettings);
         const endSelectionDateArray = timelineData.currentGranularity
-            .splitDateForTitle(Utils.GET_END_SELECTION_PERIOD(timelineData).startDate, dateFormatSettings);
+            .splitDateForTitle(Utils.GET_END_SELECTION_PERIOD(timelineData).startDate, dateFormatSettings, calendarSettings);
         const startSelectionString = startSelectionDateArray.join(Utils.DateArrayJoiner);
         const endSelectionString = endSelectionDateArray.join(Utils.DateArrayJoiner);
         return `${startSelectionString}${Utils.DateSplitter}${endSelectionString}`;

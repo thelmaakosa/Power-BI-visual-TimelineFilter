@@ -32,7 +32,7 @@ export declare class GranularityData {
      * Resets the new granularity, adds all dates to it, and then edits the last date period with the ending date.
      * @param granularity The new granularity to be added
      */
-    addGranularity(granularity: IGranularity, dateFormatSettings: dateFormatSettings): void;
+    addGranularity(granularity: IGranularity, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): void;
     /**
      * Renders all available granularities
      */

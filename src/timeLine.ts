@@ -222,6 +222,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             viewport,
             timelineProperties,
             Timeline.TimelineMargins,
+            timelineSettings.dateFormat,
         );
 
         Timeline.updateCursors(timelineData);
@@ -333,7 +334,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         LegendHeightRange: 20,
         MaxCellHeight: 40,
         MinCellHeight: 15,
-        MinCellWidth: 85,
+        MinCellWidth: 90,
         PeriodSlicerRectHeight: 20,
         PeriodSlicerRectWidth: 60,
         RightMargin: 15,
@@ -378,7 +379,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     private static GranularityNamesLength: number = 4;
 
     private static DefaultRangeTextSelectionY: number = 20;
-    private static DefaultRangeTextSelectionX: number = 10;
+    private static DefaultRangeTextSelectionX: number = 0;
 
     private static ViewportWidthAdjustment: number = 2;
     public static labelsSettings: LabelsSettings;
@@ -442,8 +443,10 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         viewport: powerbiVisualsApi.IViewport,
         timelineProperties: ITimelineProperties,
         timelineMargins: ITimelineMargins,
+        dateFormatSettings: dateFormatSettings
     ): void {
-
+        
+        var width: number;
         timelineProperties.cellsYPosition = timelineProperties.textYPosition;
 
         const labelSize: number = pixelConverter.fromPointToPixel(labelsSettings.textSize);
@@ -469,12 +472,33 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
         // Height is deducted here to take account of edge cursors width
         // that in fact is half of cell height for each of them
-        const width: number = Math.max(
-            timelineMargins.MinCellWidth,
-            (viewport.width - height - Timeline.ViewportWidthAdjustment) / (datePeriodsCount));
+        if(dateFormatSettings.dayofweek == true && dateFormatSettings.dayofweekFormat == 'dddd' && dateFormatSettings.monthFormat == 'MMMM'){
+            timelineMargins.MinCellWidth = 160;
+        }
+        if(dateFormatSettings.dayofweek == true && dateFormatSettings.dayofweekFormat == 'dddd' && dateFormatSettings.monthFormat == 'MMM'){
+            timelineMargins.MinCellWidth = 135;
+        }
+        if(dateFormatSettings.dayofweek == true && dateFormatSettings.dayofweekFormat == 'ddd'){
+            timelineMargins.MinCellWidth = 130;
+        }
+        if (dateFormatSettings.dayofweek == false && dateFormatSettings.monthFormat == 'MMMM'){
+            timelineMargins.MinCellWidth = 105;
+        }
+        if (dateFormatSettings.dayofweek == false && dateFormatSettings.monthFormat == 'MMM'){
+            timelineMargins.MinCellWidth = 90;
+        }
 
+        width = Math.max(
+            timelineMargins.MinCellWidth* labelSize / 10.67,
+            (viewport.width - height - Timeline.ViewportWidthAdjustment) / (datePeriodsCount));
+        
         timelineProperties.cellHeight = height;
-        timelineProperties.cellWidth = width;
+        if(dateFormatSettings.datecategorization == true){
+            timelineProperties.cellWidth = 2 * width + 30;
+        }
+        else{
+            timelineProperties.cellWidth = width;
+        }
     }
 
     private static parseSettings(
@@ -944,14 +968,15 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             .attr("ry", cellSettings.capoutlineRadius)
             .style("clip-path", (cursorDataPoint: ICursorDataPoint) => {
                 if (cursorDataPoint.cursorIndex == 0){
-                    return "polygon(-5% 0, 50% 0, 50% 100%, -5% 100%)"
+                    return "polygon(-100% -50%, 50% -50%, 50% 150%, -100% 150%)"
                 }
                 else{
-                    return "polygon(50% 0, 105% 0, 105% 100%, 50% 100%)"
+                    return "polygon(50% -50%, 150% -50px, 150% 150%, 50% 150%)"
                 }
             })
             .style("fill", cellSettings.capfillColor)
             .style("stroke", cellSettings.capoutlineColor)
+            .style("stroke-width", cellSettings.capoutlineThickness)
             .call(this.cursorDragBehavior);
     }
 
@@ -972,9 +997,11 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 .append("g")
                 .classed(Timeline.TimelineSelectors.RangeTextArea.className, true)
                 .classed(settings.rangeHeader.position, true)
-                .append("text");
+                .append("text")
+                            
+            
 
-            const timeRangeText: string = Utils.TIME_RANGE_TEXT(timelineData, settings.dateFormat);
+            const timeRangeText: string = Utils.TIME_RANGE_TEXT(timelineData, settings.dateFormat, settings.calendar);
 
             const labelFormattedTextOptions: dataLabelInterfaces.LabelFormattedTextOptions = {
                 fontSize: settings.rangeHeader.textSize,
@@ -987,7 +1014,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             const positionOffset: number = Timeline.TimelineMargins.LegendHeight - this.timelineProperties.legendHeight;
             this.rangeTextSelection
                 .classed(Timeline.TimelineSelectors.SelectionRangeContainer.className, true)
-
                 .attr("x", Timeline.DefaultRangeTextSelectionX)
                 .attr("y", Timeline.DefaultRangeTextSelectionY - positionOffset)
                 .attr("fill", settings.rangeHeader.fontColor)
@@ -999,6 +1025,27 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 .text(actualText)
                 .append("title")
                 .text(timeRangeText);
+
+            let textProperties: formattingInterfaces.TextProperties = {
+                fontFamily:settings.rangeHeader.fontFamily,
+                fontSize: pixelConverter.fromPoint(settings.rangeHeader.textSize),
+                text: timeRangeText,
+            };
+
+
+
+
+            switch (settings.rangeHeader.position) {
+                case "right":
+                    this.rangeTextSelection.attr("transform", svgManipulation.translate(-textMeasurementService.measureSvgTextWidth(textProperties), 0));
+                    break;
+                case "center":
+                    this.rangeTextSelection.attr("transform", svgManipulation.translate(-textMeasurementService.measureSvgTextWidth(textProperties)/2, 0));
+                    break;
+                case "left":
+                    this.rangeTextSelection.attr("transform", svgManipulation.translate(0, 0));
+                    break;
+            }
         }
     }
 
@@ -1127,14 +1174,14 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             delete instances[0].properties.scaleThickness;
 
         }
-        if (options.objectName === "granularity"
-            && !settings.granularity.selectedOutlineLeft
-            || !settings.granularity.selectedOutlineRight
-            || !settings.granularity.selectedOutlineTop
-            || !settings.granularity.selectedOutlineBottom
-        ){
-            delete instances[0].properties.selectedOutlineRadius;
-        }
+        // if (options.objectName === "granularity"
+        //     && !settings.granularity.selectedOutlineLeft
+        //     || !settings.granularity.selectedOutlineRight
+        //     || !settings.granularity.selectedOutlineTop
+        //     || !settings.granularity.selectedOutlineBottom
+        // ){
+        //     delete instances[0].properties.selectedOutlineRadius;
+        // }
 
         if (options.objectName === "cells") {
  
@@ -1183,6 +1230,11 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                             numberRange: {
                                 min: 0,
                                 max: 10
+                            }
+                        },
+                        textSize: {
+                            numberRange: {
+                                max: 15
                             }
                         }
                     }
@@ -1583,7 +1635,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         this.mainGroupSelection.attr("transform", translateString);
 
         if (this.selectorSelection) {
-            this.selectorSelection.attr("transform", fixedTranslateString);
+            this.selectorSelection.attr("transform", svgManipulation.translate(5 + 22.5*timelineSettings.granularity.textSize/8, timelineProperties.topMargin + this.timelineProperties.startYpoint));
         }
 
         this.cursorGroupSelection.attr("transform", translateString);

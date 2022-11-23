@@ -39,6 +39,7 @@ import { GranularityNames } from "./granularity/granularityNames";
 import { GranularityType } from "./granularity/granularityType";
 import { CellsSettings } from "./settings/cellsSettings";
 import { dateFormatSettings } from "./settings/dateFormatSettings";
+import { CalendarSettings } from "./settings/calendarSettings";
 
 export class Utils {
     public static DefaultCellColor: string = "transparent";
@@ -335,12 +336,12 @@ export class Utils {
     /**
      * Returns the time range text, depending on the given granularity (e.g. "Feb 3 2014 - Apr 5 2015", "Q1 2014 - Q2 2015")
      */
-    public static TIME_RANGE_TEXT(timelineData: ITimelineData, dateFormatSettings: dateFormatSettings): string {
+    public static TIME_RANGE_TEXT(timelineData: ITimelineData, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): string {
         const startSelectionDateArray: (string | number)[] = timelineData.currentGranularity
-            .splitDateForTitle(Utils.GET_START_SELECTION_DATE(timelineData), dateFormatSettings);
+            .splitDateForTitle(Utils.GET_START_SELECTION_DATE(timelineData), dateFormatSettings, calendarSettings);
 
         const endSelectionDateArray: (string | number)[] = timelineData.currentGranularity
-            .splitDateForTitle(Utils.GET_END_SELECTION_PERIOD(timelineData).startDate, dateFormatSettings);
+            .splitDateForTitle(Utils.GET_END_SELECTION_PERIOD(timelineData).startDate, dateFormatSettings, calendarSettings);
 
         const startSelectionString: string = startSelectionDateArray.join(Utils.DateArrayJoiner);
         const endSelectionString: string = endSelectionDateArray.join(Utils.DateArrayJoiner);

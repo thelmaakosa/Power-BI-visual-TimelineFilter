@@ -14,7 +14,6 @@ export declare class GranularityBase implements IGranularity {
     private clickableRectHeight;
     private clickableRectFactor;
     private clickableRectWidth;
-    private granularityXOffset;
     private hLineYOffset;
     private hLineWidth;
     private hLineXOffset;
@@ -25,7 +24,6 @@ export declare class GranularityBase implements IGranularity {
     private sliderWidth;
     private sliderHeight;
     private textLabelYOffset;
-    private textLabelDx;
     private datePeriods;
     private extendedLabel;
     private shortDayFormatter;
@@ -37,11 +35,11 @@ export declare class GranularityBase implements IGranularity {
     constructor(calendar: Calendar, locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings, CalendarSettings: CalendarSettings);
     measures(): void;
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
-    splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
-    splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
+    splitDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[];
+    splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[];
     getDayName(date: Date): string;
     getDayofWeekName(date: Date): string;
-    getMonthName(date: Date): string;
+    getMonthName(date: Date, calendarSettings: CalendarSettings): string;
     getYearName(date: Date): string;
     resetDatePeriods(): void;
     getDatePeriods(): ITimelineDatePeriod[];
@@ -55,7 +53,7 @@ export declare class GranularityBase implements IGranularity {
      * i.e. using Month granularity, Feb 2 2015 corresponds to Feb 3 2015.
      * It is assumed that the given date does not correspond to previous date periods, other than the last date period
      */
-    addDate(date: Date, dateFormatSettings: dateFormatSettings): void;
+    addDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): void;
     setNewEndDate(date: Date): void;
     /**
      * Splits a given period into two periods.

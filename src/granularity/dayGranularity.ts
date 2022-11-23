@@ -54,8 +54,8 @@ export class DayGranularity extends GranularityBase {
         return GranularityType.day;
     }
 
-    public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
-        var month = this.getMonthName(date)
+    public splitDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[] {
+        var month = this.getMonthName(date, calendarSettings)
         var day = date.getDate()
         var year: string = ''
         if (dateFormatSettings.yearFormat == "yy"){
@@ -76,7 +76,7 @@ export class DayGranularity extends GranularityBase {
         return firstDatePeriod.startDate.getTime() === secondDatePeriod.startDate.getTime();
     }
 
-    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar): ITimelineLabel {
+    public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar, calendarSettings: CalendarSettings): ITimelineLabel {
         // const quarter: string = this.getQuarterName(datePeriod.startDate);
         var dayofweek: string;
         var monthName: string;
@@ -98,7 +98,7 @@ export class DayGranularity extends GranularityBase {
             nextdayofweek = ""
         }
 
-        monthName = this.getMonthName(datePeriod.startDate);
+        monthName = this.getMonthName(datePeriod.startDate, calendarSettings);
 
         if (dateFormatSettings.dayFormat == 'dd'){
             dayName = this.getDayName(datePeriod.startDate);
@@ -106,7 +106,7 @@ export class DayGranularity extends GranularityBase {
         else{
             dayName = datePeriod.startDate.getDate().toString();
         }
-        nextmonthName = this.getMonthName(calendar.getNextDate(datePeriod.startDate));
+        nextmonthName = this.getMonthName(calendar.getNextDate(datePeriod.startDate), calendarSettings);
         nextdayName = this.getDayName(calendar.getNextDate(datePeriod.startDate));
         if (dateFormatSettings.yearFormat == "yy"){
             yearName = "'" + this.getYearName(datePeriod.startDate);

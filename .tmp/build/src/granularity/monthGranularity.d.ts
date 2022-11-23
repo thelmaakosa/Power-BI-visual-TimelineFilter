@@ -11,7 +11,7 @@ export declare class MonthGranularity extends GranularityBase {
     constructor(calendar: Calendar, locale: string, dateFormatSettings: dateFormatSettings, CalendarSettings: CalendarSettings);
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
     getType(): GranularityType;
-    splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
-    sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean;
+    splitDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[];
+    sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): boolean;
     generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar, calendarSettings: CalendarSettings): ITimelineLabel;
 }

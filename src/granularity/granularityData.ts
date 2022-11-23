@@ -113,11 +113,11 @@ export class GranularityData {
      * Resets the new granularity, adds all dates to it, and then edits the last date period with the ending date.
      * @param granularity The new granularity to be added
      */
-    public addGranularity(granularity: IGranularity, dateFormatSettings: dateFormatSettings): void {
+    public addGranularity(granularity: IGranularity, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): void {
         granularity.resetDatePeriods();
 
         for (const date of this.dates) {
-            granularity.addDate(date, dateFormatSettings);
+            granularity.addDate(date, dateFormatSettings, calendarSettings);
         }
 
         granularity.setNewEndDate(this.endingDate);
@@ -145,7 +145,7 @@ export class GranularityData {
                 if (granularitySelection !== null) {
                     granularitySelection.attr(
                         "transform",
-                        svgManipulation.translate(viewport.width - (this.groupWidth*(count)) + renderIndex * this.groupWidth, 0),
+                        svgManipulation.translate(viewport.width - (this.groupWidth*(count)*props.granularSettings.textSize/8) + renderIndex * this.groupWidth * props.granularSettings.textSize/8, 0),
                     );
     
                     renderIndex++;
@@ -155,7 +155,7 @@ export class GranularityData {
                 if (granularitySelection !== null) {
                     granularitySelection.attr(
                         "transform",
-                        svgManipulation.translate(renderIndex * this.groupWidth, 0),
+                        svgManipulation.translate(renderIndex * this.groupWidth * props.granularSettings.textSize/8, 0),
                     );
     
                     renderIndex++;
@@ -165,7 +165,7 @@ export class GranularityData {
                 if (granularitySelection !== null) {
                     granularitySelection.attr(
                         "transform",
-                        svgManipulation.translate(viewport.width / 2 - (this.groupWidth*(count)) / 2 + renderIndex * this.groupWidth, 0),
+                        svgManipulation.translate(viewport.width / 2 - (this.groupWidth*props.granularSettings.textSize*(count)) / 2 + renderIndex * this.groupWidth * props.granularSettings.textSize/8, 0),
                     );
     
                     renderIndex++;
@@ -192,11 +192,11 @@ export class GranularityData {
     ): void {
         this.granularities = [];
 
-        this.addGranularity(new YearGranularity(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings);
-        this.addGranularity(new QuarterGranularity(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings);
-        this.addGranularity(new MonthGranularity(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings);
-        this.addGranularity(new WeekGranularity(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings);
-        this.addGranularity(new DayGranularity(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings);
+        this.addGranularity(new YearGranularity(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
+        this.addGranularity(new QuarterGranularity(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
+        this.addGranularity(new MonthGranularity(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
+        this.addGranularity(new WeekGranularity(calendar, locale, localizationManager, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
+        this.addGranularity(new DayGranularity(calendar, locale, dateFormatSettings, calendarSettings), dateFormatSettings, calendarSettings);
     }
 
     public createLabels(dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): void {

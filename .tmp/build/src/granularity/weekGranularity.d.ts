@@ -15,7 +15,7 @@ export declare class WeekGranularity extends GranularityBase {
     render(props: IGranularityRenderProps, isFirst: boolean): Selection<any, any, any, any>;
     getType(): GranularityType;
     splitDate(date: Date): (string | number)[];
-    splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[];
+    splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[];
     sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean;
-    generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar, CalendarSettings: CalendarSettings): ITimelineLabel;
+    generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar, calendarSettings: CalendarSettings): ITimelineLabel;
 }

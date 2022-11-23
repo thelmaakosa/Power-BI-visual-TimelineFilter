@@ -62,21 +62,18 @@ export class GranularityBase implements IGranularity {
     private clickableRectFactor: number = 2;
     private clickableRectWidth: number = 50;
 
-    private granularityXOffset: number = 10;
     private hLineYOffset: number = 2;
     private hLineWidth: number = 45;
     private hLineXOffset: number = 45;
     private vLineHeight: number = 5;
 
     private sliderXOffset: number = 25;
-    private sliderYOffset: number = 17;
+    private sliderYOffset: number = 18;
     private sliderRx: number = 4;
     private sliderWidth: number = 45;
-    private sliderHeight: number = 15;
+    private sliderHeight: number = 17;
 
-
-    private textLabelYOffset: number = 5;
-    private textLabelDx: string = "0.5em";
+    private textLabelYOffset: number = -5;
 
     private datePeriods: ITimelineDatePeriod[] = [];
     private extendedLabel: IExtendedLabel;
@@ -120,7 +117,7 @@ export class GranularityBase implements IGranularity {
         // render vetical line
         granularitySelection.append("rect")
             .classed("timelineVertLine", true)
-            .attr("x", this.granularityXOffset.toString())
+            .attr("x", 0)
             .attr("y", 0)
             .attr("width", props.granularSettings.scaleThickness)
             .attr("height", pixelConverter.toString(this.vLineHeight + props.granularSettings.scaleThickness))
@@ -130,10 +127,10 @@ export class GranularityBase implements IGranularity {
         if (!isFirst) {
             granularitySelection.append("rect")
                 .classed("timelineHorzLine", true)
-                .attr("x", pixelConverter.toString(0 - this.hLineXOffset + this.granularityXOffset))
+                .attr("x", pixelConverter.toString(0 - this.hLineXOffset*props.granularSettings.textSize/8))
                 .attr("y", pixelConverter.toString(this.hLineYOffset))
                 .attr("height", props.granularSettings.scaleThickness)
-                .attr("width", pixelConverter.toString(this.hLineWidth))
+                .attr("width", pixelConverter.toString(this.hLineWidth*props.granularSettings.textSize/8))
                 .attr("fill", props.granularSettings.scale? props.granularSettings.scaleColor : "rgba(255, 255, 255, 0)");
         }
 
@@ -142,14 +139,13 @@ export class GranularityBase implements IGranularity {
             .classed("periodSlicerGranularities", true)
             .text(this.granularityProps.marker)
             .attr("x", pixelConverter.toString(0))
-            .attr("y", pixelConverter.toString(0 - this.textLabelYOffset))
+            .attr("y", pixelConverter.toString(0 + this.textLabelYOffset))
             .style("font-size", pixelConverter.fromPointToPixel(props.granularSettings.textSize))
             .style("font-family", props.granularSettings.fontFamily)
             .style("font-weight", props.granularSettings.Bold ? '900' : 'normal')
             .style("font-style", props.granularSettings.Italic ? 'italic' : 'initial')
             .style("text-decoration", props.granularSettings.Underline ? 'underline' : 'initial')
             .style("fill", props.granularSettings.fontColor)
-            .attr("dx", this.textLabelDx);
 
         // render slider
         if (props.granularSettings.granularity === this.granularityProps.granularityType) {
@@ -162,7 +158,7 @@ export class GranularityBase implements IGranularity {
         granularitySelection
             .append("rect")
             .classed("periodSlicerSelectionRect", true)
-            .attr("x", pixelConverter.toString(0 - this.clickableRectWidth / this.clickableRectFactor + this.granularityXOffset))
+            .attr("x", pixelConverter.toString(0 - this.clickableRectWidth / this.clickableRectFactor))
             .attr("y", pixelConverter.toString(0 - this.clickableRectWidth / this.clickableRectFactor))
             .attr("width", pixelConverter.toString(this.clickableRectWidth))
             .attr("height", pixelConverter.toString(this.clickableRectHeight))
@@ -191,16 +187,16 @@ export class GranularityBase implements IGranularity {
         return granularitySelection;
     }
 
-    public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
+    public splitDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[] {
         return [
-            this.getMonthName(date),
+            this.getMonthName(date, calendarSettings),
             date.getDate(),
             this.calendar.determineYear(date),
         ];
     }
 
-    public splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
-        return this.splitDate(date, dateFormatSettings);
+    public splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[] {
+        return this.splitDate(date, dateFormatSettings, calendarSettings);
     }
 
     public getDayName(date: Date): string {
@@ -209,7 +205,7 @@ export class GranularityBase implements IGranularity {
     public getDayofWeekName(date: Date): string {
         return this.shortDayOfWeekFormatter.format(date);
     }
-    public getMonthName(date: Date): string {
+    public getMonthName(date: Date, calendarSettings: CalendarSettings): string {
         return this.shortMonthFormatter.format(date);
     }
     public getYearName(date: Date): string {
@@ -236,7 +232,7 @@ export class GranularityBase implements IGranularity {
         const labels: ITimelineLabel[] = [];
         let lastDatePeriod: ITimelineDatePeriod;
         this.datePeriods.forEach((datePeriod: ITimelineDatePeriod) => {
-            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod, dateFormatSettings)) {
+            if (!labels.length || !granularity.sameLabel(datePeriod, lastDatePeriod, dateFormatSettings, calendarSettings)) {
                 lastDatePeriod = datePeriod;
                 labels.push(granularity.generateLabel(datePeriod, dateFormatSettings, this.calendar, calendarSettings));
             }
@@ -252,10 +248,10 @@ export class GranularityBase implements IGranularity {
      * i.e. using Month granularity, Feb 2 2015 corresponds to Feb 3 2015.
      * It is assumed that the given date does not correspond to previous date periods, other than the last date period
      */
-    public addDate(date: Date, dateFormatSettings: dateFormatSettings): void {
+    public addDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): void {
         const datePeriods: ITimelineDatePeriod[] = this.getDatePeriods();
         const lastDatePeriod: ITimelineDatePeriod = datePeriods[datePeriods.length - 1];
-        const identifierArray: (string | number)[] = this.splitDate(date, dateFormatSettings);
+        const identifierArray: (string | number)[] = this.splitDate(date, dateFormatSettings, calendarSettings);
 
         if (datePeriods.length === 0
             || !Utils.IS_ARRAYS_EQUAL(lastDatePeriod.identifierArray, identifierArray)) {
@@ -367,68 +363,65 @@ export class GranularityBase implements IGranularity {
         selection: Selection<any, any, any, any>,
         granularSettings: GranularitySettings,
     ): void {
-        if (granularSettings.selectedOutlineLeft == true && granularSettings.selectedOutlineRight == true && granularSettings.selectedOutlineTop == true && granularSettings.selectedOutlineBottom == true){
             selection
             .append("rect")
             .classed("periodSlicerRect", true)
-            .attr("x", pixelConverter.toString(0 - this.sliderXOffset + this.granularityXOffset))
+            .attr("x", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16))
             .attr("y", pixelConverter.toString(0 - this.sliderYOffset))
             .attr("rx", pixelConverter.toString(granularSettings.selectedOutlineRadius))
             .attr("ry", pixelConverter.toString(granularSettings.selectedOutlineRadius))
-            .attr("width", pixelConverter.toString(this.sliderWidth))
+            .attr("width", pixelConverter.toString(this.sliderWidth*granularSettings.textSize/8))
             .attr("height", pixelConverter.toString(this.sliderHeight))
             .style("fill", granularSettings.selectedfillColor)
             .style("fill-opacity", granularSettings.transparency/100)
             .style("stroke", granularSettings.outlineColor)
             .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
             .data([granularSettings.granularity])
-        }
-        else {
-            if (granularSettings.selectedOutlineLeft == true){
+        
+            if (granularSettings.selectedOutlineLeft == false){
                 selection
                 .append("line")
                 .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset))
-                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 - this.sliderXOffset))
-                .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .style("stroke", granularSettings.outlineColor)
-                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16))
+                .attr("y1", -20)
+                .attr("x2", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16))
+                .attr("y2", 0)
+                .style("stroke", "#FFF")
+                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness+2))
             }
             
-            if (granularSettings.selectedOutlineRight == true){
+            if (granularSettings.selectedOutlineRight == false){
                 selection
                 .append("line")
                 .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 + this.sliderXOffset))
-                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset))
-                .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .style("stroke", granularSettings.outlineColor)
-                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+                .attr("x1", pixelConverter.toString(0 + this.sliderWidth*granularSettings.textSize/16))
+                .attr("y1", -20)
+                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.textSize/16))
+                .attr("y2", 0)
+                .style("stroke", "#FFF")
+                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness+2))
             }
-            if (granularSettings.selectedOutlineTop == true){
+            if (granularSettings.selectedOutlineTop == false){
                 selection
                 .append("line")
                 .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset-granularSettings.selectedOutlineThickness/2))
+                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16-granularSettings.selectedOutlineThickness/2))
                 .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset+granularSettings.selectedOutlineThickness/2))
+                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.textSize/16+granularSettings.selectedOutlineThickness/2))
                 .attr("y2", pixelConverter.toString(0 - this.sliderYOffset))
-                .style("stroke", granularSettings.outlineColor)
-                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+                .style("stroke", "#FFF")
+                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness+2))
             }
-            if (granularSettings.selectedOutlineBottom == true){
+            if (granularSettings.selectedOutlineBottom == false){
                 selection
                 .append("line")
                 .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderXOffset-granularSettings.selectedOutlineThickness/2))
+                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16-granularSettings.selectedOutlineThickness/2))
                 .attr("y1", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderXOffset+granularSettings.selectedOutlineThickness/2))
+                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.textSize/16+granularSettings.selectedOutlineThickness/2))
                 .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .style("stroke", granularSettings.outlineColor)
-                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+                .style("stroke", "#FFF")
+                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness+2))
             }
-        }
     }
 }

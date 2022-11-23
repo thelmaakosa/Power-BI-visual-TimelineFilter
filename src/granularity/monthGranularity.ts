@@ -54,8 +54,8 @@ export class MonthGranularity extends GranularityBase {
         return GranularityType.month;
     }
 
-    public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
-        var month = this.getMonthName(date)
+    public splitDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[] {
+        var month = this.getMonthName(date, calendarSettings)
         var year: string = ''
         if (dateFormatSettings.yearFormat == "yy"){
             year = "'" + this.getYearName(date);
@@ -70,8 +70,8 @@ export class MonthGranularity extends GranularityBase {
         ];
     }
 
-    public sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean {
-        return this.getMonthName(firstDatePeriod.startDate) === this.getMonthName(secondDatePeriod.startDate)
+    public sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): boolean {
+        return this.getMonthName(firstDatePeriod.startDate, calendarSettings) === this.getMonthName(secondDatePeriod.startDate, calendarSettings)
             && this.calendar.determineYear(firstDatePeriod.startDate) === this.calendar.determineYear(secondDatePeriod.startDate);
     }
 
@@ -90,8 +90,8 @@ export class MonthGranularity extends GranularityBase {
 
         var nextdate: Date = calendar.getNextMonth(currentdate);
 
-        monthName = this.getMonthName(currentdate);
-        nextmonthName = this.getMonthName(nextdate)
+        monthName = this.getMonthName(currentdate, calendarSettings);
+        nextmonthName = this.getMonthName(nextdate, calendarSettings)
         if (dateFormatSettings.yearFormat == "yy"){
             yearName = "'" + this.getYearName(currentdate);
             nextyearName = "'" + this.getYearName(nextdate);
