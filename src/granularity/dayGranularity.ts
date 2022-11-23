@@ -99,7 +99,13 @@ export class DayGranularity extends GranularityBase {
         }
 
         monthName = this.getMonthName(datePeriod.startDate);
-        dayName = this.getDayName(datePeriod.startDate);
+
+        if (dateFormatSettings.dayFormat == 'dd'){
+            dayName = this.getDayName(datePeriod.startDate);
+        }
+        else{
+            dayName = datePeriod.startDate.getDate().toString();
+        }
         nextmonthName = this.getMonthName(calendar.getNextDate(datePeriod.startDate));
         nextdayName = this.getDayName(calendar.getNextDate(datePeriod.startDate));
         if (dateFormatSettings.yearFormat == "yy"){

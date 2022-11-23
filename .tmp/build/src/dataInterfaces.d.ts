@@ -39,6 +39,7 @@ export interface ITimelineSelectors {
     SelectionCursor: CssConstants.ClassAndSelector;
     SelectionRangeContainer: CssConstants.ClassAndSelector;
     TimelineSlicer: CssConstants.ClassAndSelector;
+    TimelineHeader: CssConstants.ClassAndSelector;
     TimelineVisual: CssConstants.ClassAndSelector;
     TimelineWrapper: CssConstants.ClassAndSelector;
     UpperTextArea: CssConstants.ClassAndSelector;

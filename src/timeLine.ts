@@ -405,6 +405,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         SelectionRangeContainer: CssConstants.createClassAndSelector("selectionRangeContainer"),
         TextLabel: CssConstants.createClassAndSelector("label"),
         TimelineSlicer: CssConstants.createClassAndSelector("timelineSlicer"),
+        TimelineHeader: CssConstants.createClassAndSelector("timelineHeader"),
         TimelineVisual: CssConstants.createClassAndSelector("timeline"),
         TimelineWrapper: CssConstants.createClassAndSelector("timelineWrapper"),
         UpperTextArea: CssConstants.createClassAndSelector("upperTextArea"),
@@ -817,13 +818,14 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                     ? cellsSettings.selectedoutlineThickness
                     : cellsSettings.unselectedoutlineThickness;
             })
-            .style("opacity", (dataPoint: ITimelineDataPoint) => {
+            .style("fill-opacity", (dataPoint: ITimelineDataPoint) => {
                 const isSelected: boolean = Utils.IS_GRANULE_SELECTED(dataPoint, this.timelineData);
 
                 return isSelected
                     ? cellsSettings.transparency/100
                     : cellsSettings.innerPadding/100;
             })
+            .style("stroke-opacity", 1)
     }
 
     public renderCells(timelineData: ITimelineData, timelineProperties: ITimelineProperties, yPos: number, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): void {
@@ -881,42 +883,31 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             .exit()
             .remove();
 
-        return cursorSelection
-            .enter()
-            .append("path")
-            .classed(Timeline.TimelineSelectors.SelectionCursor.className, true)
-            .merge(cursorSelection)
-            .attr("transform", (cursorDataPoint: ICursorDataPoint) => {
-                const dx: number = cursorDataPoint.selectionIndex * this.timelineProperties.cellWidth;
-                const dy: number = cellHeight / Timeline.CellHeightDivider + cellsYPosition;
+        // return cursorSelection
+        //     .enter()
+        //     .append("path")
+        //     .classed(Timeline.TimelineSelectors.SelectionCursor.className, true)
+        //     .merge(cursorSelection)
+        //     .attr("transform", (cursorDataPoint: ICursorDataPoint) => {
+        //         const dx: number = cursorDataPoint.selectionIndex * this.timelineProperties.cellWidth;
+        //         const dy: number = cellHeight / Timeline.CellHeightDivider + cellsYPosition;
 
-                return svgManipulation.translate(dx, dy);
-            })
-            // .attr("d", d3Arc<ICursorDataPoint>()
-            //     .innerRadius(0)
-            //     .outerRadius(cellHeight / Timeline.CellHeightDivider)
-            //     .startAngle((cursorDataPoint: ICursorDataPoint) => {
-            //         return cursorDataPoint.cursorIndex * Math.PI + Math.PI;
-            //     })
-            //     .endAngle((cursorDataPoint: ICursorDataPoint) => {
-            //         return cursorDataPoint.cursorIndex * Math.PI + 2 * Math.PI;
-            //     }),
-            // )
-            .attr("d", ((cursorDataPoint: ICursorDataPoint) => {
-                    if (cursorDataPoint.cursorIndex == 0){
-                        return "M1.2246467991473533e-15,"+cellSettings.capoutlineRadius+"A+"+(cellSettings.capSize)+","+cellSettings.capoutlineRadius+",0,1,1,-3.673940397442059e-15,-"+cellSettings.capoutlineRadius+"L0,0Z"
-                    }
-                    else if (cursorDataPoint.cursorIndex == 1){
-                        return "M-3.673940397442059e-15,-"+cellSettings.capoutlineRadius+"A+"+(cellSettings.capSize)+","+cellSettings.capoutlineRadius+",0,1,1,6.123233995736766e-15,"+cellSettings.capoutlineRadius+"L0,0Z"
-                    }
-                }),
-            )
-            // .attr("d", "M-3.673940397442059e-15,-20A20,20,0,1,1,6.123233995736766e-15,20L0,0Z")
-            .style("fill", cellSettings.capfillColor)
-            .style("opacity", cellSettings.capfillOpacity/100)
-            .style("stroke", cellSettings.capoutlineColor)
-            .style("stroke-width", cellSettings.capoutlineThickness)
-            .call(this.cursorDragBehavior);
+        //         return svgManipulation.translate(dx, dy);
+        //     })
+        //     .attr("d", ((cursorDataPoint: ICursorDataPoint) => {
+        //             if (cursorDataPoint.cursorIndex == 0){
+        //                 return "M1.2246467991473533e-15,"+cellSettings.capoutlineRadius+"A+"+(cellSettings.capSize)+","+cellSettings.capoutlineRadius+",0,1,1,-3.673940397442059e-15,-"+cellSettings.capoutlineRadius+"L0,0Z"
+        //             }
+        //             else if (cursorDataPoint.cursorIndex == 1){
+        //                 return "M-3.673940397442059e-15,-"+cellSettings.capoutlineRadius+"A+"+(cellSettings.capSize)+","+cellSettings.capoutlineRadius+",0,1,1,6.123233995736766e-15,"+cellSettings.capoutlineRadius+"L0,0Z"
+        //             }
+        //         }),
+        //     )
+        //     .style("fill", cellSettings.capfillColor)
+        //     .style("opacity", cellSettings.capfillOpacity/100)
+        //     .style("stroke", cellSettings.capoutlineColor)
+        //     .style("stroke-width", cellSettings.capoutlineThickness)
+        //     .call(this.cursorDragBehavior);
 
             // cursorSelection
             // .enter()
@@ -934,23 +925,34 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             //     return svgManipulation.translate(dx, dy);
             // })
 
-            // return cursorSelection
-            // .enter()
-            // .append("ellipse")
-            // .classed(Timeline.TimelineSelectors.SelectionCursor.className, true)
-            // .merge(cursorSelection)
-            // .attr("rx", 10)
-            // .attr("ry", 20)
-            // .attr("clip-path", "url(#cut-off)")
-            // .attr("transform", (cursorDataPoint: ICursorDataPoint) => {
-            //     const dx: number = cursorDataPoint.selectionIndex * this.timelineProperties.cellWidth;
-            //     const dy: number = cellHeight / Timeline.CellHeightDivider + cellsYPosition;
-
-            //     return svgManipulation.translate(dx, dy);
-            // })
-            // .style("fill", cellSettings.capfillColor)
-            // .style("stroke", cellSettings.capoutlineColor)
-            // .call(this.cursorDragBehavior);
+            return cursorSelection
+            .enter()
+            .append("rect")
+            .classed(Timeline.TimelineSelectors.SelectionCursor.className, true)
+            .merge(cursorSelection)
+            .attr("transform", (cursorDataPoint: ICursorDataPoint) => {
+                        const dx: number = cursorDataPoint.selectionIndex * this.timelineProperties.cellWidth - cellSettings.capSize/2;
+                        const dy: number = cellsYPosition;
+        
+                        return svgManipulation.translate(dx, dy);
+                    })
+            .attr("width", cellSettings.capSize)
+            .attr("height", 40)
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("rx", cellSettings.capoutlineRadius)
+            .attr("ry", cellSettings.capoutlineRadius)
+            .style("clip-path", (cursorDataPoint: ICursorDataPoint) => {
+                if (cursorDataPoint.cursorIndex == 0){
+                    return "polygon(-5% 0, 50% 0, 50% 100%, -5% 100%)"
+                }
+                else{
+                    return "polygon(50% 0, 105% 0, 105% 100%, 50% 100%)"
+                }
+            })
+            .style("fill", cellSettings.capfillColor)
+            .style("stroke", cellSettings.capoutlineColor)
+            .call(this.cursorDragBehavior);
     }
 
     public renderTimeRangeText(timelineData: ITimelineData, settings: Settings): void {
@@ -1140,7 +1142,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 capSize: { numberRange: { min: 0 } },
                 unselectedoutlineThickness: { numberRange: { min: 0, max: 5 } },
                 capoutlineThickness: { numberRange: { min: 0, max: 5 } },
-                capoutlineRadius: { numberRange: { min: 0} }
+                capoutlineRadius: { numberRange: { min: 0, max: 30} }
          
             };
         }
@@ -1375,6 +1377,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             .style("width", viewportWidth + "px");
 
         this.headerSelection
+            .classed(Timeline.TimelineSelectors.TimelineHeader.className, true)
             .attr("height", this.timelineProperties.legendHeight);
     }
 
@@ -1621,10 +1624,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 this.yearLabelsSelection
                 .attr("class", null)
                 .classed(timelineSettings.labels.position, true)
-                .classed(timelineSettings.dateFormat.yearFormat, true)
-                .classed(timelineSettings.dateFormat.quarterFormat, true)
-                .classed(timelineSettings.dateFormat.monthFormat, true)
-                .classed(timelineSettings.dateFormat.dayFormat, true)
 
                 this.renderLabels(
                     extendedLabels.yearLabels,
@@ -1640,10 +1639,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 this.quarterLabelsSelection
                 .attr("class", null)
                 .classed(timelineSettings.labels.position, true)
-                .classed(timelineSettings.dateFormat.yearFormat, true)
-                .classed(timelineSettings.dateFormat.quarterFormat, true)
-                .classed(timelineSettings.dateFormat.monthFormat, true)
-                .classed(timelineSettings.dateFormat.dayFormat, true);
 
                 this.renderLabels(
                     extendedLabels.quarterLabels,
@@ -1660,10 +1655,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 .attr("class", null)
                 .classed(timelineSettings.labels.position, true)
                 .classed(timelineSettings.labels.position, true)
-                .classed(timelineSettings.dateFormat.yearFormat, true)
-                .classed(timelineSettings.dateFormat.quarterFormat, true)
-                .classed(timelineSettings.dateFormat.monthFormat, true)
-                .classed(timelineSettings.dateFormat.dayFormat, true);
                 
                 this.renderLabels(
                     extendedLabels.monthLabels,
@@ -1680,10 +1671,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 .attr("class", null)
                 .classed(timelineSettings.labels.position, true)
                 .classed(timelineSettings.labels.position, true)
-                .classed(timelineSettings.dateFormat.yearFormat, true)
-                .classed(timelineSettings.dateFormat.quarterFormat, true)
-                .classed(timelineSettings.dateFormat.monthFormat, true)
-                .classed(timelineSettings.dateFormat.dayFormat, true);
 
                 this.renderLabels(
                     extendedLabels.weekLabels,
@@ -1700,10 +1687,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 .attr("class", null)
                 .classed(timelineSettings.labels.position, true)
                 .classed(timelineSettings.labels.position, true)
-                .classed(timelineSettings.dateFormat.yearFormat, true)
-                .classed(timelineSettings.dateFormat.quarterFormat, true)
-                .classed(timelineSettings.dateFormat.monthFormat, true)
-                .classed(timelineSettings.dateFormat.dayFormat, true);
                 
                 this.renderLabels(
                     extendedLabels.dayLabels,
@@ -1808,6 +1791,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             .attr("fill", this.settings.labels.fontColor)
             .append("title")
             .text((label: ITimelineLabel) => label.title);
+
     }
 
     private clearData(): void {

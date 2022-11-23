@@ -27,5 +27,5 @@
 import { WeekStandards } from "../calendars/weekStandards";
 
 export class calendaTypeSettings {
-    public weekStandard: number = 1;
+    public weekStandard: number = 0;
 }

@@ -356,7 +356,7 @@
                     }
                 },
                 "selectedfillColor": {
-                    "displayName": "Selectd Rectangle Fill Color",
+                    "displayName": "Selected Rectangle Fill Color",
                     "type": {
                         "fill": {
                             "solid": {
@@ -648,13 +648,17 @@
                             {
                                 "value": "dd",
                                 "displayName": "DD"
+                            },
+                            {
+                                "value": "d",
+                                "displayName": "D"
                             }
                         ]
                     },
                     "filterState": true
                 },
                 "dayofweek": {
-                    "displayName": "Day of week",
+                    "displayName": "Day of Week",
                     "type": {
                         "bool": true
                     }

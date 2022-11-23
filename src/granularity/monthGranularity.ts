@@ -86,7 +86,7 @@ export class MonthGranularity extends GranularityBase {
         
         var currentdate: Date = datePeriod.startDate;
 
-        currentdate.setDate(currentdate.getDate() + calendarSettings.day);
+        // currentdate.setDate(currentdate.getDate() + calendarSettings.day);
 
         var nextdate: Date = calendar.getNextMonth(currentdate);
 
@@ -103,7 +103,7 @@ export class MonthGranularity extends GranularityBase {
 
         }
 
-        currentdate.setDate(currentdate.getDate()  - calendarSettings.day);
+        // currentdate.setDate(currentdate.getDate()  - calendarSettings.day);
 
         if (dateFormatSettings.datecategorization == true ){
             text = `${monthName} ${yearName}`;

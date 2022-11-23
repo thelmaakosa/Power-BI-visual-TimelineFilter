@@ -62,19 +62,19 @@ export class GranularityBase implements IGranularity {
     private clickableRectFactor: number = 2;
     private clickableRectWidth: number = 50;
 
+    private granularityXOffset: number = 10;
     private hLineYOffset: number = 2;
     private hLineWidth: number = 45;
     private hLineXOffset: number = 45;
+    private vLineHeight: number = 5;
 
-    private sliderXOffset: number = 22.5;
+    private sliderXOffset: number = 25;
     private sliderYOffset: number = 17;
     private sliderRx: number = 4;
     private sliderWidth: number = 45;
     private sliderHeight: number = 15;
 
-    private vLineHeight: number = 5;
 
-    private textLabelXOffset: number = 7;
     private textLabelYOffset: number = 5;
     private textLabelDx: string = "0.5em";
 
@@ -93,7 +93,7 @@ export class GranularityBase implements IGranularity {
 
     constructor(calendar: Calendar, private locale: string, granularityProps: IGranularityName, dateFormatSettings: dateFormatSettings, CalendarSettings: CalendarSettings) {
         this.calendar = calendar;
-        this.shortDayFormatter = valueFormatter.create({ format: dateFormatSettings.dayFormat, cultureSelector: this.locale });
+        this.shortDayFormatter = valueFormatter.create({ format: 'dd', cultureSelector: this.locale });
         this.shortDayOfWeekFormatter = valueFormatter.create({ format: dateFormatSettings.dayofweekFormat, cultureSelector: this.locale });
         this.shortMonthFormatter = valueFormatter.create({ format: dateFormatSettings.monthFormat, cultureSelector: this.locale });
         this.shortYearFormatter = valueFormatter.create({ format: dateFormatSettings.yearFormat, cultureSelector: this.locale });
@@ -120,7 +120,7 @@ export class GranularityBase implements IGranularity {
         // render vetical line
         granularitySelection.append("rect")
             .classed("timelineVertLine", true)
-            .attr("x", 0)
+            .attr("x", this.granularityXOffset.toString())
             .attr("y", 0)
             .attr("width", props.granularSettings.scaleThickness)
             .attr("height", pixelConverter.toString(this.vLineHeight + props.granularSettings.scaleThickness))
@@ -130,7 +130,7 @@ export class GranularityBase implements IGranularity {
         if (!isFirst) {
             granularitySelection.append("rect")
                 .classed("timelineHorzLine", true)
-                .attr("x", pixelConverter.toString(0 - this.hLineXOffset))
+                .attr("x", pixelConverter.toString(0 - this.hLineXOffset + this.granularityXOffset))
                 .attr("y", pixelConverter.toString(this.hLineYOffset))
                 .attr("height", props.granularSettings.scaleThickness)
                 .attr("width", pixelConverter.toString(this.hLineWidth))
@@ -141,7 +141,7 @@ export class GranularityBase implements IGranularity {
         granularitySelection.append("text")
             .classed("periodSlicerGranularities", true)
             .text(this.granularityProps.marker)
-            .attr("x", pixelConverter.toString(0 - this.textLabelXOffset))
+            .attr("x", pixelConverter.toString(0))
             .attr("y", pixelConverter.toString(0 - this.textLabelYOffset))
             .style("font-size", pixelConverter.fromPointToPixel(props.granularSettings.textSize))
             .style("font-family", props.granularSettings.fontFamily)
@@ -162,7 +162,7 @@ export class GranularityBase implements IGranularity {
         granularitySelection
             .append("rect")
             .classed("periodSlicerSelectionRect", true)
-            .attr("x", pixelConverter.toString(0 - this.clickableRectWidth / this.clickableRectFactor))
+            .attr("x", pixelConverter.toString(0 - this.clickableRectWidth / this.clickableRectFactor + this.granularityXOffset))
             .attr("y", pixelConverter.toString(0 - this.clickableRectWidth / this.clickableRectFactor))
             .attr("width", pixelConverter.toString(this.clickableRectWidth))
             .attr("height", pixelConverter.toString(this.clickableRectHeight))
@@ -371,7 +371,7 @@ export class GranularityBase implements IGranularity {
             selection
             .append("rect")
             .classed("periodSlicerRect", true)
-            .attr("x", pixelConverter.toString(0 - this.sliderXOffset))
+            .attr("x", pixelConverter.toString(0 - this.sliderXOffset + this.granularityXOffset))
             .attr("y", pixelConverter.toString(0 - this.sliderYOffset))
             .attr("rx", pixelConverter.toString(granularSettings.selectedOutlineRadius))
             .attr("ry", pixelConverter.toString(granularSettings.selectedOutlineRadius))
