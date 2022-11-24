@@ -84,9 +84,17 @@ export class Calendar {
             firstDayOfYear,
         );
 
-        return date.getFullYear() + this.getFiscalYearAjustment() - ((firstDate <= date)
+        return date.getFullYear() - ((firstDate <= date)
             ? this.EmptyYearOffset
             : this.YearOffset);
+    }
+
+    public determineMonth(date: Date): number {
+        const month: number = date.getMonth();
+        const year: number = this.determineYear(date);
+        const firstDayOfYear = this.getFirstDayOfYear();
+
+        return month - ((firstDayOfYear <= date.getDate())? 0: 1);
     }
 
     public determineWeek(date: Date): number[] {

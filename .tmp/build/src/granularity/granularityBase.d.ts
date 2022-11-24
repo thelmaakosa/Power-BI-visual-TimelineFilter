@@ -39,7 +39,7 @@ export declare class GranularityBase implements IGranularity {
     splitDateForTitle(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[];
     getDayName(date: Date): string;
     getDayofWeekName(date: Date): string;
-    getMonthName(date: Date, calendarSettings: CalendarSettings): string;
+    getMonthName(date: Date): string;
     getYearName(date: Date): string;
     resetDatePeriods(): void;
     getDatePeriods(): ITimelineDatePeriod[];

@@ -209,12 +209,24 @@
                     "type": {
                         "enumeration": [
                             {
-                                "value": "0",
-                                "displayName": "1 month"
+                                "value": "year",
+                                "displayName": "year"
                             },
                             {
-                                "value": "1",
-                                "displayName": "1 year"
+                                "value": "quarter",
+                                "displayName": "quarter"
+                            },
+                            {
+                                "value": "month",
+                                "displayName": "month"
+                            },
+                            {
+                                "value": "week",
+                                "displayName": "week"
+                            },
+                            {
+                                "value": "day",
+                                "displayName": "day"
                             }
                         ]
                     }

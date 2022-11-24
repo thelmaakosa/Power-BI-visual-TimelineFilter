@@ -22,6 +22,7 @@ export declare class Calendar {
     constructor(calendarFormat: CalendarSettings, weekDaySettings: WeekDaySettings);
     getFiscalYearAjustment(): number;
     determineYear(date: Date): number;
+    determineMonth(date: Date): number;
     determineWeek(date: Date): number[];
     getFirstDayOfWeek(): number;
     getFirstMonthOfYear(): number;

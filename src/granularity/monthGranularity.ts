@@ -55,68 +55,83 @@ export class MonthGranularity extends GranularityBase {
     }
 
     public splitDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[] {
-        var month = this.getMonthName(date, calendarSettings)
-        var year: string = ''
-        if (dateFormatSettings.yearFormat == "yy"){
-            year = "'" + this.getYearName(date);
-        }
-        else if (dateFormatSettings.yearFormat != "yy"){
-            year = this.getYearName(date);
-        }
-        
+        // var month = this.getMonthName(date, calendarSettings)
+        // var year: string = ''
+        // if (dateFormatSettings.yearFormat == "yy"){
+        //     year = "'" + this.getYearName(date);
+        // }
+        // else if (dateFormatSettings.yearFormat != "yy"){
+        //     year = this.getYearName(date);
+        // }
+
         return [
-            month,
-            year,
-        ];
+            this.getMonthName(date),
+            // this.calendar.determineMonth(date),
+            this.calendar.determineYear(date),
+        ]
     }
 
     public sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): boolean {
-        return this.getMonthName(firstDatePeriod.startDate, calendarSettings) === this.getMonthName(secondDatePeriod.startDate, calendarSettings)
+        return this.getMonthName(firstDatePeriod.startDate) === this.getMonthName(secondDatePeriod.startDate)
             && this.calendar.determineYear(firstDatePeriod.startDate) === this.calendar.determineYear(secondDatePeriod.startDate);
     }
 
     public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings,calendar: Calendar, calendarSettings: CalendarSettings): ITimelineLabel {
         // const quarter: string = this.getQuarterName(datePeriod.startDate);
-        var monthName: string;
-        var yearName: string;
-        var text:string;
-        var nextmonthName: string ='';
-        var nextyearName: string = '';
-        var nexttext: string = '';
+        // var monthName: string;
+        // var yearName: string;
+        // var text:string;
+        // var nextmonthName: string ='';
+        // var nextyearName: string = '';
+        // var nexttext: string = '';
+        
+        // var currentdate: Date = datePeriod.startDate;
+        // const dayadjustment: number = calendarSettings.day
+
+        // currentdate.setDate(currentdate.getDate() + dayadjustment);
+
+        // var nextdate: Date = calendar.getNextMonth(currentdate);
+
+        // monthName = this.getMonthName(currentdate, calendarSettings);
+        // nextmonthName = this.getMonthName(nextdate, calendarSettings)
+        // if (dateFormatSettings.yearFormat == "yy"){
+        //     yearName = "'" + this.getYearName(currentdate);
+        //     nextyearName = "'" + this.getYearName(nextdate);
+
+        // }
+        // else if (dateFormatSettings.yearFormat != "yy"){
+        //     yearName = this.getYearName(currentdate);
+        //     nextyearName = this.getYearName(nextdate);
+
+        // }
+
+        // currentdate.setDate(currentdate.getDate()  - dayadjustment);
+
+        // if (dateFormatSettings.datecategorization == true ){
+        //     text = `${monthName} ${yearName}`;
+        //     nexttext = ` - ${nextmonthName} ${nextyearName}`;
+        // }
+        // else{
+        //     text = `${monthName} ${yearName}`;
+        // }
+
+        // return {
+        //     id: datePeriod.index,
+        //     text: text + nexttext, 
+        //     title: text + nexttext
+        // };
         
         var currentdate: Date = datePeriod.startDate;
-
-        // currentdate.setDate(currentdate.getDate() + calendarSettings.day);
-
-        var nextdate: Date = calendar.getNextMonth(currentdate);
-
-        monthName = this.getMonthName(currentdate, calendarSettings);
-        nextmonthName = this.getMonthName(nextdate, calendarSettings)
-        if (dateFormatSettings.yearFormat == "yy"){
-            yearName = "'" + this.getYearName(currentdate);
-            nextyearName = "'" + this.getYearName(nextdate);
-
-        }
-        else if (dateFormatSettings.yearFormat != "yy"){
-            yearName = this.getYearName(currentdate);
-            nextyearName = this.getYearName(nextdate);
-
-        }
-
-        // currentdate.setDate(currentdate.getDate()  - calendarSettings.day);
-
-        if (dateFormatSettings.datecategorization == true ){
-            text = `${monthName} ${yearName}`;
-            nexttext = ` - ${nextmonthName} ${nextyearName}`;
-        }
-        else{
-            text = `${monthName} ${yearName}`;
-        }
+        var monthName: string = this.getMonthName(currentdate);
+        var nextmonthName: string = this.getMonthName(datePeriod.endDate);
+        
+        var yearName = dateFormatSettings.yearFormat == "yy" ? "'"+(this.calendar.determineYear(datePeriod.startDate) % 100).toString() : (this.calendar.determineYear(datePeriod.startDate)).toString()
+        var nextyearname = dateFormatSettings.yearFormat == "yy" ? "'"+(this.calendar.determineYear(datePeriod.endDate) % 100).toString() : (this.calendar.determineYear(datePeriod.endDate)).toString()
 
         return {
             id: datePeriod.index,
-            text: text + nexttext, 
-            title: text + nexttext
+            text: dateFormatSettings.datecategorization ? `${monthName} ${yearName} - ${nextmonthName} ${nextyearname}` :  `${monthName} ${yearName}`,
+            title: dateFormatSettings.datecategorization ? `${monthName} ${yearName} - ${nextmonthName} ${nextyearname}` : `${monthName} ${yearName}`,
         };
     }
 }

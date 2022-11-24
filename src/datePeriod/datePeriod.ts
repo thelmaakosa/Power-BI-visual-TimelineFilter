@@ -35,4 +35,5 @@ export interface ITimelineDatePeriod extends ITimelineDatePeriodBase {
     index: number;
     week: number[];
     year: number;
+    month: number;
 }

@@ -285,6 +285,71 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         return { startDate, endDate };
     }
 
+    public static SELECT_LAST_PERIOD(
+        datePeriod: ITimelineDatePeriodBase,
+        granularity: GranularityType,
+        calendar,
+        periodDate: Date,
+        settings: Settings,
+    ) {
+        let startDate: Date = periodDate;
+        let endDate: Date;
+        
+        switch (settings.forceSelection.periodoftime) {
+            case "day":
+                endDate = calendar.getNextDate(periodDate);
+                break;
+            case "week":
+                ({ startDate, endDate } = calendar.getWeekPeriod(periodDate));
+                break;
+            case "month":
+                ({ startDate, endDate } = calendar.getMonthPeriod(periodDate));
+                break;
+            case "quarter":
+                
+                let quarter: number = 3;
+                let year: number = calendar.determineYear(periodDate);
+                var yearstring: string; 
+                while (periodDate < calendar.getQuarterStartDate(year, quarter)) {
+                    if (quarter > 0) {
+                        quarter--;
+                    }
+                    else {
+                        quarter = 3;
+                        year--;
+                    }
+                }
+        
+                startDate = calendar.getQuarterStartDate(year, quarter);
+                endDate = calendar.getQuarterEndDate(periodDate)
+                break;
+            case "year":
+                ({ startDate, endDate } = calendar.getYearPeriod(periodDate));
+                break;
+        }
+
+        // if (granularity === GranularityType.day) {
+        //     const checkDatesForDayGranularity: boolean =
+        //         datePeriod.startDate <= startDate && endDate <= datePeriod.endDate ||
+        //         startDate.toString() === datePeriod.endDate.toString();
+
+        //     if (!checkDatesForDayGranularity) {
+        //         startDate = null;
+        //         endDate = null;
+        //     }
+        // } else {
+        //     const startDateAvailable = (datePeriod.startDate <= startDate && startDate <= datePeriod.endDate);
+        //     const endDateAvailable = (datePeriod.startDate <= endDate && endDate <= datePeriod.endDate);
+
+        //     if (!startDateAvailable && !endDateAvailable) {
+        //         startDate = null;
+        //         endDate = null;
+        //     }
+        // }
+        console.log(startDate, endDate)
+        return { startDate, endDate };
+    }
+
     public static ARE_VISUAL_UPDATE_OPTIONS_VALID(options: powerbiVisualsApi.extensibility.visual.VisualUpdateOptions): boolean {
         if (!options
             || !options.dataViews
@@ -770,10 +835,11 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 )
             ) {
                 adjustedPeriod.period.endDate = adjustedPeriod.adaptedDataEndDate;
+
                 ({
                     endDate: adjustedPeriod.period.endDate,
                     startDate: adjustedPeriod.period.startDate,
-                } = Timeline.SELECT_PERIOD(datePeriod, granularity, this.calendar, this.datePeriod.endDate));
+                } = Timeline.SELECT_LAST_PERIOD(datePeriod, granularity, this.calendar, this.datePeriod.endDate, this.settings));
             }
 
             this.updatePrevFilterState(adjustedPeriod, isForceSelected, this.timelineData.filterColumnTarget);
@@ -1152,7 +1218,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             && instances[0]
             && instances[0].properties
         ) {
-            // delete instances[0].properties.periodoftime;
+            delete instances[0].properties.periodoftime;
         }
 
         if (options.objectName === "dateFormat"

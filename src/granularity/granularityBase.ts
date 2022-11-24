@@ -189,7 +189,7 @@ export class GranularityBase implements IGranularity {
 
     public splitDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[] {
         return [
-            this.getMonthName(date, calendarSettings),
+            this.getMonthName(date),
             date.getDate(),
             this.calendar.determineYear(date),
         ];
@@ -205,8 +205,14 @@ export class GranularityBase implements IGranularity {
     public getDayofWeekName(date: Date): string {
         return this.shortDayOfWeekFormatter.format(date);
     }
-    public getMonthName(date: Date, calendarSettings: CalendarSettings): string {
-        return this.shortMonthFormatter.format(date);
+    public getMonthName(date: Date): string {
+        // const currentdate:  Date = new Date(
+        //     this.calendar.determineYear(date),
+        //     this.calendar.determineMonth(date),
+        //     date.getDay(),
+        // );
+
+        return this.shortMonthFormatter.format(date); 
     }
     public getYearName(date: Date): string {
         return this.shortYearFormatter.format(date);
@@ -268,6 +274,7 @@ export class GranularityBase implements IGranularity {
                 startDate: date,
                 week: this.calendar.determineWeek(date),
                 year: this.calendar.determineYear(date),
+                month: this.calendar.determineMonth(date),
             });
         }
         else {
@@ -299,6 +306,7 @@ export class GranularityBase implements IGranularity {
             startDate: newDate,
             week: this.calendar.determineWeek(newDate),
             year: this.calendar.determineYear(newDate),
+            month: this.calendar.determineMonth(newDate),
         };
 
         oldDatePeriod.endDate = newDate;
@@ -313,6 +321,7 @@ export class GranularityBase implements IGranularity {
     protected getQuarterName(date: Date, dateFormatSettings: dateFormatSettings): string {
         let quarter: number = this.DefaultQuarter;
         let year: number = this.calendar.determineYear(date);
+        var yearstring: string;
 
         while (date < this.calendar.getQuarterStartDate(year, quarter)) {
             if (quarter > 0) {
@@ -326,17 +335,21 @@ export class GranularityBase implements IGranularity {
 
         quarter++;
 
+        yearstring = dateFormatSettings.yearFormat == "yy" ? "'"+(year % 100).toString() : (year).toString()
+
         if (dateFormatSettings.quarterFormat == "Quarter X"){
-            return `Quarter ${quarter}`;
+            return `Quarter ${quarter} ${yearstring}`;
         }
         else if(dateFormatSettings.quarterFormat == "QX"){
-            return `Q${quarter}`;
+            return `Q${quarter} ${yearstring}`;
         }
         
     }
+
     protected getNextQuarter(date: Date, dateFormatSettings: dateFormatSettings): string {
         let quarter: number = this.DefaultQuarter;
         let year: number = this.calendar.determineYear(date);
+        var yearstring: string;
 
         while (date < this.calendar.getQuarterStartDate(year, quarter)) {
             if (quarter > 0) {
@@ -348,13 +361,18 @@ export class GranularityBase implements IGranularity {
             }
         }
 
-        quarter++;
+        quarter = quarter + 2;
+
+        year = quarter==5? year+1: year
+        quarter = quarter==5? 1: quarter;
+
+        yearstring = dateFormatSettings.yearFormat == "yy" ? "'"+(year % 100).toString() : (year).toString()
 
         if (dateFormatSettings.quarterFormat == "Quarter X"){
-            return `Quarter ${quarter+1}`;
+            return `Quarter ${quarter} ${yearstring}`;
         }
         else if(dateFormatSettings.quarterFormat == "QX"){
-            return `Q${quarter+1}`;
+            return `Q${quarter} ${yearstring}`;
         }
         
     }

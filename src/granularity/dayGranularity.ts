@@ -55,7 +55,7 @@ export class DayGranularity extends GranularityBase {
     }
 
     public splitDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[] {
-        var month = this.getMonthName(date, calendarSettings)
+        var month = this.getMonthName(date)
         var day = date.getDate()
         var year: string = ''
         if (dateFormatSettings.yearFormat == "yy"){
@@ -78,44 +78,23 @@ export class DayGranularity extends GranularityBase {
 
     public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar, calendarSettings: CalendarSettings): ITimelineLabel {
         // const quarter: string = this.getQuarterName(datePeriod.startDate);
-        var dayofweek: string;
-        var monthName: string;
-        var dayName: string;
-        var yearName: string = ''
-        var nextdayofweek: string;
-        var nextmonthName: string;
-        var nextdayName: string;
-        var nextyearName: string;
         var text:string;
         var nexttext: string = '';
 
-        if (dateFormatSettings.dayofweek == true){
-            dayofweek = this.getDayofWeekName(datePeriod.startDate);
-            nextdayofweek = this.getDayofWeekName(calendar.getNextDate(datePeriod.startDate));
-        }
-        else{
-            dayofweek = "";
-            nextdayofweek = ""
-        }
+        var currentdate = datePeriod.startDate;
+        var nextdate = datePeriod.endDate;
 
-        monthName = this.getMonthName(datePeriod.startDate, calendarSettings);
+        var dayName = dateFormatSettings.dayFormat == 'dd' ? this.getDayName(currentdate) : currentdate.getDate().toString();
+        var nextdayName = dateFormatSettings.dayFormat == 'dd' ? this.getDayName(nextdate) : nextdate.getDate().toString();
 
-        if (dateFormatSettings.dayFormat == 'dd'){
-            dayName = this.getDayName(datePeriod.startDate);
-        }
-        else{
-            dayName = datePeriod.startDate.getDate().toString();
-        }
-        nextmonthName = this.getMonthName(calendar.getNextDate(datePeriod.startDate), calendarSettings);
-        nextdayName = this.getDayName(calendar.getNextDate(datePeriod.startDate));
-        if (dateFormatSettings.yearFormat == "yy"){
-            yearName = "'" + this.getYearName(datePeriod.startDate);
-            nextyearName = "'" + this.getYearName(calendar.getNextDate(datePeriod.startDate))
-        }
-        else if (dateFormatSettings.yearFormat != "yy"){
-            yearName = this.getYearName(datePeriod.startDate);
-            nextyearName = this.getYearName(calendar.getNextDate(datePeriod.startDate))
-        }
+        var dayofweek = dateFormatSettings.dayofweek == true ? this.getDayofWeekName(currentdate) : "";
+        var nextdayofweek = dateFormatSettings.dayofweek == true ? this.getDayofWeekName(nextdate) : "";
+
+        var monthName = this.getMonthName(currentdate);
+        var nextmonthName = this.getMonthName(calendar.getNextDate(currentdate));
+
+        var yearName = dateFormatSettings.yearFormat == "yy" ? "'" + this.getYearName(currentdate) : this.getYearName(currentdate);
+        var nextyearName = dateFormatSettings.yearFormat == "yy" ? "'" + this.getYearName(nextdate) : this.getYearName(nextdate)
         
         if (dateFormatSettings.datecategorization == true ){
             text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;

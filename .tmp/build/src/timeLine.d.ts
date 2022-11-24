@@ -24,6 +24,10 @@ export declare class Timeline implements powerbiVisualsApi.extensibility.visual.
         startDate: Date;
         endDate: Date;
     };
+    static SELECT_LAST_PERIOD(datePeriod: ITimelineDatePeriodBase, granularity: GranularityType, calendar: any, periodDate: Date, settings: Settings): {
+        startDate: Date;
+        endDate: Date;
+    };
     static ARE_VISUAL_UPDATE_OPTIONS_VALID(options: powerbiVisualsApi.extensibility.visual.VisualUpdateOptions): boolean;
     static IS_DATA_VIEW_CATEGORICAL_VALID(dataViewCategorical: powerbiVisualsApi.DataViewCategorical): boolean;
     private static TimelineMargins;

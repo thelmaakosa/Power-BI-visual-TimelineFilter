@@ -56,18 +56,21 @@ export class QuarterGranularity extends GranularityBase {
     }
 
     public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
-        var quarter = this.getQuarterName(date, dateFormatSettings)
-        var year: string = ''
-        if (dateFormatSettings.yearFormat == "yy"){
-            year = "'" + this.getYearName(date);
-        }
-        else if (dateFormatSettings.yearFormat != "yy"){
-            year = this.getYearName(date);
-        }
+        // var quarter = this.getQuarterName(date, dateFormatSettings)
+        // var year: string = ''
+        // if (dateFormatSettings.yearFormat == "yy"){
+        //     year = "'" + this.getYearName(date);
+        // }
+        // else if (dateFormatSettings.yearFormat != "yy"){
+        //     year = this.getYearName(date);
+        // }
         
+        // return [
+        //     quarter,
+        //     year,
+        // ];
         return [
-            quarter,
-            year,
+            this.getQuarterName(date, dateFormatSettings)
         ];
     }
 
@@ -77,50 +80,63 @@ export class QuarterGranularity extends GranularityBase {
     }
 
     public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar): ITimelineLabel {
-        var quarter: string;
-        var nextquarter: string;
-        var yearName: string = '';
-        var nextyearName: string;
-        var text: string;
-        var nexttext: string = '';
+        // var quarter: string;
+        // var nextquarter: string;
+        // var yearName: string = '';
+        // var nextyearName: string;
+        // var text: string;
+        // var nexttext: string = '';
 
-        quarter = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
-        nextquarter = this.getNextQuarter(datePeriod.startDate, dateFormatSettings);
+        // quarter = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
+        // nextquarter = this.getNextQuarter(datePeriod.startDate, dateFormatSettings);
 
-        if (dateFormatSettings.yearFormat == "yy"){
-            yearName = "'" + this.getYearName(datePeriod.startDate);
-            if (nextquarter.indexOf("5")>-1){
-                nextquarter = nextquarter.replace("5", "1");;
-                nextyearName = "'" + this.getYearName(calendar.getNextYear(datePeriod.startDate));
-            }
-            else{
-                nextyearName = yearName;
-            }
+        // if (dateFormatSettings.yearFormat == "yy"){
+        //     yearName = "'" + this.getYearName(datePeriod.startDate);
+        //     if (nextquarter.indexOf("5")>-1){
+        //         nextquarter = nextquarter.replace("5", "1");;
+        //         nextyearName = "'" + this.getYearName(calendar.getNextYear(datePeriod.startDate));
+        //     }
+        //     else{
+        //         nextyearName = yearName;
+        //     }
 
-        }
-        else if (dateFormatSettings.yearFormat != "yy"){
-            yearName = this.getYearName(datePeriod.startDate);
-            if (nextquarter.indexOf("5")>-1){
-                nextquarter = nextquarter.replace("5", "1");;
-                nextyearName = this.getYearName(calendar.getNextYear(datePeriod.startDate));
-            }
-            else{
-                nextyearName = yearName;
-            }
-        }
+        // }
+        // else if (dateFormatSettings.yearFormat != "yy"){
+        //     yearName = this.getYearName(datePeriod.startDate);
+        //     if (nextquarter.indexOf("5")>-1){
+        //         nextquarter = nextquarter.replace("5", "1");;
+        //         nextyearName = this.getYearName(calendar.getNextYear(datePeriod.startDate));
+        //     }
+        //     else{
+        //         nextyearName = yearName;
+        //     }
+        // }
 
-        if (dateFormatSettings.datecategorization == true ){
-            text = `${quarter} ${yearName}`;
-            nexttext = ` - ${nextquarter} ${nextyearName}`
-        }
-        else{
-            text = `${quarter} ${yearName}`;
-        }
+        // if (dateFormatSettings.datecategorization == true ){
+        //     text = `${quarter} ${yearName}`;
+        //     nexttext = ` - ${nextquarter} ${nextyearName}`
+        // }
+        // else{
+        //     text = `${quarter} ${yearName}`;
+        // }
+
+        // return {
+        //     id: datePeriod.index,
+        //     text: text + nexttext,
+        //     title: text + nexttext,
+        // };
+
+        var quarterName: string = '';
+        var nextquarterName: string;
+
+        quarterName = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
+        nextquarterName = this.getNextQuarter(datePeriod.startDate, dateFormatSettings);
 
         return {
             id: datePeriod.index,
-            text: text + nexttext,
-            title: text + nexttext,
+            text: dateFormatSettings.datecategorization? `${quarterName}` + " - " + `${nextquarterName}`: `${quarterName}`,
+            title: dateFormatSettings.datecategorization? `${quarterName}` + " - " + `${nextquarterName}`: `${quarterName}`
         };
+
     }
 }

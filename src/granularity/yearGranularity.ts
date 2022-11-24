@@ -63,14 +63,16 @@ export class YearGranularity extends GranularityBase {
     }
 
     public splitDate(date: Date, dateFormatSettings: dateFormatSettings): (string | number)[] {
-        var year: string = ''
-        if (dateFormatSettings.yearFormat == "yy"){
-            year = "'" + this.getYearName(date);
-        }
-        else if (dateFormatSettings.yearFormat != "yy"){
-            year = this.getYearName(date);
-        }
-        return [year];
+        // var year: number;
+        // var adjustedYear:number = this.calendar.determineYear(date);
+        // if (dateFormatSettings.yearFormat == "yy"){
+        //     year = adjustedYear % 100;
+        // }
+        // else if (dateFormatSettings.yearFormat != "yy"){
+        //     year = adjustedYear;
+        // }
+        // return [year];
+        return [this.calendar.determineYear(date)];
     }
 
     public sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean {
@@ -78,35 +80,48 @@ export class YearGranularity extends GranularityBase {
     }
 
     public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar): ITimelineLabel {
+        
+
+        // const currentdate = datePeriod.startDate
+        // var adjustedYear:number = this.calendar.determineYear(currentdate)
+        // currentdate.setFullYear(adjustedYear);
+        // const localizedYear = this.localizationManager
+        //     ? this.localizationManager.getDisplayName(this.localizationKey)
+        //     : this.localizationKey;
+         
+
+        // if (dateFormatSettings.yearFormat == "yy"){
+        //     yearName = "'" + this.getYearName(currentdate);
+        //     nextyearName = "'" + this.getYearName(calendar.getNextYear(currentdate))
+        // }
+        // else if (dateFormatSettings.yearFormat != "yy"){
+        //     yearName = this.getYearName(currentdate);
+        //     nextyearName = this.getYearName(calendar.getNextYear(currentdate))
+        // }
+
+        // if (dateFormatSettings.datecategorization == true ){
+        //     text = `${yearName}`;
+        //     nexttext = ` - ${nextyearName}`
+        // }
+        // else{
+        //     text = `${yearName}`;
+        // }
+        // return {
+        //     id: datePeriod.index,
+        //     text: text  + nexttext,
+        //     title: `${localizedYear}`+ text + nexttext,
+        // };
+
         var yearName: string = '';
         var nextyearName: string;
-        var text: string;
-        var nexttext: string = "";
 
-        const localizedYear = this.localizationManager
-            ? this.localizationManager.getDisplayName(this.localizationKey)
-            : this.localizationKey;
-        
-        if (dateFormatSettings.yearFormat == "yy"){
-            yearName = "'" + this.getYearName(datePeriod.startDate);
-            nextyearName = "'" + this.getYearName(calendar.getNextYear(datePeriod.startDate))
-        }
-        else if (dateFormatSettings.yearFormat != "yy"){
-            yearName = this.getYearName(datePeriod.startDate);
-            nextyearName = this.getYearName(calendar.getNextYear(datePeriod.startDate))
-        }
+        yearName = dateFormatSettings.yearFormat == "yy" ? "'"+(this.calendar.determineYear(datePeriod.startDate) % 100).toString() : (this.calendar.determineYear(datePeriod.startDate)).toString()
+        nextyearName = dateFormatSettings.yearFormat == "yy" ? "'" + (this.calendar.determineYear(datePeriod.endDate) % 100 + 1).toString() : (this.calendar.determineYear(datePeriod.endDate)).toString()
 
-        if (dateFormatSettings.datecategorization == true ){
-            text = `${yearName}`;
-            nexttext = ` - ${nextyearName}`
-        }
-        else{
-            text = `${yearName}`;
-        }
         return {
             id: datePeriod.index,
-            text: text  + nexttext,
-            title: text + nexttext,
+            text: dateFormatSettings.datecategorization? yearName + " - " + nextyearName: yearName,
+            title: dateFormatSettings.datecategorization? yearName + " - " + nextyearName: yearName
         };
     }
 }
