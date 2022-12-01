@@ -57,13 +57,7 @@ export class DayGranularity extends GranularityBase {
     public splitDate(date: Date, dateFormatSettings: dateFormatSettings, calendarSettings: CalendarSettings): (string | number)[] {
         var month = this.getMonthName(date)
         var day = date.getDate()
-        var year: string = ''
-        if (dateFormatSettings.yearFormat == "yy"){
-            year = "'" + this.getYearName(date);
-        }
-        else if (dateFormatSettings.yearFormat != "yy"){
-            year = this.getYearName(date);
-        }
+        var year = dateFormatSettings.yearFormat == "yy" ? "'" + this.getYearName(date) : this.getYearName(date)
 
         return [
             month,

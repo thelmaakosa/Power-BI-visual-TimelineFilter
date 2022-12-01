@@ -62,18 +62,18 @@ export class GranularityBase implements IGranularity {
     private clickableRectFactor: number = 2;
     private clickableRectWidth: number = 50;
 
-    private hLineYOffset: number = 2;
+    private hLineYOffset: number = 5;
     private hLineWidth: number = 45;
     private hLineXOffset: number = 45;
     private vLineHeight: number = 5;
 
     private sliderXOffset: number = 25;
-    private sliderYOffset: number = 18;
+    private sliderYOffset: number = 15;
     private sliderRx: number = 4;
     private sliderWidth: number = 45;
     private sliderHeight: number = 17;
 
-    private textLabelYOffset: number = -5;
+    private textLabelYOffset: number = -2;
 
     private datePeriods: ITimelineDatePeriod[] = [];
     private extendedLabel: IExtendedLabel;
@@ -118,7 +118,7 @@ export class GranularityBase implements IGranularity {
         granularitySelection.append("rect")
             .classed("timelineVertLine", true)
             .attr("x", 0)
-            .attr("y", 0)
+            .attr("y", 3)
             .attr("width", props.granularSettings.scaleThickness)
             .attr("height", pixelConverter.toString(this.vLineHeight + props.granularSettings.scaleThickness))
             .attr("fill", props.granularSettings.scale? props.granularSettings.scaleColor : "rgba(255, 255, 255, 0)");
@@ -385,11 +385,11 @@ export class GranularityBase implements IGranularity {
             .append("rect")
             .classed("periodSlicerRect", true)
             .attr("x", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16))
-            .attr("y", pixelConverter.toString(0 - this.sliderYOffset))
+            .attr("y", pixelConverter.toString(0 - this.sliderYOffset - granularSettings.textSize/8))
             .attr("rx", pixelConverter.toString(granularSettings.selectedOutlineRadius))
             .attr("ry", pixelConverter.toString(granularSettings.selectedOutlineRadius))
             .attr("width", pixelConverter.toString(this.sliderWidth*granularSettings.textSize/8))
-            .attr("height", pixelConverter.toString(this.sliderHeight))
+            .attr("height", pixelConverter.toString(this.sliderHeight + granularSettings.textSize/8))
             .style("fill", granularSettings.selectedfillColor)
             .style("fill-opacity", granularSettings.transparency/100)
             .style("stroke", granularSettings.outlineColor)

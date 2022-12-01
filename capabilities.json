@@ -204,8 +204,14 @@
                         "bool": true
                     }
                 },
+                "numberofPeriod": {
+                    "displayName": "Number of Units",
+                    "type": {
+                        "numeric": true
+                    }
+                },
                 "periodoftime": {
-                    "displayName": "Period of Time",
+                    "displayName": "Period Unit",
                     "type": {
                         "enumeration": [
                             {

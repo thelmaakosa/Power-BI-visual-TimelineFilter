@@ -72,7 +72,9 @@ export class YearGranularity extends GranularityBase {
         //     year = adjustedYear;
         // }
         // return [year];
-        return [this.calendar.determineYear(date)];
+
+        // return [this.calendar.determineYear(date)];
+        return [dateFormatSettings.yearFormat == "yy" ? "'" + this.getYearName(date) : this.getYearName(date)];
     }
 
     public sameLabel(firstDatePeriod: ITimelineDatePeriod, secondDatePeriod: ITimelineDatePeriod): boolean {
@@ -112,16 +114,12 @@ export class YearGranularity extends GranularityBase {
         //     title: `${localizedYear}`+ text + nexttext,
         // };
 
-        var yearName: string = '';
-        var nextyearName: string;
-
-        yearName = dateFormatSettings.yearFormat == "yy" ? "'"+(this.calendar.determineYear(datePeriod.startDate) % 100).toString() : (this.calendar.determineYear(datePeriod.startDate)).toString()
-        nextyearName = dateFormatSettings.yearFormat == "yy" ? "'" + (this.calendar.determineYear(datePeriod.endDate) % 100 + 1).toString() : (this.calendar.determineYear(datePeriod.endDate)).toString()
+        var yearName = dateFormatSettings.yearFormat == "yy" ? "'" + this.getYearName(datePeriod.startDate) : this.getYearName(datePeriod.startDate);
 
         return {
             id: datePeriod.index,
-            text: dateFormatSettings.datecategorization? yearName + " - " + nextyearName: yearName,
-            title: dateFormatSettings.datecategorization? yearName + " - " + nextyearName: yearName
+            text: yearName,
+            title: yearName
         };
     }
 }

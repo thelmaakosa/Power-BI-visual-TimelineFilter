@@ -126,16 +126,12 @@ export class QuarterGranularity extends GranularityBase {
         //     title: text + nexttext,
         // };
 
-        var quarterName: string = '';
-        var nextquarterName: string;
-
-        quarterName = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
-        nextquarterName = this.getNextQuarter(datePeriod.startDate, dateFormatSettings);
+        var quarterName = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
 
         return {
             id: datePeriod.index,
-            text: dateFormatSettings.datecategorization? `${quarterName}` + " - " + `${nextquarterName}`: `${quarterName}`,
-            title: dateFormatSettings.datecategorization? `${quarterName}` + " - " + `${nextquarterName}`: `${quarterName}`
+            text: `${quarterName}`,
+            title: `${quarterName}`
         };
 
     }

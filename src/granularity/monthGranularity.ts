@@ -66,8 +66,7 @@ export class MonthGranularity extends GranularityBase {
 
         return [
             this.getMonthName(date),
-            // this.calendar.determineMonth(date),
-            this.calendar.determineYear(date),
+            dateFormatSettings.yearFormat == "yy" ? "'" + this.getYearName(date) : this.getYearName(date),
         ]
     }
 
@@ -123,15 +122,12 @@ export class MonthGranularity extends GranularityBase {
         
         var currentdate: Date = datePeriod.startDate;
         var monthName: string = this.getMonthName(currentdate);
-        var nextmonthName: string = this.getMonthName(datePeriod.endDate);
-        
-        var yearName = dateFormatSettings.yearFormat == "yy" ? "'"+(this.calendar.determineYear(datePeriod.startDate) % 100).toString() : (this.calendar.determineYear(datePeriod.startDate)).toString()
-        var nextyearname = dateFormatSettings.yearFormat == "yy" ? "'"+(this.calendar.determineYear(datePeriod.endDate) % 100).toString() : (this.calendar.determineYear(datePeriod.endDate)).toString()
+        var yearName = dateFormatSettings.yearFormat == "yy" ? "'" + this.getYearName(currentdate) : this.getYearName(currentdate);
 
         return {
             id: datePeriod.index,
-            text: dateFormatSettings.datecategorization ? `${monthName} ${yearName} - ${nextmonthName} ${nextyearname}` :  `${monthName} ${yearName}`,
-            title: dateFormatSettings.datecategorization ? `${monthName} ${yearName} - ${nextmonthName} ${nextyearname}` : `${monthName} ${yearName}`,
+            text: `${monthName} ${yearName}`,
+            title: `${monthName} ${yearName}`,
         };
     }
 }

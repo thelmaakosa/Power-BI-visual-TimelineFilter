@@ -26,6 +26,7 @@
 
 export class ForceSelectionSettings {
     public currentPeriod: boolean = false;
-    public latestAvailableDate: boolean = false;
+    public latestAvailableDate: boolean = true;
+    public numberofPeriod: number = 1;
     public periodoftime: string = 'year';
 }

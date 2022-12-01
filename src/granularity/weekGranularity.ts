@@ -75,20 +75,13 @@ export class WeekGranularity extends GranularityBase {
         var currentdate: Date = date;
         var currentdateday = currentdate.getDay();
         
-        currentdate.setDate(currentdate.getDate() );
+        // currentdate.setDate(currentdate.getDate() );
 
         var month = this.getMonthName(currentdate)
         var day = currentdate.getDate()
-        var year: string = ''
-        if (dateFormatSettings.yearFormat == "yy"){
-            year = "'" + this.getYearName(currentdate);
-        }
-        else if (dateFormatSettings.yearFormat != "yy"){
-            year = this.getYearName(currentdate);
-        }
+        var year = dateFormatSettings.yearFormat == "yy" ? "'" + this.getYearName(currentdate) : this.getYearName(currentdate)
 
-        currentdate.setDate(currentdate.getDate() )
-
+        // currentdate.setDate(currentdate.getDate() )
 
         return [
             month,
@@ -106,86 +99,19 @@ export class WeekGranularity extends GranularityBase {
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
 
-        // const quarter: string = this.getQuarterName(datePeriod.startDate);
-        // var dayName: Number;
-        // var monthName: string;
-        // var yearName: string
-        // var nextdayName: Number;
-        // var nextmonthName: string = '';
-        // var nextyearName: string = '';
-        // var text: string;
-        // var nexttext: string = ''
-
-        // var currentdate: Date = datePeriod.startDate;
-        // var currentdateday = currentdate.getDay();
-
-        // currentdate.setDate(currentdate.getDate() - currentdateday + calendarSettings.firstdayofweek);
-        
-        // var nextdate: Date = calendar.getNextWeek(currentdate);
-
-        // var dayofweek: string
-        // if (dateFormatSettings.dayofweek == true){
-        //     dayofweek = this.getDayofWeekName(datePeriod.startDate);
-        // }
-        // else{
-        //     dayofweek = "";
-        // }
-
-        // dayName = currentdate.getDate();
-        // monthName = this.getMonthName(currentdate);
-        // nextdayName = nextdate.getDate();
-        // nextmonthName = this.getMonthName(nextdate);
-        // if (dateFormatSettings.yearFormat == "yy"){
-        //     yearName = "'" + this.getYearName(currentdate);
-        //     nextyearName = "'" + this.getYearName(nextdate);
-
-        // }
-        // else if (dateFormatSettings.yearFormat != "yy"){
-        //     yearName = this.getYearName(currentdate);
-        //     nextyearName = this.getYearName(nextdate);
-
-        // }
-
-        // currentdate.setDate(currentdate.getDate()+currentdateday - calendarSettings.firstdayofweek);
-
-        // if (dateFormatSettings.datecategorization == true ){
-        //     text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
-        //     nexttext = `\n - ${dayofweek} ${nextmonthName} ${nextdayName} ${nextyearName}`;
-        // }
-        // else{
-        //     text = `${dayofweek} ${monthName} ${dayName} ${yearName}`;
-        // }
-
-        // return {
-        //     id: datePeriod.index,
-        //     text: text + nexttext,
-        //     title: text + nexttext,
-        // };
         var currentdate: Date = datePeriod.startDate;
         var nextdate: Date = datePeriod.endDate;
-
         var currentdateday = currentdate.getDay();
 
-        currentdate.setDate(currentdate.getDate() + calendarSettings.firstdayofweek - currentdateday);
-
-        var day: Number = currentdate.getDate();
-        var nextday: Number = nextdate.getDate();
-
+        var day: string = dateFormatSettings.dayFormat == 'dd' ? this.getDayName(currentdate) : currentdate.getDate().toString();
         var dayofweek = dateFormatSettings.dayofweek == true ? this.getDayofWeekName(currentdate) : "";
-        var nextdayofweek = dateFormatSettings.dayofweek == true ? this.getDayofWeekName(nextdate) : "";
-
         var monthName: string = this.getMonthName(currentdate);
-        var nextmonthName: string = this.getMonthName(nextdate);
-        
-        var yearName = dateFormatSettings.yearFormat == "yy" ? "'"+(this.calendar.determineYear(currentdate) % 100).toString() : (this.calendar.determineYear(currentdate)).toString()
-        var nextyearname = dateFormatSettings.yearFormat == "yy" ? "'"+(this.calendar.determineYear(nextdate) % 100).toString() : (this.calendar.determineYear(nextdate)).toString()
-
-        currentdate.setDate(currentdate.getDate() - calendarSettings.firstdayofweek + currentdateday);
+        var yearName = dateFormatSettings.yearFormat == "yy" ? "'"+(currentdate.getFullYear() % 100).toString() : (currentdate.getFullYear()).toString()
 
         return {
             id: datePeriod.index,
-            text: dateFormatSettings.datecategorization ? `${dayofweek} ${monthName} ${day} ${yearName} - ${nextdayofweek} ${nextmonthName} ${nextday} ${nextyearname}` :  `${dayofweek} ${monthName} ${day} ${yearName}`,
-            title: dateFormatSettings.datecategorization ? `${dayofweek} ${monthName} ${day} ${yearName} - ${nextdayofweek} ${nextmonthName} ${nextday} ${nextyearname}` : `${dayofweek} ${monthName} ${day} ${yearName}`,
+            text: `${dayofweek} ${monthName} ${day} ${yearName}`,
+            title: `${dayofweek} ${monthName} ${day} ${yearName}`,
         };
     }
 }
