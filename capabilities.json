@@ -3,7 +3,7 @@
         {
             "name": "Time",
             "kind": "Grouping",
-            "displayName": "Time",
+            "displayName": "Date(s)",
             "displayNameKey": "Role_Time"
         }
     ],
@@ -12,7 +12,7 @@
             "conditions": [
                 {
                     "Time": {
-                        "max": 1
+                        "max": 2
                     }
                 }
             ],
