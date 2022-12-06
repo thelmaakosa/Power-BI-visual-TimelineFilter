@@ -138,7 +138,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         viewport: powerbiVisualsApi.IViewport,
         previousCalendar: Calendar,
     ): Calendar {
-
+        console.log("dataview", dataView);
         if (this.isDataViewValid(dataView)) {
             return null;
         }
@@ -367,11 +367,20 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             ? columnExp.level
             : null;
 
-        if (!(dataView.categorical.categories[0].source.type.dateTime
+        if (!(dataView.categorical.categories[0].source.type.dateTime 
             || (dataView.categorical.categories[0].source.type.numeric
                 && (valueType === "Year" || valueType === "Date")))) {
+            
+                return false;
+        }
+        if (dataView.categorical.categories[1] 
+            && !(dataView.categorical.categories[1].source.type.dateTime 
+            || (dataView.categorical.categories[1].source.type.numeric
+                && (valueType === "Year" || valueType === "Date")))) {
+                    
             return false;
         }
+
 
         return true;
     }
@@ -379,7 +388,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     public static IS_DATA_VIEW_CATEGORICAL_VALID(dataViewCategorical: powerbiVisualsApi.DataViewCategorical): boolean {
         return !(!dataViewCategorical
             || !dataViewCategorical.categories
-            || dataViewCategorical.categories.length !== 1
+            // || dataViewCategorical.categories.length !== 1
             || !dataViewCategorical.categories[0].values
             || dataViewCategorical.categories[0].values.length === 0
             || !dataViewCategorical.categories[0].source
