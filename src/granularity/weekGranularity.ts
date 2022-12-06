@@ -98,15 +98,16 @@ export class WeekGranularity extends GranularityBase {
         const localizedWeek = this.localizationManager
             ? this.localizationManager.getDisplayName(this.localizationKey)
             : this.localizationKey;
+        
+        var startDate: Date = datePeriod.startDate;
+        var endDate: Date = datePeriod.endDate;
+        
+        ({ startDate, endDate } = calendar.getWeekPeriod(datePeriod.startDate));
 
-        var currentdate: Date = datePeriod.startDate;
-        var nextdate: Date = datePeriod.endDate;
-        var currentdateday = currentdate.getDay();
-
-        var day: string = dateFormatSettings.dayFormat == 'dd' ? this.getDayName(currentdate) : currentdate.getDate().toString();
-        var dayofweek = dateFormatSettings.dayofweek == true ? this.getDayofWeekName(currentdate) : "";
-        var monthName: string = this.getMonthName(currentdate);
-        var yearName = dateFormatSettings.yearFormat == "yy" ? "'"+(currentdate.getFullYear() % 100).toString() : (currentdate.getFullYear()).toString()
+        var day: string = dateFormatSettings.dayFormat == 'dd' ? this.getDayName(startDate) : startDate.getDate().toString();
+        var dayofweek = dateFormatSettings.dayofweek == true ? this.getDayofWeekName(startDate) : "";
+        var monthName: string = this.getMonthName(startDate);
+        var yearName = dateFormatSettings.yearFormat == "yy" ? "'"+(startDate.getFullYear() % 100).toString() : (startDate.getFullYear()).toString()
 
         return {
             id: datePeriod.index,

@@ -36,7 +36,7 @@ export class GranularitySettings {
     public granularity: GranularityType = GranularityType.month;
     public position: string = "left";
     public fontFamily: string = 'Segoe UI';
-    public textSize: number = 9;
+    public fontSize: number = 9;
     public fontColor: string = "#00458F";
     public Bold: boolean = false;
     public Italic: boolean = false;

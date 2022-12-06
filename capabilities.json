@@ -337,7 +337,7 @@
                         }
                     }
                 },
-                "textSize": {
+                "fontSize": {
                     "displayName": "Font Size",
                     "displayNameKey": "Visual_TextSize",
                     "type": {
@@ -489,7 +489,7 @@
                         }
                     }
                 },
-                "textSize": {
+                "fontSize": {
                     "displayName": "Font Size",
                     "displayNameKey": "Visual_TextSize",
                     "type": {
@@ -566,7 +566,7 @@
                         }
                     }
                 },
-                "textSize": {
+                "fontSize": {
                     "displayName": "Font Size",
                     "displayNameKey": "Visual_TextSize",
                     "type": {

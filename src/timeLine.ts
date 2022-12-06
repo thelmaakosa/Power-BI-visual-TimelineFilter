@@ -138,7 +138,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         viewport: powerbiVisualsApi.IViewport,
         previousCalendar: Calendar,
     ): Calendar {
-        console.log("dataview", dataView);
         if (this.isDataViewValid(dataView)) {
             return null;
         }
@@ -523,7 +522,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         var width: number;
         timelineProperties.cellsYPosition = timelineProperties.textYPosition;
 
-        const labelSize: number = pixelConverter.fromPointToPixel(labelsSettings.textSize);
+        const labelSize: number = pixelConverter.fromPointToPixel(labelsSettings.fontSize);
 
         if (labelsSettings.show) {
             const granularityOffset: number = 1;
@@ -754,7 +753,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
 
         this.clearSelection(this.timelineData.filterColumnTarget);
-        this.toggleForceSelectionOptions();
+        // this.toggleForceSelectionOptions();
     }
 
     public doesPeriodSlicerRectPositionNeedToUpdate(granularity: GranularityType): boolean {
@@ -1066,7 +1065,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         const maxWidth: number = this.svgWidth
             - leftMargin
             - this.timelineProperties.leftMargin
-            - settings.rangeHeader.textSize;
+            - settings.rangeHeader.fontSize;
 
         d3SelectAll("g." + Timeline.TimelineSelectors.RangeTextArea.className).remove();
 
@@ -1082,7 +1081,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             const timeRangeText: string = Utils.TIME_RANGE_TEXT(timelineData, settings.dateFormat, settings.calendar);
 
             const labelFormattedTextOptions: dataLabelInterfaces.LabelFormattedTextOptions = {
-                fontSize: settings.rangeHeader.textSize,
+                fontSize: settings.rangeHeader.fontSize,
                 label: timeRangeText,
                 maxWidth,
             };
@@ -1096,7 +1095,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 .attr("y", Timeline.DefaultRangeTextSelectionY - positionOffset)
                 .attr("fill", settings.rangeHeader.fontColor)
                 .style("font-family", settings.rangeHeader.fontFamily)
-                .style("font-size", pixelConverter.fromPointToPixel(settings.rangeHeader.textSize))
+                .style("font-size", pixelConverter.fromPointToPixel(settings.rangeHeader.fontSize))
                 .style("font-weight", settings.rangeHeader.Bold ? '700' : 'normal')
                 .style("font-style", settings.rangeHeader.Italic ? 'italic' : 'initial')
                 .style("text-decoration", settings.rangeHeader.Underline ? 'underline' : 'initial')
@@ -1106,7 +1105,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
             let textProperties: formattingInterfaces.TextProperties = {
                 fontFamily:settings.rangeHeader.fontFamily,
-                fontSize: pixelConverter.fromPoint(settings.rangeHeader.textSize),
+                fontSize: pixelConverter.fromPoint(settings.rangeHeader.fontSize),
                 text: timeRangeText,
             };
 
@@ -1253,25 +1252,19 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             delete instances[0].properties.scaleThickness;
 
         }
-        // if (options.objectName === "granularity"
-        //     && !settings.granularity.selectedOutlineLeft
-        //     || !settings.granularity.selectedOutlineRight
-        //     || !settings.granularity.selectedOutlineTop
-        //     || !settings.granularity.selectedOutlineBottom
-        // ){
-        //     delete instances[0].properties.selectedOutlineRadius;
-        // }
+        if (options.objectName === "granularity"
+            && !settings.granularity.selectedOutlineLeft
+            || !settings.granularity.selectedOutlineRight
+            || !settings.granularity.selectedOutlineTop
+            || !settings.granularity.selectedOutlineBottom
+        ){
+            instances[0].properties.selectedOutlineRadius = 0;
+            delete instances[0].properties.selectedOutlineRadius;
+            delete instances[0].properties.selectedOutlineThickness;
+            delete instances[0].properties.outlineColor;
 
-        if (options.objectName === "cells") {
- 
-            instances[0].validValues = {
-                capSize: { numberRange: { min: 0 } },
-                unselectedoutlineThickness: { numberRange: { min: 0, max: 5 } },
-                capoutlineThickness: { numberRange: { min: 0, max: 5 } },
-                capoutlineRadius: { numberRange: { min: 0, max: 30} }
-         
-            };
         }
+
 
         // This options have no sense if ISO standard was picked
         if ((options.objectName === "weekDay" || options.objectName === "calendar")
@@ -1320,12 +1313,23 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                                 max: 10
                             }
                         },
-                        textSize: {
+                        fontSize: {
                             numberRange: {
-                                max: 15
+                                min: 8,
+                                max: 14
                             }
                         }
                     }
+                break;
+            }
+            case 'rangeHeader': {
+                instances[0].validValues = {
+                    fontSize: {
+                        numberRange: {
+                            max: 14
+                        }
+                    }
+                }
                 break;
             }
             case 'cells': {
@@ -1334,13 +1338,13 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                         selectedoutlineThickness: {
                             numberRange: {
                                 min: 0,
-                                max: 10
+                                max: 5
                             }
                         },
                         unselectedoutlineThickness: {
                             numberRange: {
                                 min: 0,
-                                max: 10
+                                max: 5
                             }
                         },
                         capSize: {
@@ -1352,13 +1356,13 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                         capoutlineThickness: {
                             numberRange: {
                                 min: 0,
-                                max: 10
+                                max: 5
                             }
                         },
                         capoutlineRadius: {
                             numberRange: {
                                 min: 0,
-                                max: 50
+                                max: 20
                             }
                         },
                         capfillOpacity: {
@@ -1366,8 +1370,25 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                                 min: 0,
                                 max: 100
                             }
+                        },
+                        fontSize: {
+                            numberRange: {
+                                min: 8,
+                                max: 14
+                            }
                         }
                     }
+                break;
+            }
+            case 'labels' :{
+                instances[0].validValues = {
+                    fontSize: {
+                        numberRange: {
+                            min: 8,
+                            max: 14
+                        }
+                    }
+                }
                 break;
             }
         }
@@ -1452,7 +1473,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
     public onCursorDragEnd(): void {
         this.setSelection(this.timelineData);
-        this.toggleForceSelectionOptions();
+        // this.toggleForceSelectionOptions();
     }
 
     private updatePrevFilterState(
@@ -1723,7 +1744,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         this.mainGroupSelection.attr("transform", translateString);
 
         if (this.selectorSelection) {
-            this.selectorSelection.attr("transform", svgManipulation.translate(timelineSettings.granularity.position=='left' ? 40*timelineSettings.granularity.textSize/8 : 20*timelineSettings.granularity.textSize/8, timelineProperties.topMargin + this.timelineProperties.startYpoint));
+            this.selectorSelection.attr("transform", svgManipulation.translate(timelineSettings.granularity.position=='left' ? 40*timelineSettings.granularity.fontSize/8 : 20*timelineSettings.granularity.fontSize/8, timelineProperties.topMargin + this.timelineProperties.startYpoint));
         }
 
         this.cursorGroupSelection.attr("transform", translateString);
@@ -1850,7 +1871,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
 
         return this.timelineProperties.textYPosition
-            + (1 + index) * pixelConverter.fromPointToPixel(this.settings.labels.textSize);
+            + (1 + index) * pixelConverter.fromPointToPixel(this.settings.labels.fontSize);
     }
 
     private renderLabels(
@@ -1868,7 +1889,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
 
         const labelsGroupSelection: D3Selection<any, ITimelineLabel, any, any> = labelTextSelection.data(labels);
-        const fontSize: string = pixelConverter.fromPoint(this.settings.labels.textSize);
+        const fontSize: string = pixelConverter.fromPoint(this.settings.labels.fontSize);
         const fontFamily: string = this.settings.labels.fontFamily;
 
         labelsGroupSelection
@@ -1909,7 +1930,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 }
 
                 const labelFormattedTextOptions: dataLabelInterfaces.LabelFormattedTextOptions = {
-                    fontSize: this.settings.labels.textSize,
+                    fontSize: this.settings.labels.fontSize,
                     label: label.text,
                     maxWidth: this.timelineProperties.cellWidth * (isLast
                         ? Timeline.CellWidthLastFactor
@@ -1919,7 +1940,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
                 return dataLabelUtils.getLabelFormattedText(labelFormattedTextOptions);
             })
-            .style("font-size", pixelConverter.fromPoint(this.settings.labels.textSize))
+            .style("font-size", pixelConverter.fromPoint(this.settings.labels.fontSize))
             .style("font-family", this.settings.labels.fontFamily)
             .style("font-weight", this.settings.labels.Bold ? '700' : 'normal')
             .style("font-style", this.settings.labels.Italic ? 'italic' : 'initial')
@@ -1998,7 +2019,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         this.renderTimeRangeText(timelineData, this.settings);
 
         this.setSelection(timelineData);
-        this.toggleForceSelectionOptions();
+        // this.toggleForceSelectionOptions();
     }
 
     private scrollAutoFocusFunc(selectedGranulaPos: number): void {
@@ -2010,8 +2031,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     }
 
     private toggleForceSelectionOptions(): void {
-        const isForceSelectionTurnedOn: boolean = this.settings.forceSelection.currentPeriod
-            || this.settings.forceSelection.latestAvailableDate;
+        const isForceSelectionTurnedOn: boolean = this.settings.forceSelection.latestAvailableDate;
 
         if (isForceSelectionTurnedOn) {
             this.turnOffForceSelectionOptions();

@@ -76,49 +76,6 @@ export class MonthGranularity extends GranularityBase {
     }
 
     public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings,calendar: Calendar, calendarSettings: CalendarSettings): ITimelineLabel {
-        // const quarter: string = this.getQuarterName(datePeriod.startDate);
-        // var monthName: string;
-        // var yearName: string;
-        // var text:string;
-        // var nextmonthName: string ='';
-        // var nextyearName: string = '';
-        // var nexttext: string = '';
-        
-        // var currentdate: Date = datePeriod.startDate;
-        // const dayadjustment: number = calendarSettings.day
-
-        // currentdate.setDate(currentdate.getDate() + dayadjustment);
-
-        // var nextdate: Date = calendar.getNextMonth(currentdate);
-
-        // monthName = this.getMonthName(currentdate, calendarSettings);
-        // nextmonthName = this.getMonthName(nextdate, calendarSettings)
-        // if (dateFormatSettings.yearFormat == "yy"){
-        //     yearName = "'" + this.getYearName(currentdate);
-        //     nextyearName = "'" + this.getYearName(nextdate);
-
-        // }
-        // else if (dateFormatSettings.yearFormat != "yy"){
-        //     yearName = this.getYearName(currentdate);
-        //     nextyearName = this.getYearName(nextdate);
-
-        // }
-
-        // currentdate.setDate(currentdate.getDate()  - dayadjustment);
-
-        // if (dateFormatSettings.datecategorization == true ){
-        //     text = `${monthName} ${yearName}`;
-        //     nexttext = ` - ${nextmonthName} ${nextyearName}`;
-        // }
-        // else{
-        //     text = `${monthName} ${yearName}`;
-        // }
-
-        // return {
-        //     id: datePeriod.index,
-        //     text: text + nexttext, 
-        //     title: text + nexttext
-        // };
         
         var currentdate: Date = datePeriod.startDate;
         var monthName: string = this.getMonthName(currentdate);

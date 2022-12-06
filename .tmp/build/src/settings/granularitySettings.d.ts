@@ -9,7 +9,7 @@ export declare class GranularitySettings {
     granularity: GranularityType;
     position: string;
     fontFamily: string;
-    textSize: number;
+    fontSize: number;
     fontColor: string;
     Bold: boolean;
     Italic: boolean;

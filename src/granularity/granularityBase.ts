@@ -127,10 +127,10 @@ export class GranularityBase implements IGranularity {
         if (!isFirst) {
             granularitySelection.append("rect")
                 .classed("timelineHorzLine", true)
-                .attr("x", pixelConverter.toString(0 - this.hLineXOffset*props.granularSettings.textSize/8))
+                .attr("x", pixelConverter.toString(0 - this.hLineXOffset*props.granularSettings.fontSize/8))
                 .attr("y", pixelConverter.toString(this.hLineYOffset))
                 .attr("height", props.granularSettings.scaleThickness)
-                .attr("width", pixelConverter.toString(this.hLineWidth*props.granularSettings.textSize/8))
+                .attr("width", pixelConverter.toString(this.hLineWidth*props.granularSettings.fontSize/8))
                 .attr("fill", props.granularSettings.scale? props.granularSettings.scaleColor : "rgba(255, 255, 255, 0)");
         }
 
@@ -140,7 +140,7 @@ export class GranularityBase implements IGranularity {
             .text(this.granularityProps.marker)
             .attr("x", pixelConverter.toString(0))
             .attr("y", pixelConverter.toString(0 + this.textLabelYOffset))
-            .style("font-size", pixelConverter.fromPointToPixel(props.granularSettings.textSize))
+            .style("font-size", pixelConverter.fromPointToPixel(props.granularSettings.fontSize))
             .style("font-family", props.granularSettings.fontFamily)
             .style("font-weight", props.granularSettings.Bold ? '900' : 'normal')
             .style("font-style", props.granularSettings.Italic ? 'italic' : 'initial')
@@ -335,7 +335,7 @@ export class GranularityBase implements IGranularity {
 
         quarter++;
 
-        yearstring = dateFormatSettings.yearFormat == "yy" ? "'"+(year % 100).toString() : (year).toString()
+        yearstring = dateFormatSettings.yearFormat == "yy" ? "'"+((year + 1) % 100).toString() : (year + 1).toString()
 
         if (dateFormatSettings.quarterFormat == "Quarter X"){
             return `Quarter ${quarter} ${yearstring}`;
@@ -381,15 +381,17 @@ export class GranularityBase implements IGranularity {
         selection: Selection<any, any, any, any>,
         granularSettings: GranularitySettings,
     ): void {
+            const isRectRadiusOn = granularSettings.selectedOutlineLeft && granularSettings.selectedOutlineRight && granularSettings.selectedOutlineTop && granularSettings.selectedOutlineBottom
+            const selectedOutlineRadius = isRectRadiusOn ? granularSettings.selectedOutlineRadius : 0
             selection
             .append("rect")
             .classed("periodSlicerRect", true)
-            .attr("x", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16))
-            .attr("y", pixelConverter.toString(0 - this.sliderYOffset - granularSettings.textSize/8))
-            .attr("rx", pixelConverter.toString(granularSettings.selectedOutlineRadius))
-            .attr("ry", pixelConverter.toString(granularSettings.selectedOutlineRadius))
-            .attr("width", pixelConverter.toString(this.sliderWidth*granularSettings.textSize/8))
-            .attr("height", pixelConverter.toString(this.sliderHeight + granularSettings.textSize/8))
+            .attr("x", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16))
+            .attr("y", pixelConverter.toString(0 - this.sliderYOffset - granularSettings.fontSize/8))
+            .attr("rx", pixelConverter.toString(selectedOutlineRadius))
+            .attr("ry", pixelConverter.toString(selectedOutlineRadius))
+            .attr("width", pixelConverter.toString(this.sliderWidth*granularSettings.fontSize/8))
+            .attr("height", pixelConverter.toString(this.sliderHeight + granularSettings.fontSize/8))
             .style("fill", granularSettings.selectedfillColor)
             .style("fill-opacity", granularSettings.transparency/100)
             .style("stroke", granularSettings.outlineColor)
@@ -399,11 +401,11 @@ export class GranularityBase implements IGranularity {
             if (granularSettings.selectedOutlineLeft == false){
                 selection
                 .append("line")
-                .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16))
+                .classed("periodSlicerLeftLine", true)
+                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16))
                 .attr("y1", -20)
-                .attr("x2", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16))
-                .attr("y2", 0)
+                .attr("x2", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16))
+                .attr("y2", 4)
                 .style("stroke", "#FFF")
                 .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness+2))
             }
@@ -411,32 +413,32 @@ export class GranularityBase implements IGranularity {
             if (granularSettings.selectedOutlineRight == false){
                 selection
                 .append("line")
-                .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 + this.sliderWidth*granularSettings.textSize/16))
+                .classed("periodSlicerRightLine", true)
+                .attr("x1", pixelConverter.toString(0 + this.sliderWidth*granularSettings.fontSize/16))
                 .attr("y1", -20)
-                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.textSize/16))
-                .attr("y2", 0)
+                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.fontSize/16))
+                .attr("y2", 4)
                 .style("stroke", "#FFF")
                 .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness+2))
             }
             if (granularSettings.selectedOutlineTop == false){
                 selection
                 .append("line")
-                .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16-granularSettings.selectedOutlineThickness/2))
-                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.textSize/16+granularSettings.selectedOutlineThickness/2))
-                .attr("y2", pixelConverter.toString(0 - this.sliderYOffset))
+                .classed("periodSlicerTopLine", true)
+                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16-granularSettings.selectedOutlineThickness/2))
+                .attr("y1", pixelConverter.toString(-2 - this.sliderYOffset))
+                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.fontSize/16+granularSettings.selectedOutlineThickness/2))
+                .attr("y2", pixelConverter.toString(-2 - this.sliderYOffset))
                 .style("stroke", "#FFF")
                 .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness+2))
             }
             if (granularSettings.selectedOutlineBottom == false){
                 selection
                 .append("line")
-                .classed("periodSlicerRect", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.textSize/16-granularSettings.selectedOutlineThickness/2))
+                .classed("periodSlicerBottomLine", true)
+                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16-granularSettings.selectedOutlineThickness/2))
                 .attr("y1", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.textSize/16+granularSettings.selectedOutlineThickness/2))
+                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.fontSize/16+granularSettings.selectedOutlineThickness/2))
                 .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
                 .style("stroke", "#FFF")
                 .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness+2))

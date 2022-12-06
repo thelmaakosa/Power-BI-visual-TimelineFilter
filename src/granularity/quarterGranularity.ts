@@ -80,52 +80,7 @@ export class QuarterGranularity extends GranularityBase {
     }
 
     public generateLabel(datePeriod: ITimelineDatePeriod, dateFormatSettings: dateFormatSettings, calendar: Calendar): ITimelineLabel {
-        // var quarter: string;
-        // var nextquarter: string;
-        // var yearName: string = '';
-        // var nextyearName: string;
-        // var text: string;
-        // var nexttext: string = '';
-
-        // quarter = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
-        // nextquarter = this.getNextQuarter(datePeriod.startDate, dateFormatSettings);
-
-        // if (dateFormatSettings.yearFormat == "yy"){
-        //     yearName = "'" + this.getYearName(datePeriod.startDate);
-        //     if (nextquarter.indexOf("5")>-1){
-        //         nextquarter = nextquarter.replace("5", "1");;
-        //         nextyearName = "'" + this.getYearName(calendar.getNextYear(datePeriod.startDate));
-        //     }
-        //     else{
-        //         nextyearName = yearName;
-        //     }
-
-        // }
-        // else if (dateFormatSettings.yearFormat != "yy"){
-        //     yearName = this.getYearName(datePeriod.startDate);
-        //     if (nextquarter.indexOf("5")>-1){
-        //         nextquarter = nextquarter.replace("5", "1");;
-        //         nextyearName = this.getYearName(calendar.getNextYear(datePeriod.startDate));
-        //     }
-        //     else{
-        //         nextyearName = yearName;
-        //     }
-        // }
-
-        // if (dateFormatSettings.datecategorization == true ){
-        //     text = `${quarter} ${yearName}`;
-        //     nexttext = ` - ${nextquarter} ${nextyearName}`
-        // }
-        // else{
-        //     text = `${quarter} ${yearName}`;
-        // }
-
-        // return {
-        //     id: datePeriod.index,
-        //     text: text + nexttext,
-        //     title: text + nexttext,
-        // };
-
+        
         var quarterName = this.getQuarterName(datePeriod.startDate, dateFormatSettings);
 
         return {

@@ -28,7 +28,7 @@ export class rangeHeaderSettings {
     public show: boolean = true;
     public position: string = "right";
     public fontFamily: string = 'Segoe UI';
-    public textSize: number = 9;
+    public fontSize: number = 9;
     public fontColor: string = "#000000";
     public Bold: boolean = false;
     public Italic: boolean = false;

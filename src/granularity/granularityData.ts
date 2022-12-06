@@ -145,7 +145,7 @@ export class GranularityData {
                 if (granularitySelection !== null) {
                     granularitySelection.attr(
                         "transform",
-                        svgManipulation.translate(viewport.width - (this.groupWidth*(count)*props.granularSettings.textSize/8) + renderIndex * this.groupWidth * props.granularSettings.textSize/8, 0),
+                        svgManipulation.translate(viewport.width - (this.groupWidth*(count)*props.granularSettings.fontSize/8) + renderIndex * this.groupWidth * props.granularSettings.fontSize/8, 0),
                     );
     
                     renderIndex++;
@@ -155,7 +155,7 @@ export class GranularityData {
                 if (granularitySelection !== null) {
                     granularitySelection.attr(
                         "transform",
-                        svgManipulation.translate(renderIndex * this.groupWidth * props.granularSettings.textSize/8, 0),
+                        svgManipulation.translate(renderIndex * this.groupWidth * props.granularSettings.fontSize/8, 0),
                     );
     
                     renderIndex++;
@@ -165,7 +165,7 @@ export class GranularityData {
                 if (granularitySelection !== null) {
                     granularitySelection.attr(
                         "transform",
-                        svgManipulation.translate(viewport.width / 2 - (this.groupWidth*(count)*props.granularSettings.textSize) / 16 + renderIndex * this.groupWidth * props.granularSettings.textSize/8, 0),
+                        svgManipulation.translate(viewport.width / 2 - (this.groupWidth*(count)*props.granularSettings.fontSize) / 16 + renderIndex * this.groupWidth * props.granularSettings.fontSize/8, 0),
                     );
     
                     renderIndex++;
