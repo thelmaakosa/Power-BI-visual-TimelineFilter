@@ -426,9 +426,9 @@ export class GranularityBase implements IGranularity {
                 .append("line")
                 .classed("periodSlicerTopLine", true)
                 .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16-granularSettings.selectedOutlineThickness/2))
-                .attr("y1", pixelConverter.toString(-2 - this.sliderYOffset))
+                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset - granularSettings.fontSize/8))
                 .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.fontSize/16+granularSettings.selectedOutlineThickness/2))
-                .attr("y2", pixelConverter.toString(-2 - this.sliderYOffset))
+                .attr("y2", pixelConverter.toString(0 - this.sliderYOffset - granularSettings.fontSize/8))
                 .style("stroke", "#FFF")
                 .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness+2))
             }

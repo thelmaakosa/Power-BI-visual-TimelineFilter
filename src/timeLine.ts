@@ -293,7 +293,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     ) {
         let startDate: Date = periodDate;
         let endDate: Date;
-        console.log("periodDate", periodDate);
         switch (settings.forceSelection.periodoftime) {
             case "day":
                 ({ startDate, endDate } = calendar.getLastDatePeriod(settings.forceSelection.numberofPeriod - 1, periodDate));
@@ -323,7 +322,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 endDate = calendar.getQuarterEndDate(periodDate)
                 break;
             case "year":
-                ({ startDate, endDate } = calendar.getLastYearPeriod(settings.forceSelection.numberofPeriod, periodDate));
+                ({ startDate, endDate } = calendar.getLastYearPeriod(settings.forceSelection.numberofPeriod - 1, periodDate));
                 break;
         }
 
@@ -345,7 +344,6 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         //         endDate = null;
         //     }
         // }
-        console.log(startDate, endDate)
         return { startDate, endDate };
     }
 
@@ -753,7 +751,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
 
         this.clearSelection(this.timelineData.filterColumnTarget);
-        // this.toggleForceSelectionOptions();
+        this.toggleForceSelectionOptions();
     }
 
     public doesPeriodSlicerRectPositionNeedToUpdate(granularity: GranularityType): boolean {
@@ -1037,7 +1035,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                         return svgManipulation.translate(dx, dy);
                     })
             .attr("width", cellSettings.capSize)
-            .attr("height", 40)
+            .attr("height", this.timelineProperties.cellHeight)
             .attr("x", 0)
             .attr("y", 0)
             .attr("rx", cellSettings.capoutlineRadius)
@@ -1287,7 +1285,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 instances[0].validValues = {
                     numberofPeriod: {
                         numberRange: {
-                            min: 1,
+                            min: 1
                         }
                     }
                 }
@@ -1326,6 +1324,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 instances[0].validValues = {
                     fontSize: {
                         numberRange: {
+                            min: 8,
                             max: 14
                         }
                     }
@@ -1473,7 +1472,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
     public onCursorDragEnd(): void {
         this.setSelection(this.timelineData);
-        // this.toggleForceSelectionOptions();
+        this.toggleForceSelectionOptions();
     }
 
     private updatePrevFilterState(
@@ -2019,7 +2018,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         this.renderTimeRangeText(timelineData, this.settings);
 
         this.setSelection(timelineData);
-        // this.toggleForceSelectionOptions();
+        this.toggleForceSelectionOptions();
     }
 
     private scrollAutoFocusFunc(selectedGranulaPos: number): void {
@@ -2027,7 +2026,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             return;
         }
 
-        this.rootSelection.node().scrollLeft = selectedGranulaPos - this.horizontalAutoScrollingPositionOffset;
+        this.rootSelection.node().scrollLeft = selectedGranulaPos - this.options.viewport.width * 0.4;
     }
 
     private toggleForceSelectionOptions(): void {
@@ -2043,8 +2042,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             merge: [{
                 objectName: "forceSelection",
                 properties: {
-                    currentPeriod: false,
-                    latestAvailableDate: false,
+                    latestAvailableDate: true,
                 },
                 selector: null,
             }],
