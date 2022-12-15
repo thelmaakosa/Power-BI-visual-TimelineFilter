@@ -335,6 +335,10 @@ export class GranularityBase implements IGranularity {
 
         quarter++;
 
+        if (this.calendar.getFirstMonthOfYear() == 0 && this.calendar.getFirstDayOfYear() == 1){
+            year--;
+        }
+
         yearstring = dateFormatSettings.yearFormat == "yy" ? "'"+((year + 1) % 100).toString() : (year + 1).toString()
 
         if (dateFormatSettings.quarterFormat == "Quarter X"){
@@ -359,6 +363,10 @@ export class GranularityBase implements IGranularity {
                 quarter = this.DefaultQuarter;
                 year--;
             }
+        }
+
+        if (this.calendar.getFirstMonthOfYear() == 0 && this.calendar.getFirstDayOfYear() == 1){
+            year--;
         }
 
         quarter = quarter + 2;
