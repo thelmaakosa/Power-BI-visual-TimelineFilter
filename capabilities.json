@@ -205,13 +205,13 @@
                     }
                 },
                 "numberofPeriod": {
-                    "displayName": "Number of Units",
+                    "displayName": "Period of Time",
                     "type": {
                         "numeric": true
                     }
                 },
                 "periodoftime": {
-                    "displayName": "Period Unit",
+                    "displayName": "Unit of Time",
                     "type": {
                         "enumeration": [
                             {

@@ -398,10 +398,10 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         CellHeight: 15,
         CellWidth: 40,
         ElementWidth: 0,
-        FramePadding: 5,
+        FramePadding: 10,
         HeightOffset: 75,
         LeftMargin: 15,
-        LegendHeight: 33,
+        LegendHeight: 40,
         LegendHeightRange: 20,
         MaxCellHeight: 40,
         MinCellHeight: 15,
@@ -1252,11 +1252,10 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         }
         if (options.objectName === "granularity"
             && !settings.granularity.selectedOutlineLeft
-            || !settings.granularity.selectedOutlineRight
-            || !settings.granularity.selectedOutlineTop
-            || !settings.granularity.selectedOutlineBottom
+            && !settings.granularity.selectedOutlineRight
+            && !settings.granularity.selectedOutlineTop
+            && !settings.granularity.selectedOutlineBottom
         ){
-            instances[0].properties.selectedOutlineRadius = 0;
             delete instances[0].properties.selectedOutlineRadius;
             delete instances[0].properties.selectedOutlineThickness;
             delete instances[0].properties.outlineColor;
