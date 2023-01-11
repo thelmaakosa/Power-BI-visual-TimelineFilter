@@ -819,11 +819,17 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             const adjustedPeriod: IAdjustedFilterDatePeriod = this.adjustFilterDatePeriod();
             const datePeriod: ITimelineDatePeriodBase = this.datePeriod;
             const granularity: GranularityType = this.settings.granularity.granularity;
-            const isCurrentPeriodSelected: boolean = !this.isForceSelectionReset && this.settings.forceSelection.currentPeriod;
+            const isCurrentPeriodSelected: boolean = this.isForceSelectionReset && this.settings.forceSelection.currentPeriod;
             const isLatestAvailableDateSelected: boolean = !this.isForceSelectionReset && this.settings.forceSelection.latestAvailableDate;
             const isForceSelected: boolean = !this.isForceSelectionReset && (isCurrentPeriodSelected || isLatestAvailableDateSelected);
-            this.isForceSelectionReset = false; // Reset it to default state to allow re-enabling Force Selection
+            // this.isForceSelectionReset = false; // Reset it to default state to allow re-enabling Force Selection
             let currentForceSelectionResult = { startDate: null, endDate: null };
+
+            console.log("isForceSelectionReset", this.isForceSelectionReset);
+            console.log("latestAvailableDate", this.settings.forceSelection.latestAvailableDate)
+            console.log("isCurrentPeriodSelected", isCurrentPeriodSelected);
+            console.log("isLatestAvailableDateSelected", isLatestAvailableDateSelected);
+            console.log("isForceSelected", isForceSelected);
 
             if (isCurrentPeriodSelected) {
                 currentForceSelectionResult = ({
