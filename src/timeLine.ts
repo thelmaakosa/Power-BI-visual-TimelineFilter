@@ -416,7 +416,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
 
     private static MinSizeOfViewport: number = 0;
 
-    private static DefaultTextYPosition: number = 30;
+    private static DefaultTextYPosition: number = 60;
 
     private static CellsYPositionFactor: number = 3;
     private static CellsYPositionOffset: number = 30;
@@ -521,15 +521,7 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
         timelineProperties.cellsYPosition = timelineProperties.textYPosition;
 
         const labelSize: number = pixelConverter.fromPointToPixel(labelsSettings.fontSize);
-
-        if (labelsSettings.show) {
-            const granularityOffset: number = 1;
-
-            timelineProperties.cellsYPosition += labelSize
-                * Timeline.LabelSizeFactor
-                * granularityOffset;
-        }
-
+        
         const svgHeight: number = Math.max(0, viewport.height - timelineMargins.TopMargin);
 
         const height: number = Math.max(timelineMargins.MinCellHeight,
@@ -819,14 +811,12 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
             const adjustedPeriod: IAdjustedFilterDatePeriod = this.adjustFilterDatePeriod();
             const datePeriod: ITimelineDatePeriodBase = this.datePeriod;
             const granularity: GranularityType = this.settings.granularity.granularity;
-            const isCurrentPeriodSelected: boolean = this.isForceSelectionReset && this.settings.forceSelection.currentPeriod;
             const isLatestAvailableDateSelected: boolean = !this.isForceSelectionReset && this.settings.forceSelection.latestAvailableDate;
+            const isCurrentPeriodSelected: boolean = !this.isForceSelectionReset && this.settings.forceSelection.currentPeriod;
             const isForceSelected: boolean = !this.isForceSelectionReset && (isCurrentPeriodSelected || isLatestAvailableDateSelected);
-            // this.isForceSelectionReset = false; // Reset it to default state to allow re-enabling Force Selection
+            this.isForceSelectionReset = false; // Reset it to default state to allow re-enabling Force Selection
             let currentForceSelectionResult = { startDate: null, endDate: null };
 
-            console.log("isForceSelectionReset", this.isForceSelectionReset);
-            console.log("latestAvailableDate", this.settings.forceSelection.latestAvailableDate)
             console.log("isCurrentPeriodSelected", isCurrentPeriodSelected);
             console.log("isLatestAvailableDateSelected", isLatestAvailableDateSelected);
             console.log("isForceSelected", isForceSelected);
@@ -1870,12 +1860,10 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
     }
 
     private calculateYOffset(index: number): number {
-        if (!this.settings.labels.show) {
-            return this.timelineProperties.textYPosition;
-        }
+        return this.timelineProperties.textYPosition;
 
-        return this.timelineProperties.textYPosition
-            + (1 + index) * pixelConverter.fromPointToPixel(this.settings.labels.fontSize);
+        // return this.timelineProperties.textYPosition
+        //     + (1 + index) * pixelConverter.fromPointToPixel(this.settings.labels.fontSize);
     }
 
     private renderLabels(
