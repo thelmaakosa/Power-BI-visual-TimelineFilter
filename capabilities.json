@@ -431,7 +431,7 @@
                     }
                 },
                 "selectedOutlineRadius": {
-                    "displayName": "Selected Outline Radius",
+                    "displayName": "Selected Rectangle Radius",
                     "type": {
                         "numeric": true
                     }
@@ -818,7 +818,7 @@
                     }
                 },
                 "capoutlineRadius": {
-                    "displayName": "Cap Outline Radius",
+                    "displayName": "Cap Radius",
                     "type": {
                         "numeric": true
                     }

@@ -43,13 +43,13 @@ export class GranularitySettings {
     public Underline: boolean = false;
     public selectedfillColor: string = "transparent";
     public transparency: number = 50;
+    public selectedOutlineRadius: number = 0;
     public selectedOutlineLeft: boolean = true;
     public selectedOutlineRight: boolean = true;
     public selectedOutlineTop: boolean = true;
     public selectedOutlineBottom: boolean = true;
     public outlineColor: string = "#3F464B";
     public selectedOutlineThickness: number = 2;
-    public selectedOutlineRadius: number = 0;
     public scale: boolean = true;
     public scaleColor: string = "#8C9093";
     public scaleThickness: number = 2;

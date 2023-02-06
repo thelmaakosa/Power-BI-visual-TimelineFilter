@@ -16,13 +16,13 @@ export declare class GranularitySettings {
     Underline: boolean;
     selectedfillColor: string;
     transparency: number;
+    selectedOutlineRadius: number;
     selectedOutlineLeft: boolean;
     selectedOutlineRight: boolean;
     selectedOutlineTop: boolean;
     selectedOutlineBottom: boolean;
     outlineColor: string;
     selectedOutlineThickness: number;
-    selectedOutlineRadius: number;
     scale: boolean;
     scaleColor: string;
     scaleThickness: number;

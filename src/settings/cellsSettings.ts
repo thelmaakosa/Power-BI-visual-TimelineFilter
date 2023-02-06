@@ -37,8 +37,8 @@ export class CellsSettings {
     public capSize: number = 10;
     public capfillColor: string = "#8C9093";
     public capfillOpacity: number = 100;
+    public capoutlineRadius: number = 20;
     public capoutlineColor: string = "#8C9093";
     public capoutlineThickness: number = 2;
-    public capoutlineRadius: number = 20;
 
 }
