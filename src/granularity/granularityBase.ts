@@ -391,65 +391,125 @@ export class GranularityBase implements IGranularity {
     ): void {
             const isSelectedOutlineThickness = granularSettings.selectedOutlineLeft || granularSettings.selectedOutlineRight || granularSettings.selectedOutlineTop || granularSettings.selectedOutlineBottom
             const selectedOutlineThickness = isSelectedOutlineThickness ? granularSettings.selectedOutlineThickness : 0
-            selection
-            .append("rect")
-            .classed("periodSlicerRect", true)
-            .attr("x", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16))
-            .attr("y", pixelConverter.toString(0 - this.sliderYOffset - granularSettings.fontSize/4))
-            .attr("rx", pixelConverter.toString(granularSettings.selectedOutlineRadius))
-            .attr("ry", pixelConverter.toString(granularSettings.selectedOutlineRadius))
-            .attr("width", pixelConverter.toString(this.sliderWidth*granularSettings.fontSize/8))
-            .attr("height", pixelConverter.toString(this.sliderHeight + granularSettings.fontSize/4))
-            .style("fill", granularSettings.selectedfillColor)
-            .style("fill-opacity", granularSettings.transparency/100)
-            .style("stroke", granularSettings.outlineColor)
-            .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
-            .data([granularSettings.granularity])
-        
-            if (granularSettings.selectedOutlineLeft == false){
-                selection
-                .append("line")
-                .classed("periodSlicerLeftLine", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16))
-                .attr("y1", -20)
-                .attr("x2", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16))
-                .attr("y2", 4)
-                .style("stroke", "#FFF")
-                .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
-            }
+            // selection
+            // .append("rect")
+            // .classed("periodSlicerRect", true)
+            // .attr("x", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16))
+            // .attr("y", pixelConverter.toString(0 - this.sliderYOffset - granularSettings.fontSize/4))
+            // .attr("rx", pixelConverter.toString(granularSettings.selectedOutlineRadius))
+            // .attr("ry", pixelConverter.toString(granularSettings.selectedOutlineRadius))
+            // .attr("width", pixelConverter.toString(this.sliderWidth*granularSettings.fontSize/8))
+            // .attr("height", pixelConverter.toString(this.sliderHeight + granularSettings.fontSize/4))
+            // .style("fill", granularSettings.selectedfillColor)
+            // .style("fill-opacity", granularSettings.transparency/100)
+            // .style("stroke", granularSettings.outlineColor)
+            // .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+            // .data([granularSettings.granularity])
+
+            const width = this.sliderWidth*granularSettings.fontSize/8;
+            const height = this.sliderHeight + granularSettings.fontSize/4;
+            const rx = (granularSettings.selectedOutlineRadius);
             
-            if (granularSettings.selectedOutlineRight == false){
+            const x = (0 - width/2 + rx);
+            const y = (0 - this.sliderYOffset - granularSettings.fontSize/4);
+
+            // selection
+            // .append("path")
+            // .style("fill", granularSettings.selectedfillColor)
+            // .style("fill-opacity", granularSettings.transparency/100)
+            // .style("stroke", granularSettings.outlineColor)
+            // .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+            // .data([granularSettings.granularity])
+            // .attr("d", "M" + x + "," + y + " h" + (width-2*rx) + " a" + rx + "," + rx + " 0 0 1 " + rx + "," + rx + " v" + (height-2*rx) + " a" + rx + "," + rx + " 0 0 1 -" + rx + "," + rx +  " h-" + (width-2*rx) + " a" + rx + "," + rx + " 0 0 1 -" + rx + ",-" + rx + " v-" + (height-2*rx) + " a" + rx + "," + rx + " 0 0 1 " + rx + ",-" + rx + " z")
+        
+            if (granularSettings.selectedOutlineTop == true){
                 selection
-                .append("line")
-                .classed("periodSlicerRightLine", true)
-                .attr("x1", pixelConverter.toString(0 + this.sliderWidth*granularSettings.fontSize/16))
-                .attr("y1", -20)
-                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.fontSize/16))
-                .attr("y2", 4)
-                .style("stroke", "#FFF")
+                .append("path")
+                .style("fill", granularSettings.selectedfillColor)
+                .style("fill-opacity", granularSettings.transparency/100)
+                .style("stroke", granularSettings.outlineColor)
                 .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+                .data([granularSettings.granularity])
+                .attr("d", "M" + x + "," + y + " h" + (width-2*rx) + " z")
             }
-            if (granularSettings.selectedOutlineTop == false){
+            if (granularSettings.selectedOutlineRight == true){
                 selection
-                .append("line")
-                .classed("periodSlicerTopLine", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16-selectedOutlineThickness/2))
-                .attr("y1", pixelConverter.toString(0 - this.sliderYOffset - granularSettings.fontSize/4))
-                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.fontSize/16+selectedOutlineThickness/2))
-                .attr("y2", pixelConverter.toString(0 - this.sliderYOffset - granularSettings.fontSize/4))
-                .style("stroke", "#FFF")
+                .append("path")
+                .style("fill", granularSettings.selectedfillColor)
+                .style("fill-opacity", granularSettings.transparency/100)
+                .style("stroke", granularSettings.outlineColor)
                 .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+                .data([granularSettings.granularity])
+                .attr("d", "M" + (width/2) + "," + (y+rx) + " v" + (height-2*rx) + " z")
+            
             }
-            if (granularSettings.selectedOutlineBottom == false){
+            if (granularSettings.selectedOutlineBottom == true){
                 selection
-                .append("line")
-                .classed("periodSlicerBottomLine", true)
-                .attr("x1", pixelConverter.toString(0 - this.sliderWidth*granularSettings.fontSize/16-selectedOutlineThickness/2))
-                .attr("y1", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .attr("x2", pixelConverter.toString(0 + this.sliderWidth*granularSettings.fontSize/16+selectedOutlineThickness/2))
-                .attr("y2", pixelConverter.toString(this.sliderHeight - this.sliderYOffset))
-                .style("stroke", "#FFF")
-                .style("stroke-width", pixelConverter.toString(granularSettings.selectedOutlineThickness))
+                .append("path")
+                .style("fill", granularSettings.selectedfillColor)
+                .style("fill-opacity", granularSettings.transparency/100)
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+                .data([granularSettings.granularity])
+                .attr("d", "M" + x + "," + (y+height) + " h" + (width-2*rx) + " z")
+            
             }
+            if (granularSettings.selectedOutlineLeft == true){
+                selection
+                .append("path")
+                .style("fill", granularSettings.selectedfillColor)
+                .style("fill-opacity", granularSettings.transparency/100)
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+                .data([granularSettings.granularity])
+                .attr("d", "M" + (-width/2) + "," + (y+rx) + " v" + (height-2*rx) + " z")
+            
+            }
+            if (granularSettings.selectedOutlineLeft ==true && granularSettings.selectedOutlineTop == true ){
+                selection
+                .append("path")
+                .style("fill", granularSettings.selectedfillColor)
+                .style("fill-opacity", granularSettings.transparency/100)
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+                .data([granularSettings.granularity])
+                .attr("d", "M" + (-width/2) + "," + (y+rx) + " a" + rx + "," + rx + " 0 0 1 " + rx + "," + (-rx))
+                
+
+            }
+            if (granularSettings.selectedOutlineLeft ==true && granularSettings.selectedOutlineBottom == true ){
+                selection
+                .append("path")
+                .style("fill", granularSettings.selectedfillColor)
+                .style("fill-opacity", granularSettings.transparency/100)
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+                .data([granularSettings.granularity])
+                .attr("d", "M" + x + "," + (y+height) + " a" + rx + "," + rx + " 0 0 1 " + (-rx) + "," + (-rx))
+                
+            }
+            if (granularSettings.selectedOutlineRight ==true && granularSettings.selectedOutlineTop == true ){
+                selection
+                .append("path")
+                .style("fill", granularSettings.selectedfillColor)
+                .style("fill-opacity", granularSettings.transparency/100)
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+                .data([granularSettings.granularity])
+                .attr("d", "M" + (width/2-rx) + "," + y + " a" + rx + "," + rx + " 0 0 1 " + rx + "," + rx)
+            }
+            if (granularSettings.selectedOutlineRight ==true && granularSettings.selectedOutlineBottom == true ){
+                selection
+                .append("path")
+                .style("fill", granularSettings.selectedfillColor)
+                .style("fill-opacity", granularSettings.transparency/100)
+                .style("stroke", granularSettings.outlineColor)
+                .style("stroke-width", pixelConverter.toString(selectedOutlineThickness))
+                .data([granularSettings.granularity])
+                .attr("d", "M" + (width/2) + "," + (y+height-rx) + " a" + rx + "," + rx + " 0 0 1 " + (-rx) + "," + rx)
+                
+            }
+
+            
     }
 }
