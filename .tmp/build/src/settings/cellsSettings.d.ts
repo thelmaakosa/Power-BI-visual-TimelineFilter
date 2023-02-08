@@ -1,8 +1,8 @@
 export declare class CellsSettings {
     selectedfillColor: string;
-    transparency: number;
+    selectedfillopacity: number;
     fillUnselected: string;
-    innerPadding: number;
+    unselectedfillopacity: number;
     selectedStrokeColor: string;
     selectedoutlineThickness: number;
     strokeColor: string;
