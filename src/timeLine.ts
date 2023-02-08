@@ -916,8 +916,8 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                 const isSelected: boolean = Utils.IS_GRANULE_SELECTED(dataPoint, this.timelineData);
 
                 return isSelected
-                    ? cellsSettings.transparency/100
-                    : cellsSettings.innerPadding/100;
+                    ? cellsSettings.selectedfillopacity/100
+                    : cellsSettings.unselectedfillopacity/100;
             })
             .style("stroke-opacity", 1)
     }
@@ -1360,6 +1360,18 @@ export class Timeline implements powerbiVisualsApi.extensibility.visual.IVisual 
                             }
                         },
                         capfillOpacity: {
+                            numberRange: {
+                                min: 0,
+                                max: 100
+                            }
+                        },
+                        selectedfillopacity: {
+                            numberRange: {
+                                min: 0,
+                                max: 100
+                            }
+                        },
+                        unselectedfillopacity: {
                             numberRange: {
                                 min: 0,
                                 max: 100

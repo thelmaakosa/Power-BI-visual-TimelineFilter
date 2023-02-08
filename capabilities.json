@@ -720,10 +720,10 @@
                         }
                     }
                 },
-                "transparency": {
+                "selectedfillopacity": {
                     "displayName": "Selected Fill Opacity",
                     "type": {
-                        "integer": true
+                        "numeric": true
                     }
                 },
                 "selectedStrokeColor": {
@@ -756,10 +756,10 @@
                         }
                     }
                 },
-                "innerPadding": {
+                "unselectedfillopacity": {
                     "displayName": "Unselected Fill Opacity",
                     "type": {
-                        "integer": true
+                        "numeric": true
                     }
                 },
                 "strokeColor": {

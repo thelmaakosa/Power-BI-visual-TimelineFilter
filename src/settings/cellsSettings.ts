@@ -26,9 +26,9 @@
 
 export class CellsSettings {
     public selectedfillColor: string = "#ADD5FF";
-    public transparency: number = 100;
+    public selectedfillopacity: number = 100;
     public fillUnselected: string = "#D9DADB";
-    public innerPadding: number = 100;
+    public unselectedfillopacity: number = 100;
 
     public selectedStrokeColor: string = "#00458F";
     public selectedoutlineThickness: number = 1;
